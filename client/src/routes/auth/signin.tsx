@@ -32,7 +32,7 @@ function SignIn() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="bg-background rounded-lg drop-shadow-xl shadow-xl min-w-2/3 w-2/3 lg:w-1/4 lg:h-1/2 flex flex-col p-8 py-12 lg:p-14 lg:py-16 items-center font-sans gap-6"
+        className="bg-background rounded-lg drop-shadow-xl shadow-xl min-w-2/3 min-h-1/2 w-2/3 lg:w-1/4 flex flex-col p-8 py-12 lg:p-14 lg:py-16 items-center font-sans gap-6"
       >
         <h1 className="text-xl lg:text-2xl font-bold">Welcome back!</h1>
         <FormField
