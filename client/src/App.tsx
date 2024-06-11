@@ -1,8 +1,8 @@
 import "./App.css";
-import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import AuthLayout from "@/components/auth-layout";
 import SplashScreen from "@/components/splash-screen";
+import SignIn from "@/routes/auth/signin";
 
 function App() {
   const [showSplash, setShowSplash] = useState(
@@ -23,7 +23,7 @@ function App() {
     <SplashScreen />
   ) : (
     <AuthLayout>
-      <Button>Sign In</Button>
+      <SignIn />
     </AuthLayout>
   );
 }
