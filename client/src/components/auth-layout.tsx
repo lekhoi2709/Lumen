@@ -9,6 +9,7 @@ function AuthLayout({ children }: { children: React.ReactNode }) {
           src={AuthBg}
           alt="background"
           className="w-full h-full object-cover"
+          loading="eager"
         />
       </div>
       <section className="z-10 w-full h-full flex items-center justify-center">
