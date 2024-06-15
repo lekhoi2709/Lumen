@@ -31,7 +31,7 @@ export default {
             },
             process.env.JWT_SECRET || "",
             {
-              expiresIn: "1h",
+              expiresIn: "2h",
             }
           );
 
@@ -42,7 +42,7 @@ export default {
         }
 
         return res.status(401).json({
-          message: "Authentication failed",
+          message: "Password does not match",
         });
       });
     } catch (error) {
