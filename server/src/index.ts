@@ -2,12 +2,13 @@ import { Request, Response } from "express";
 import ExpressConfig from "./express.config";
 import MongooseConnection from "./database";
 import * as dotenv from "dotenv";
+import AuthRoute from "./routes/auth";
 if (process.env.NODE_ENV != "production") {
   dotenv.config();
 }
 
 const port = process.env.PORT || 5000;
-var dbUrl: string = process.env.DB_URL || "";
+var dbUrl: string = process.env.DB_URI || "";
 if (process.env.NODE_ENV == "production") {
   dbUrl = process.env.DB_URL || "";
 }
@@ -17,10 +18,10 @@ async function main() {
     const dbConnection = MongooseConnection.getInstance();
     dbConnection.connect(dbUrl).then(() => {
       const app = ExpressConfig();
-      app.use("/api/auth", require("./routes/auth"));
+      app.use("/api/auth", AuthRoute);
 
       app.get("/", (req: Request, res: Response) => {
-        res.send("Express + TypeScript Server");
+        res.send("Lumen Server");
       });
 
       app.listen(port, () => {

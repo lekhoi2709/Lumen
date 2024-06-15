@@ -1,0 +1,87 @@
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import { Request, Response } from "express";
+import User from "../models/user";
+
+export default {
+  login: async (req: Request, res: Response) => {
+    const { email, password } = req.body;
+
+    try {
+      const user = await User.findOne({ email });
+
+      if (!user) {
+        return res.status(404).json({
+          message: "User not found",
+        });
+      }
+
+      bcrypt.compare(password, user.password, (err, result) => {
+        if (err) {
+          return res.status(500).json({
+            message: "Internal Server Error",
+          });
+        }
+
+        if (result) {
+          const token = jwt.sign(
+            {
+              email: user.email,
+              userId: user._id,
+            },
+            process.env.JWT_SECRET || "",
+            {
+              expiresIn: "1h",
+            }
+          );
+
+          return res.status(200).json({
+            message: "Login successful",
+            token,
+          });
+        }
+
+        return res.status(401).json({
+          message: "Authentication failed",
+        });
+      });
+    } catch (error) {
+      return res.status(500).json({
+        message: "Internal Server Error",
+      });
+    }
+  },
+
+  register: async (req: Request, res: Response) => {
+    const { lastName, firstName, email, password, avatarUrl } = req.body;
+
+    bcrypt.hash(password, 10, async (err, hash) => {
+      if (err) {
+        return res.status(500).json({
+          message: "Internal Server Error",
+        });
+      }
+
+      try {
+        const user = new User({
+          firstName,
+          lastName,
+          email,
+          password: hash,
+          avatarUrl,
+        });
+
+        const newUser = await user.save();
+
+        return res.status(201).json({
+          message: "User created successfully",
+          data: newUser,
+        });
+      } catch (error) {
+        return res.status(500).json({
+          message: "Internal Server Error",
+        });
+      }
+    });
+  },
+};
