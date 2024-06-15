@@ -3,6 +3,9 @@ import express, { Application, Request, Response, NextFunction } from "express";
 const ExpressConfig = (): Application => {
   const app = express();
 
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
+
   app.use((req: Request, res: Response, next: NextFunction) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader(
@@ -15,9 +18,6 @@ const ExpressConfig = (): Application => {
     );
     next();
   });
-
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
 
   return app;
 };
