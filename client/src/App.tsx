@@ -1,6 +1,6 @@
 import "./App.css";
 import { useState, useEffect } from "react";
-import AuthLayout from "@/components/layouts/auth-layout";
+import AuthLayout from "@/layouts/auth-layout";
 import SplashScreen from "@/components/splash-screen";
 import SignIn from "@/routes/auth/signin";
 
