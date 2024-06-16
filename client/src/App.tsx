@@ -29,11 +29,15 @@ function App() {
     <Router>
       <AuthProvider>
         <Routes>
+          {/* public route */}
           <Route path="/login" element={<SignIn />} />
           <Route path="/register" element={<SignUp />} />
+          {/* private route */}
           <Route element={<AuthRoute />}>
             <Route path="/" element={<Home />} />
           </Route>
+          {/* catch all route */}
+          <Route path="*" element={<h1>Page not found</h1>} />
         </Routes>
       </AuthProvider>
     </Router>
