@@ -1,33 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ThemeProvider } from "@/contexts/theme-provider";
-import SignUp from "./routes/auth/signup";
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-  },
-  {
-    path: "/register",
-    element: <SignUp />,
-  },
-  {
-    path: "/about",
-    element: <h1>About</h1>,
-  },
-  {
-    path: "/contact",
-    element: <h1>Contact</h1>,
-  },
-]);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <ThemeProvider defaultTheme="light">
-      <RouterProvider router={router} />
+      <App />
     </ThemeProvider>
   </React.StrictMode>
 );

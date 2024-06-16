@@ -12,9 +12,16 @@ type AuthProviderProps = {
   children: React.ReactNode;
 };
 
-const AuthContext = createContext(null as unknown as AuthContextType);
+const initialState: AuthContextType = {
+  user: null,
+  token: "",
+  loginAct: () => null,
+  logoutAct: () => null,
+};
 
-function AuthProvider({ children, ...props }: AuthProviderProps) {
+const AuthContext = createContext<AuthContextType>(initialState);
+
+export function AuthProvider({ children, ...props }: AuthProviderProps) {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token") || "");
 
@@ -64,8 +71,6 @@ function AuthProvider({ children, ...props }: AuthProviderProps) {
     </AuthContext.Provider>
   );
 }
-
-export default AuthProvider;
 
 export function useAuth() {
   return useContext(AuthContext);
