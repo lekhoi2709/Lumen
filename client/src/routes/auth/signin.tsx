@@ -36,16 +36,13 @@ function SignIn() {
         password: data.password,
       };
 
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/auth/login/`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      const response = await fetch(`${process.env.API_URL}/auth/login/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
 
       const result = await response.json();
 
