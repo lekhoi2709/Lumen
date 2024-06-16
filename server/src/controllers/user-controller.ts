@@ -37,6 +37,7 @@ export default {
 
           return res.status(200).json({
             message: "Login successful",
+            user: user.email,
             token,
           });
         }
