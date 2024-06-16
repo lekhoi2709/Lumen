@@ -4,7 +4,7 @@ import { useAuth } from "@/contexts/auth-context";
 function AuthRoute() {
   const auth = useAuth();
 
-  if (!auth.user || !auth.token) {
+  if (!auth.token) {
     return <Navigate to="/login" />;
   }
 

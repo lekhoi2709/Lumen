@@ -13,20 +13,50 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import AuthLayout from "@/layouts/auth-layout";
+import { PasswordInput } from "@/components/password-input";
+import { useAuth } from "@/contexts/auth-context";
 
 const formSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6).max(50),
+  email: z.string().email().trim(),
+  password: z.string().min(6).trim(),
 });
 
 function SignIn() {
+  const auth = useAuth();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     mode: "onBlur",
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log(data);
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    try {
+      const payload = {
+        email: data.email,
+        password: data.password,
+      };
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/auth/login/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      const result = await response.json();
+
+      if (result.token && result.user) {
+        auth.loginAct(result);
+      } else {
+        throw new Error(result.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
@@ -58,7 +88,7 @@ function SignIn() {
                 <FormItem className="w-full">
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="Password" {...field} />
+                    <PasswordInput placeholder="Password" {...field} />
                   </FormControl>
                   <FormDescription>
                     <a

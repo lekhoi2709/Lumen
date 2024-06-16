@@ -39,8 +39,37 @@ function SignUp() {
     mode: "onBlur",
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log(data);
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    try {
+      const payload = {
+        email: data.email,
+        password: data.password,
+        lastName: data.lastName,
+        firstName: data.firstName,
+        avatarUrl: "default-avatar",
+      };
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/auth/register/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (response.ok) {
+        alert("Account created successfully!");
+        form.reset();
+      } else {
+        const error = await response.json();
+        alert(error.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (

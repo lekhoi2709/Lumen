@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 type AuthContextType = {
   user: any;
-  token: string;
+  token: string | null;
   loginAct: (data: any) => void;
   logoutAct: () => void;
 };
@@ -14,7 +14,7 @@ type AuthProviderProps = {
 
 const initialState: AuthContextType = {
   user: null,
-  token: "",
+  token: null,
   loginAct: () => null,
   logoutAct: () => null,
 };
@@ -23,41 +23,21 @@ const AuthContext = createContext<AuthContextType>(initialState);
 
 export function AuthProvider({ children, ...props }: AuthProviderProps) {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem("token") || "");
+  const [token, setToken] = useState(localStorage.getItem("token") || null);
 
   const navigate = useNavigate();
 
   const loginAct = async (data: any) => {
-    try {
-      const response = await fetch(
-        import.meta.env.VITE_API_URL + "/auth/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
-
-      const result = await response.json();
-
-      if (result.data) {
-        setUser(result.data.user);
-        setToken(result.data.token);
-        localStorage.setItem("token", result.data.token);
-        navigate("/");
-        return;
-      }
-      throw new Error(result.message);
-    } catch (err) {
-      console.log(err);
-    }
+    setUser(data.user);
+    setToken(data.token);
+    localStorage.setItem("token", data.token);
+    navigate("/");
+    return;
   };
 
   const logoutAct = () => {
     setUser(null);
-    setToken("");
+    setToken(null);
     localStorage.removeItem("token");
     navigate("/login");
   };
