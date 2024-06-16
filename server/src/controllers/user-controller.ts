@@ -78,7 +78,12 @@ export default {
           message: "User created successfully",
           data: newUser,
         });
-      } catch (error) {
+      } catch (error: any) {
+        if (error.name === "MongoServerError" && error.code === 11000) {
+          return res.status(409).json({
+            message: "Email already exists",
+          });
+        }
         return res.status(500).json({
           message: "Internal Server Error",
         });
