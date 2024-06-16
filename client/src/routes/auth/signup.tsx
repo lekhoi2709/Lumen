@@ -14,6 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/password-input";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const formSchema = z
   .object({
@@ -39,6 +40,8 @@ function SignUp() {
     mode: "onBlur",
   });
 
+  const navigate = useNavigate();
+
   async function onSubmit(data: z.infer<typeof formSchema>) {
     try {
       const payload = {
@@ -59,7 +62,7 @@ function SignUp() {
 
       if (response.ok) {
         alert("Account created successfully!");
-        form.reset();
+        navigate("/login");
       } else {
         const error = await response.json();
         alert(error.message);
