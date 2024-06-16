@@ -9,7 +9,7 @@ const ExpressConfig = (): Application => {
 
   app.use(
     cors({
-      origin: ["http://localhost:1420"],
+      origin: ["http://localhost:1420", "https://lumen-omega.vercel.app"],
       credentials: true,
     })
   );
