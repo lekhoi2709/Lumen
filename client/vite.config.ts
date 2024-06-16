@@ -20,6 +20,6 @@ export default defineConfig(async () => ({
     },
   },
   define: {
-    API_URL: process.env.VITE_API_URL,
+    API_URL: JSON.stringify(process.env.VITE_API_URL),
   },
 }));
