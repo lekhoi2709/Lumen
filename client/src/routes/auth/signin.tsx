@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import AuthLayout from "@/layouts/auth-layout";
 import { PasswordInput } from "@/components/password-input";
 import { useAuth } from "@/contexts/auth-context";
+import { Link } from "react-router-dom";
 
 const formSchema = z.object({
   email: z.string().email().trim(),
@@ -105,12 +106,12 @@ function SignIn() {
           </Button>
           <FormDescription>
             Don't have an account?{" "}
-            <a
-              href="/register"
+            <Link
+              to="/register"
               className="cursor-pointer font-bold text-foreground"
             >
               Sign Up
-            </a>
+            </Link>
           </FormDescription>
         </form>
       </Form>

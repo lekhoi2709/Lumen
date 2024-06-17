@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/password-input";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const formSchema = z
   .object({
@@ -156,12 +156,12 @@ function SignUp() {
           </Button>
           <FormDescription>
             Already have an account?{" "}
-            <a
-              href="/login"
+            <Link
+              to="/login"
               className="cursor-pointer font-bold text-foreground"
             >
               Sign In
-            </a>
+            </Link>
           </FormDescription>
         </form>
       </Form>
