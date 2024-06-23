@@ -77,7 +77,7 @@ function SignUp() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="bg-background rounded-lg drop-shadow-xl shadow-xl min-w-2/3 min-h-1/2 w-2/3 lg:w-1/3 flex flex-col p-8 py-12 lg:p-14 lg:py-16 items-center font-sans gap-8 lg:gap-12"
+          className="bg-background dark:bg-background/80 transition-colors duration-500 backdrop-blur-md rounded-lg drop-shadow-xl shadow-xl min-w-2/3 min-h-1/2 w-2/3 lg:w-1/3 flex flex-col p-8 py-12 lg:p-14 lg:py-16 items-center font-sans gap-8 lg:gap-12"
         >
           <h1 className="text-xl lg:text-2xl font-bold">Sign Up</h1>
           <section className="w-full flex flex-col gap-4 lg:gap-6">
@@ -90,7 +90,11 @@ function SignUp() {
                   render={({ field }) => (
                     <FormItem className="w-full">
                       <FormControl>
-                        <Input placeholder="First Name" {...field} />
+                        <Input
+                          placeholder="First Name"
+                          className="bg-accent dark:bg-accent/40"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -103,7 +107,11 @@ function SignUp() {
                   render={({ field }) => (
                     <FormItem className="w-full">
                       <FormControl>
-                        <Input placeholder="Last Name" {...field} />
+                        <Input
+                          placeholder="Last Name"
+                          className="bg-accent dark:bg-accent/40"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -118,7 +126,11 @@ function SignUp() {
                 <FormItem className="w-full">
                   <FormLabel>E-mail</FormLabel>
                   <FormControl>
-                    <Input placeholder="E-mail" {...field} />
+                    <Input
+                      placeholder="E-mail"
+                      className="bg-accent dark:bg-accent/40"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -131,7 +143,11 @@ function SignUp() {
                 <FormItem className="w-full">
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <PasswordInput placeholder="Password" {...field} />
+                    <PasswordInput
+                      placeholder="Password"
+                      className="bg-accent dark:bg-accent/40"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -144,21 +160,28 @@ function SignUp() {
                 <FormItem className="w-full">
                   <FormLabel>Confirm password</FormLabel>
                   <FormControl>
-                    <PasswordInput placeholder="Confirm Password" {...field} />
+                    <PasswordInput
+                      placeholder="Confirm Password"
+                      className="bg-accent dark:bg-accent/40"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </section>
-          <Button type="submit" className="w-full py-6">
+          <Button
+            type="submit"
+            className="w-full py-6 transition-transform duration-500 hover:scale-[1.03] ease-in-out"
+          >
             Create Account
           </Button>
           <FormDescription>
             Already have an account?{" "}
             <Link
               to="/login"
-              className="cursor-pointer font-bold text-foreground"
+              className="cursor-pointer font-bold text-foreground transition-colors duration-500 hover:text-blue-500"
             >
               Sign In
             </Link>

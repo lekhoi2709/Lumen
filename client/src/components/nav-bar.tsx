@@ -8,7 +8,7 @@ const isActive = ({ isActive }: any) => `link ${isActive ? "active" : ""}`;
 function Navbar() {
   const { t } = useTranslation();
   return (
-    <nav className="fixed w-full flex justify-between items-center p-4 backdrop-blur-md bg-[#fafafa]/40 dark:bg-[#202020]/40 font-custom z-50">
+    <nav className="fixed w-full flex justify-between items-center p-4 backdrop-blur-md bg-background/80 font-custom z-50 transition-colors duration-500 font-sans">
       <ul className="flex gap-4">
         <NavLink to="/" className={isActive}>
           {t("nav.home")}

@@ -13,7 +13,7 @@ function AuthLayout({ children }: { children: React.ReactNode }) {
         />
       </div>
       {children}
-      <span className="absolute z-10 bottom-0 right-0 p-2 lg:p-3 bg-background/90 backdrop-blur-sm rounded-tl-md text-sm lg:text-base">
+      <span className="absolute z-10 bottom-0 right-0 p-2 lg:p-3 bg-background/80 backdrop-blur-md rounded-tl-md text-sm lg:text-base transition-colors duration-500">
         <p>
           Designed by{" "}
           <a
