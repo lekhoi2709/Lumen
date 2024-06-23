@@ -17,10 +17,6 @@ const LANGUAGES = [
 function LanguageToggle() {
   const { i18n } = useTranslation();
 
-  const onChangeLang = (lang_code: string) => {
-    i18n.changeLanguage(lang_code);
-  };
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -33,7 +29,7 @@ function LanguageToggle() {
         {LANGUAGES.map((lang) => (
           <DropdownMenuItem
             key={lang.value}
-            onClick={() => onChangeLang(lang.value)}
+            onClick={() => i18n.changeLanguage(lang.value)}
           >
             <span className="flex gap-2 items-center">
               {lang.icon}
