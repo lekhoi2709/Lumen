@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import SplashScreen from "@/components/splash-screen";
 import { AuthProvider } from "./contexts/auth-context";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
@@ -8,6 +8,7 @@ import SignUp from "./routes/auth/signup";
 import PrivateRoute from "./routes/auth/private-route";
 import AuthRoute from "./routes/auth/auth-route";
 import Home from "./routes";
+import Navbar from "./components/nav-bar";
 
 function App() {
   const [showSplash, setShowSplash] = useState(
@@ -27,23 +28,26 @@ function App() {
   return showSplash ? (
     <SplashScreen />
   ) : (
-    <Router>
-      <AuthProvider>
-        <Routes>
-          {/* public route */}
-          <Route element={<AuthRoute />}>
-            <Route path="/login" element={<SignIn />} />
-            <Route path="/register" element={<SignUp />} />
-          </Route>
-          {/* private route */}
-          <Route element={<PrivateRoute />}>
-            <Route path="/" element={<Home />} />
-          </Route>
-          {/* catch all route */}
-          <Route path="*" element={<h1>Page not found</h1>} />
-        </Routes>
-      </AuthProvider>
-    </Router>
+    <Suspense fallback="loading">
+      <Router>
+        <Navbar />
+        <AuthProvider>
+          <Routes>
+            {/* public route */}
+            <Route element={<AuthRoute />}>
+              <Route path="/login" element={<SignIn />} />
+              <Route path="/register" element={<SignUp />} />
+            </Route>
+            {/* private route */}
+            <Route element={<PrivateRoute />}>
+              <Route path="/" element={<Home />} />
+            </Route>
+            {/* catch all route */}
+            <Route path="*" element={<h1>Page not found</h1>} />
+          </Routes>
+        </AuthProvider>
+      </Router>
+    </Suspense>
   );
 }
 

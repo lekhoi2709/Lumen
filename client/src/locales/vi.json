@@ -1,0 +1,19 @@
+{
+  "nav": {
+    "home": "Trang chủ",
+    "about": "Giới thiệu",
+    "contact": "Liên hệ",
+    "login": "Đăng nhập",
+    "register": "Đăng ký",
+    "logout": "Đăng xuất"
+  },
+  "register": {
+    "title": "Đăng ký",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "confirmPassword": "Xác nhận mật khẩu",
+    "signup": "Đăng ký",
+    "alreadyHaveAccount": "Đã có tài khoản?",
+    "login": "Đăng nhập"
+  }
+}
