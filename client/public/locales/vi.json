@@ -9,11 +9,23 @@
   },
   "register": {
     "title": "Đăng ký",
-    "email": "Email",
+    "fullname": "Họ và tên",
+    "firstName": "Tên",
+    "lastName": "Họ",
+    "email": "E-mail",
     "password": "Mật khẩu",
     "confirmPassword": "Xác nhận mật khẩu",
     "signup": "Đăng ký",
     "alreadyHaveAccount": "Đã có tài khoản?",
     "login": "Đăng nhập"
+  },
+  "login": {
+    "title": "Chào mừng trở lại!",
+    "email": "E-mail",
+    "password": "Mật khẩu",
+    "login": "Đăng nhập",
+    "forgotPassword": "Quên mật khẩu?",
+    "noAccount": "Chưa có tài khoản?",
+    "register": "Đăng ký"
   }
 }
