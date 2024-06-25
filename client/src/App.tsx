@@ -11,13 +11,12 @@ import Home from "./routes";
 
 function App() {
   const [showSplash, setShowSplash] = useState(
-    () =>
-      !JSON.parse(sessionStorage.getItem("isFirstTimeShowSplash") || "false")
+    () => !JSON.parse(sessionStorage.getItem("show-splash") || "false")
   );
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      sessionStorage.setItem("isFirstTimeShowSplash", JSON.stringify(true));
+      sessionStorage.setItem("show-splash", JSON.stringify(true));
       setShowSplash(false);
     }, 2000);
 
