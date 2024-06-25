@@ -16,6 +16,7 @@ import AuthLayout from "@/layouts/auth-layout";
 import { PasswordInput } from "@/components/password-input";
 import { useAuth } from "@/contexts/auth-context";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const formSchema = z.object({
   email: z.string().email().trim(),
@@ -24,6 +25,7 @@ const formSchema = z.object({
 
 function SignIn() {
   const auth = useAuth();
+  const { t } = useTranslation();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -64,7 +66,7 @@ function SignIn() {
           onSubmit={form.handleSubmit(onSubmit)}
           className="bg-background dark:bg-background/80 transition-colors duration-500 backdrop-blur-md rounded-lg drop-shadow-xl shadow-xl min-w-2/3 min-h-1/2 w-2/3 lg:w-1/3 flex flex-col p-8 py-12 lg:p-14 lg:py-16 items-center font-sans gap-8 lg:gap-12"
         >
-          <h1 className="text-xl lg:text-2xl font-bold">Welcome back!</h1>
+          <h1 className="text-xl lg:text-2xl font-bold">{t("login.title")}</h1>
           <section className="w-full flex flex-col gap-4 lg:gap-6">
             <FormField
               control={form.control}
@@ -88,10 +90,10 @@ function SignIn() {
               name="password"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>{t("login.password")}</FormLabel>
                   <FormControl>
                     <PasswordInput
-                      placeholder="Password"
+                      placeholder={t("login.password")}
                       className="bg-accent dark:bg-accent/40"
                       {...field}
                     />
@@ -101,7 +103,7 @@ function SignIn() {
                       href="#"
                       className="cursor-pointer font-bold text-foreground"
                     >
-                      Forgot a password?
+                      {t("login.forgotPassword")}
                     </a>
                   </FormDescription>
                   <FormMessage />
@@ -113,15 +115,15 @@ function SignIn() {
             type="submit"
             className="w-full py-6 transition-transform duration-500 hover:scale-[1.03] ease-in-out"
           >
-            Login
+            {t("login.signin")}
           </Button>
           <FormDescription>
-            Don't have an account?{" "}
+            {t("login.noAccount")}{" "}
             <Link
               to="/register"
               className="cursor-pointer font-bold text-foreground transition-colors duration-500 hover:text-blue-500"
             >
-              Sign Up
+              {t("login.register")}
             </Link>
           </FormDescription>
         </form>
