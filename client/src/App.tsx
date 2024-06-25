@@ -8,7 +8,6 @@ import SignUp from "./routes/auth/signup";
 import PrivateRoute from "./routes/auth/private-route";
 import AuthRoute from "./routes/auth/auth-route";
 import Home from "./routes";
-import Navbar from "./components/nav-bar";
 
 function App() {
   const [showSplash, setShowSplash] = useState(
@@ -30,7 +29,6 @@ function App() {
   ) : (
     <Suspense fallback="loading">
       <Router>
-        <Navbar />
         <AuthProvider>
           <Routes>
             {/* public route */}
