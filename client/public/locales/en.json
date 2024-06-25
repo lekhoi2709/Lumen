@@ -9,23 +9,23 @@
   },
   "register": {
     "title": "Sign Up",
-    "fullname": "Full Name",
+    "fullName": "Full Name",
     "firstName": "First Name",
     "lastName": "Last Name",
     "email": "E-mail",
     "password": "Password",
     "confirmPassword": "Confirm Password",
-    "signup": "Sign Up",
+    "signup": "Create Account",
     "alreadyHaveAccount": "Already have an account?",
-    "login": "Log In"
+    "login": "Sign In"
   },
   "login": {
     "title": "Welcome back!",
     "email": "E-mail",
     "password": "Password",
-    "forgot": "Forgot a password?",
-    "login": "Log In",
+    "forgotPassword": "Forgot a password?",
+    "signin": "Sign In",
     "noAccount": "Don't have an account?",
-    "signup": "Sign Up"
+    "register": "Sign Up"
   }
 }
