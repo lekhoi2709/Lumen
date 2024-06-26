@@ -17,6 +17,9 @@ import { PasswordInput } from "@/components/password-input";
 import { useAuth } from "@/contexts/auth-context";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { Toaster } from "@/components/ui/toaster";
+import { useToast } from "@/components/ui/use-toast";
+import { Loader2Icon } from "lucide-react";
 
 const formSchema = z.object({
   email: z.string().email().trim(),
@@ -24,13 +27,15 @@ const formSchema = z.object({
 });
 
 function SignIn() {
-  const auth = useAuth();
-  const { t } = useTranslation();
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     mode: "onBlur",
   });
+
+  const auth = useAuth();
+  const { t } = useTranslation();
+  const { toast } = useToast();
+  const { isDirty, isValid, isSubmitting } = form.formState;
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     try {
@@ -52,7 +57,10 @@ function SignIn() {
       if (result.token && result.user) {
         auth.loginAct(result);
       } else {
-        throw new Error(result.message);
+        toast({
+          variant: "destructive",
+          description: result.message,
+        });
       }
     } catch (error) {
       console.error(error);
@@ -113,9 +121,14 @@ function SignIn() {
           </section>
           <Button
             type="submit"
+            disabled={!isDirty || !isValid || isSubmitting}
             className="w-full py-6 transition-transform duration-500 hover:scale-[1.03] ease-in-out"
           >
-            {t("login.signin")}
+            {isSubmitting ? (
+              <Loader2Icon className="animate-spin" />
+            ) : (
+              t("login.signin")
+            )}
           </Button>
           <FormDescription>
             {t("login.noAccount")}{" "}
@@ -128,6 +141,7 @@ function SignIn() {
           </FormDescription>
         </form>
       </Form>
+      <Toaster />
     </AuthLayout>
   );
 }

@@ -16,6 +16,9 @@ import { PasswordInput } from "@/components/password-input";
 import { Button } from "@/components/ui/button";
 import { useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { Toaster } from "@/components/ui/toaster";
+import { useToast } from "@/components/ui/use-toast";
+import { Loader2Icon } from "lucide-react";
 
 const formSchema = z
   .object({
@@ -43,6 +46,8 @@ function SignUp() {
 
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { toast } = useToast();
+  const { isDirty, isValid, isSubmitting } = form.formState;
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     try {
@@ -67,7 +72,10 @@ function SignUp() {
         navigate("/login");
       } else {
         const error = await response.json();
-        alert(error.message);
+        toast({
+          variant: "destructive",
+          description: error.message,
+        });
       }
     } catch (error) {
       console.error(error);
@@ -177,9 +185,14 @@ function SignUp() {
           </section>
           <Button
             type="submit"
+            disabled={!isDirty || !isValid || isSubmitting}
             className="w-full py-6 transition-transform duration-500 hover:scale-[1.03] ease-in-out"
           >
-            {t("register.signup")}
+            {isSubmitting ? (
+              <Loader2Icon className="animate-spin" />
+            ) : (
+              t("register.signup")
+            )}
           </Button>
           <FormDescription>
             {t("register.alreadyHaveAccount")}{" "}
@@ -192,6 +205,7 @@ function SignUp() {
           </FormDescription>
         </form>
       </Form>
+      <Toaster />
     </AuthLayout>
   );
 }
