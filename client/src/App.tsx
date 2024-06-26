@@ -8,6 +8,7 @@ import SignUp from "./routes/auth/signup";
 import PrivateRoute from "./routes/auth/private-route";
 import AuthRoute from "./routes/auth/auth-route";
 import Home from "./routes";
+import Dashboard from "./routes/dashboard";
 
 function App() {
   const [showSplash, setShowSplash] = useState(
@@ -31,13 +32,14 @@ function App() {
         <AuthProvider>
           <Routes>
             {/* public route */}
+            <Route path="/" element={<Home />} />
             <Route element={<AuthRoute />}>
               <Route path="/login" element={<SignIn />} />
               <Route path="/register" element={<SignUp />} />
             </Route>
             {/* private route */}
             <Route element={<PrivateRoute />}>
-              <Route path="/" element={<Home />} />
+              <Route path="/dashboard" element={<Dashboard />} />
             </Route>
             {/* catch all route */}
             <Route path="*" element={<h1>Page not found</h1>} />
