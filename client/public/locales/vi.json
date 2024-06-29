@@ -27,5 +27,13 @@
     "forgotPassword": "Quên mật khẩu?",
     "noAccount": "Chưa có tài khoản?",
     "register": "Đăng ký"
+  },
+  "forgot": {
+    "title": "Quên mật khẩu",
+    "email": "E-mail",
+    "next": "Tiếp theo",
+    "newPass": "Mật khẩu mới",
+    "send": "Gửi OTP",
+    "reset": "Đặt lại mật khẩu"
   }
 }

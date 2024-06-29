@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import User from "../models/user";
+import { log } from "console";
 
 export default {
   login: async (req: Request, res: Response) => {
@@ -27,7 +28,6 @@ export default {
           const token = jwt.sign(
             {
               email: user.email,
-              userId: user._id,
             },
             process.env.JWT_SECRET || "",
             {
@@ -89,5 +89,38 @@ export default {
         });
       }
     });
+  },
+
+  resetPassword: async (req: Request, res: Response) => {
+    const { email, newPassword } = req.body;
+
+    try {
+      const user = await User.findOne({ email });
+
+      if (!user) {
+        return res.status(404).json({
+          message: "User not found",
+        });
+      }
+
+      bcrypt.hash(newPassword, 10, async (err, hash) => {
+        if (err) {
+          return res.status(500).json({
+            message: "Internal Server Error",
+          });
+        }
+
+        user.password = hash;
+        await user.save();
+
+        return res.status(200).json({
+          message: "Password updated successfully",
+        });
+      });
+    } catch (error) {
+      return res.status(500).json({
+        message: "Internal Server Error",
+      });
+    }
   },
 };
