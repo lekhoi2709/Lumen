@@ -28,7 +28,6 @@ export default {
           const token = jwt.sign(
             {
               email: user.email,
-              userId: user._id,
             },
             process.env.JWT_SECRET || "",
             {
