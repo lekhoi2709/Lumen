@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import SMTPTransport from "nodemailer/lib/smtp-transport";
 
 async function mailSender(email: string, title: string, body: string) {
   try {
@@ -8,10 +9,13 @@ async function mailSender(email: string, title: string, body: string) {
       port: 587,
       secure: false,
       auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_HOST,
+        user: process.env.MAIL_USER!,
+        pass: process.env.MAIL_PASS!,
       },
-    });
+      tls: {
+        rejectUnauthorized: true,
+      },
+    } as SMTPTransport.Options);
 
     const info = await transporter.sendMail({
       from: {
