@@ -100,7 +100,7 @@ function SignIn() {
                   </FormControl>
                   <FormDescription>
                     <a
-                      href="#"
+                      href="/forgot-password"
                       className="cursor-pointer font-bold text-foreground"
                     >
                       {t("login.forgotPassword")}
