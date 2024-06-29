@@ -3,15 +3,21 @@ import nodemailer from "nodemailer";
 async function mailSender(email: string, title: string, body: string) {
   try {
     let transporter = nodemailer.createTransport({
-      host: process.env.MAIL_HOST,
+      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
       auth: {
         user: process.env.MAIL_USER,
         pass: process.env.MAIL_HOST,
       },
     });
 
-    let info = await transporter.sendMail({
-      from: "Lumen - LMS",
+    const info = await transporter.sendMail({
+      from: {
+        name: "Lumen - LMS",
+        address: process.env.MAIL_USER!,
+      },
       to: email,
       subject: title,
       html: body,
