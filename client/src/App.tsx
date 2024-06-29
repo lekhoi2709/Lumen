@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import SignIn from "./routes/auth/signin";
 import SignUp from "./routes/auth/signup";
 import ForgotPassword from "./routes/auth/forgot-password";
+import ResetPassword from "./routes/auth/reset-password";
 import PrivateRoute from "./routes/auth/private-route";
 import AuthRoute from "./routes/auth/auth-route";
 import Home from "./routes";
@@ -36,6 +37,7 @@ function App() {
               <Route path="/login" element={<SignIn />} />
               <Route path="/register" element={<SignUp />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/forgot-password-2" element={<ResetPassword />} />
             </Route>
             {/* private route */}
             <Route element={<PrivateRoute />}>
