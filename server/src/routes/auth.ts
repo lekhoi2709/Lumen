@@ -8,6 +8,7 @@ router.post("/login", userController.login);
 router.post("/register", userController.register);
 router.post("/send-otp", otpController.sendOTP);
 router.post("/verify-otp", otpController.verifyOTP);
-router.post("/logout", (req, res) => {});
+
+router.put("/reset-password", userController.resetPassword);
 
 export default router;
