@@ -91,17 +91,17 @@ function ResetPassword() {
           onSubmit={form.handleSubmit(onSubmit)}
           className="bg-background dark:bg-background/80 transition-colors duration-500 backdrop-blur-md rounded-lg drop-shadow-xl shadow-xl min-w-2/3 min-h-1/2 w-2/3 lg:w-1/3 flex flex-col p-8 py-12 lg:p-14 lg:py-16 items-center font-sans gap-8 lg:gap-12"
         >
-          <h1 className="text-xl lg:text-2xl font-bold">Forgot Password</h1>
+          <h1 className="text-xl lg:text-2xl font-bold">{t("forgot.title")}</h1>
           <section className="w-full flex flex-col gap-4 lg:gap-6">
             <FormField
               control={form.control}
               name="newPassword"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>New Password</FormLabel>
+                  <FormLabel>{t("forgot.newPass")}</FormLabel>
                   <FormControl>
                     <PasswordInput
-                      placeholder="New Password"
+                      placeholder={t("forgot.newPass")}
                       className="bg-accent dark:bg-accent/40"
                       {...field}
                     />
@@ -115,10 +115,10 @@ function ResetPassword() {
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>Confirm Password</FormLabel>
+                  <FormLabel>{t("register.confirmPassword")}</FormLabel>
                   <FormControl>
                     <PasswordInput
-                      placeholder="Confirm Password"
+                      placeholder={t("register.confirmPassword")}
                       className="bg-accent dark:bg-accent/40"
                       {...field}
                     />
@@ -136,7 +136,7 @@ function ResetPassword() {
             {isSubmitting ? (
               <Loader2Icon className="animate-spin" />
             ) : (
-              "Reset Password"
+              t("forgot.reset")
             )}
           </Button>
         </form>

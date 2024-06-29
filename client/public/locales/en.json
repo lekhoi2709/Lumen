@@ -27,5 +27,13 @@
     "signin": "Sign In",
     "noAccount": "Don't have an account?",
     "register": "Sign Up"
+  },
+  "forgot": {
+    "title": "Forgot Password",
+    "email": "E-mail",
+    "next": "Next",
+    "newPass": "New Password",
+    "send": "Send OTP",
+    "reset": "Reset Password"
   }
 }

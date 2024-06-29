@@ -1,5 +1,5 @@
 import AuthLayout from "@/layouts/auth-layout";
-import { set, z } from "zod";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
@@ -132,14 +132,14 @@ function ForgotPassword() {
           onSubmit={form.handleSubmit(onSubmit)}
           className="bg-background dark:bg-background/80 transition-colors duration-500 backdrop-blur-md rounded-lg drop-shadow-xl shadow-xl min-w-2/3 min-h-1/2 w-2/3 lg:w-1/3 flex flex-col p-8 py-12 lg:p-14 lg:py-16 items-center font-sans gap-8 lg:gap-12"
         >
-          <h1 className="text-xl lg:text-2xl font-bold">Forgot Password</h1>
+          <h1 className="text-xl lg:text-2xl font-bold">{t("forgot.title")}</h1>
           <section className="w-full flex flex-col gap-4 lg:gap-6">
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>E-mail</FormLabel>
+                  <FormLabel>{t("forgot.email")}</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="E-mail"
@@ -182,7 +182,7 @@ function ForgotPassword() {
                       ) : isCounting ? (
                         countdown
                       ) : (
-                        "Send OTP"
+                        t("forgot.send")
                       )}
                     </Button>
                   </div>
@@ -196,7 +196,11 @@ function ForgotPassword() {
             disabled={!isValid || !isDirty || isSubmitting}
             className="w-full py-6 transition-transform duration-500 hover:scale-[1.03] ease-in-out"
           >
-            {isSubmitting ? <Loader2Icon className="animate-spin" /> : "Next"}
+            {isSubmitting ? (
+              <Loader2Icon className="animate-spin" />
+            ) : (
+              t("forgot.next")
+            )}
           </Button>
         </form>
       </Form>
