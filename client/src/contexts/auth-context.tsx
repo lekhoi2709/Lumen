@@ -31,7 +31,7 @@ export function AuthProvider({ children, ...props }: AuthProviderProps) {
     setUser(data.user);
     setToken(data.token);
     localStorage.setItem("token", data.token);
-    navigate("/");
+    navigate("/dashboard");
     return;
   };
 
