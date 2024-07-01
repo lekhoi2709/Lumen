@@ -17,7 +17,7 @@ export default {
         });
       }
 
-      bcrypt.compare(password, user.password, (err, result) => {
+      bcrypt.compare(password, user.password!, (err, result) => {
         if (err) {
           return res.status(500).json({
             message: "Internal Server Error",
@@ -34,6 +34,8 @@ export default {
               expiresIn: "2h",
             }
           );
+
+          user.accessToken = token;
 
           return res.status(200).json({
             message: "Login successful",
