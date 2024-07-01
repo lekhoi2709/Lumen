@@ -20,6 +20,8 @@ import { useTranslation } from "react-i18next";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2Icon } from "lucide-react";
+import GoogleButton from "@/components/google-button";
+import { Separator } from "@/components/ui/separator";
 
 const formSchema = z.object({
   email: z.string().email().trim(),
@@ -74,7 +76,9 @@ function SignIn() {
           onSubmit={form.handleSubmit(onSubmit)}
           className="bg-background dark:bg-background/80 transition-colors duration-500 backdrop-blur-md rounded-lg drop-shadow-xl shadow-xl min-w-2/3 min-h-1/2 w-2/3 lg:w-1/3 flex flex-col p-8 py-12 lg:p-14 lg:py-16 items-center font-sans gap-8 lg:gap-12"
         >
-          <h1 className="text-xl lg:text-2xl font-bold">{t("login.title")}</h1>
+          <h1 className="text-xl lg:text-2xl font-bold text-center">
+            {t("login.title")}
+          </h1>
           <section className="w-full flex flex-col gap-4 lg:gap-6">
             <FormField
               control={form.control}
@@ -119,17 +123,25 @@ function SignIn() {
               )}
             />
           </section>
-          <Button
-            type="submit"
-            disabled={!isDirty || !isValid || isSubmitting}
-            className="w-full py-6 transition-transform duration-500 hover:scale-[1.03] ease-in-out"
-          >
-            {isSubmitting ? (
-              <Loader2Icon className="animate-spin" />
-            ) : (
-              t("login.signin")
-            )}
-          </Button>
+          <div className="w-full flex flex-col gap-4 md:gap-6 justify-between items-center">
+            <Button
+              type="submit"
+              disabled={!isDirty || !isValid || isSubmitting}
+              className="w-full py-6 transition-transform duration-500 hover:scale-[1.03] ease-in-out"
+            >
+              {isSubmitting ? (
+                <Loader2Icon className="animate-spin" />
+              ) : (
+                t("login.signin")
+              )}
+            </Button>
+            <div className="flex items-center justify-center gap-2 w-full">
+              <Separator className="bg-black h-[0.5px] w-1/3" />
+              <p>{t("login.or")}</p>
+              <Separator className="bg-black h-[0.5px] w-1/3" />
+            </div>
+            <GoogleButton />
+          </div>
           <FormDescription>
             {t("login.noAccount")}{" "}
             <Link
