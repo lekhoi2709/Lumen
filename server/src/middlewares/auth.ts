@@ -1,21 +1,43 @@
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 import User from "../models/user";
+import { OAuth2Client } from "google-auth-library";
 
-export const auth = async (req: Request, res: Response, next: NextFunction) => {
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+export const authenticateToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const token = req.cookies.accessToken;
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
   try {
-    const token = req.header("Authorization")!.replace("Bearer ", "");
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!);
-    const user = await User.findOne({
-      email: (decoded as jwt.JwtPayload).email,
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
     });
-    if (!user) {
-      throw new Error("User not found");
+
+    const payload = ticket.getPayload();
+
+    if (!payload) {
+      return res.status(401).json({ message: "Unauthorized" });
     }
-    (req as any).user = user.email;
-    (req as any).token = token;
+
+    req.user = payload;
+
     next();
-  } catch (error: any) {
-    res.status(401).send({ error: "Please authenticate" });
+  } catch (error) {
+    jwt.verify(token, process.env.JWT_SECRET || "", (err: any, user: any) => {
+      if (err) {
+        return res.status(403).json({ message: "Invalid token" });
+      }
+
+      req.user = user;
+      next();
+    });
   }
 };
