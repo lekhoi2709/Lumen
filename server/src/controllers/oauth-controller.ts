@@ -87,7 +87,7 @@ export default {
 
       const ticket = await oAuth2Client.verifyIdToken({
         idToken: tokens.id_token as string,
-        audience: process.env.CLIENT_ID,
+        audience: process.env.GOOGLE_CLIENT_ID,
       });
 
       const payload = ticket.getPayload();
