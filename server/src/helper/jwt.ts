@@ -1,15 +1,11 @@
 import jwt from "jsonwebtoken";
 
-function generateRefreshToken(user: any) {
+function generateRefreshToken(email: string) {
   return new Promise((resolve, reject) => {
     jwt.sign(
-      {
-        email: user.email,
-      },
+      { email: email, provider: "local" },
       process.env.JWT_REFRESH_SECRET || "",
-      {
-        expiresIn: "7d",
-      },
+      { expiresIn: "7d" },
       (err, token) => {
         if (err) {
           return reject(err);
@@ -20,14 +16,18 @@ function generateRefreshToken(user: any) {
   });
 }
 
-function verifyJWT(token: string) {
+function verifyJWT(refreshToken: string) {
   return new Promise((resolve, reject) => {
-    jwt.verify(token, process.env.JWT_SECRET || "", (err, decoded) => {
-      if (err) {
-        return reject(err);
+    jwt.verify(
+      refreshToken,
+      process.env.JWT_REFRESH_SECRET || "",
+      (err, decoded) => {
+        if (err) {
+          return reject(err);
+        }
+        return resolve(decoded);
       }
-      return resolve(decoded);
-    });
+    );
   });
 }
 

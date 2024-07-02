@@ -9,7 +9,7 @@ export default {
     const { email, password } = req.body;
 
     try {
-      const user = await User.findOne({ email });
+      const user = await User.findOne({ email }).exec();
 
       if (!user) {
         return res.status(404).json({
@@ -25,28 +25,33 @@ export default {
         }
 
         if (result) {
-          const token = jwt.sign(
+          const accessToken = jwt.sign(
             {
               email: user.email,
+              role: user.role,
+              avatarUrl: user.avatarUrl,
+              firstName: user.firstName,
+              lastName: user.lastName,
             },
             process.env.JWT_SECRET || "",
             {
               expiresIn: "2h",
             }
           );
+          user.accessToken = accessToken;
+          user.save();
 
-          user.accessToken = token;
-          const refreshToken = generateRefreshToken(user);
+          const refreshToken = generateRefreshToken(user.email);
           res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days,
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
           });
 
           return res.status(200).json({
             message: "Login successful",
             user: user.email,
-            token,
+            token: accessToken,
           });
         }
 
@@ -62,7 +67,16 @@ export default {
   },
 
   refresh: async (req: Request, res: Response) => {
-    const refreshToken = req.cookies.refreshToken;
+    const cookie = req.cookies;
+    let cookieName = "refreshToken";
+
+    if (cookie && !cookie[cookieName]) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    }
+
+    const refreshToken = cookie[cookieName];
 
     if (!refreshToken) {
       return res.status(401).json({
@@ -90,17 +104,22 @@ export default {
       const token = jwt.sign(
         {
           email: user.email,
+          role: user.role,
+          avatarUrl: user.avatarUrl,
+          firstName: user.firstName,
+          lastName: user.lastName,
         },
         process.env.JWT_SECRET || "",
         {
           expiresIn: "2h",
         }
       );
-
       user.accessToken = token;
+      user.save();
 
       return res.status(200).json({
         message: "Token refreshed",
+        user: user.email,
         token,
       });
     } catch (error) {

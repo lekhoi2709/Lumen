@@ -1,9 +1,16 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
-import User from "../models/user";
-import { OAuth2Client } from "google-auth-library";
+import { OAuth2Client, TokenPayload } from "google-auth-library";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: JwtPayload | TokenPayload;
+    }
+  }
+}
 
 export const authenticateToken = async (
   req: Request,
@@ -28,7 +35,6 @@ export const authenticateToken = async (
     }
 
     req.user = payload;
-
     next();
   } catch (error) {
     jwt.verify(token, process.env.JWT_SECRET || "", (err: any, user: any) => {
@@ -36,7 +42,7 @@ export const authenticateToken = async (
         return res.status(403).json({ message: "Invalid token" });
       }
 
-      req.user = user;
+      req.user = user as JwtPayload;
       next();
     });
   }

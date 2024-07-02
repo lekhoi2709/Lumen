@@ -1,6 +1,7 @@
 import { OAuth2Client } from "google-auth-library";
 import { Request, Response } from "express";
 import User from "../models/user";
+import jwt from "jsonwebtoken";
 
 const saveUser = async (payload: any, tokens: any) => {
   const { email, given_name, family_name, sub, picture } = payload;
@@ -29,6 +30,9 @@ const saveUser = async (payload: any, tokens: any) => {
     await user.save();
     return;
   }
+
+  user.accessToken = tokens.access_token;
+  await user.save();
 };
 
 export default {
@@ -75,7 +79,24 @@ export default {
       const payload = ticket.getPayload();
       await saveUser(payload, tokens);
 
-      return res.redirect(303, `${process.env.CLIENT_URL}/`);
+      const refreshToken = jwt.sign(
+        {
+          email: payload!.email,
+          provider: "google",
+        },
+        process.env.JWT_REFRESH_SECRET || "",
+        {
+          expiresIn: "7d",
+        }
+      );
+
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+
+      return res.redirect(303, `${process.env.CLIENT_URL}/dashboard`);
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Internal server error" });

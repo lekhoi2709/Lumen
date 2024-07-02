@@ -36,10 +36,7 @@ const userSchema = new mongoose.Schema({
   providerId: {
     type: String,
   },
-  accessToken: {
-    type: String,
-    expires: "2h",
-  },
+  accessToken: String,
 });
 
 const User = mongoose.model("User", userSchema);
