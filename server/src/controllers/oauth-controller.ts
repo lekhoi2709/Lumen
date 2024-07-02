@@ -3,9 +3,23 @@ import { Request, Response } from "express";
 import User from "../models/user";
 import jwt from "jsonwebtoken";
 
-const saveUser = async (payload: any, tokens: any) => {
+const saveUser = async (payload: any) => {
   const { email, given_name, family_name, sub, picture } = payload;
   const user = await User.findOne({ email: email });
+
+  const accessToken = jwt.sign(
+    {
+      email: email,
+      role: "Student",
+      avatarUrl: picture,
+      firstName: given_name,
+      lastName: family_name,
+    },
+    process.env.JWT_SECRET || "",
+    {
+      expiresIn: "2h",
+    }
+  );
 
   if (!user) {
     const newUser = new User({
@@ -15,7 +29,7 @@ const saveUser = async (payload: any, tokens: any) => {
       avatarUrl: picture,
       authProvider: "google",
       providerId: sub,
-      accessToken: tokens.access_token,
+      accessToken: accessToken,
     });
 
     await newUser.save();
@@ -25,13 +39,13 @@ const saveUser = async (payload: any, tokens: any) => {
   if (user && user.authProvider !== "google") {
     user.authProvider = "google";
     user.providerId = sub;
-    user.accessToken = tokens.access_token;
+    user.accessToken = accessToken;
 
     await user.save();
     return;
   }
 
-  user.accessToken = tokens.access_token;
+  user.accessToken = accessToken;
   await user.save();
 };
 
@@ -77,7 +91,7 @@ export default {
       });
 
       const payload = ticket.getPayload();
-      await saveUser(payload, tokens);
+      await saveUser(payload);
 
       const refreshToken = jwt.sign(
         {

@@ -17,33 +17,18 @@ export const authenticateToken = async (
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.cookies.accessToken;
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
   if (!token) {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
-  try {
-    const ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: process.env.GOOGLE_CLIENT_ID,
-    });
-
-    const payload = ticket.getPayload();
-
-    if (!payload) {
-      return res.status(401).json({ message: "Unauthorized" });
+  jwt.verify(token, process.env.JWT_SECRET || "", (err: any, user: any) => {
+    if (err) {
+      return res.status(403).json({ message: "Invalid token" });
     }
 
-    req.user = payload;
+    req.user = user as JwtPayload;
     next();
-  } catch (error) {
-    jwt.verify(token, process.env.JWT_SECRET || "", (err: any, user: any) => {
-      if (err) {
-        return res.status(403).json({ message: "Invalid token" });
-      }
-
-      req.user = user as JwtPayload;
-      next();
-    });
-  }
+  });
 };
