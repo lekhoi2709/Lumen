@@ -21,10 +21,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  password: {
-    type: String,
-    required: true,
-  },
+  password: String,
   role: {
     type: String,
     required: true,
@@ -39,9 +36,7 @@ const userSchema = new mongoose.Schema({
   providerId: {
     type: String,
   },
-  accessToken: {
-    type: String,
-  },
+  accessToken: String,
 });
 
 const User = mongoose.model("User", userSchema);

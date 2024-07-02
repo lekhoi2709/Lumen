@@ -1,14 +1,55 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/auth-context";
+import { useEffect, useState } from "react";
+import Loading from "@/components/loading";
 
 function PrivateRoute() {
-  const auth = useAuth();
+  const { user, loginAct } = useAuth();
+  const location = useLocation();
+  const [loading, setLoading] = useState<boolean>(true);
 
-  if (!auth.token) {
-    return <Navigate to="/login" />;
+  useEffect(() => {
+    let isMounted = true;
+    const verifyRefreshToken = async () => {
+      try {
+        const response = await fetch(`${process.env.API_URL}/auth/refresh/`, {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          loginAct(data);
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    if (!user) {
+      verifyRefreshToken();
+    } else {
+      setLoading(false);
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  if (loading) {
+    return <Loading />;
   }
 
-  return <Outlet />;
+  return user ? (
+    <Outlet />
+  ) : (
+    <Navigate to="/login" state={{ from: location }} replace />
+  );
 }
 
 export default PrivateRoute;

@@ -68,7 +68,10 @@ function SignUp() {
       });
 
       if (response.ok) {
-        alert("Account created successfully!");
+        toast({
+          title: "Account created successfully",
+          description: "Please login to continue",
+        });
         navigate("/login");
       } else {
         const error = await response.json();
