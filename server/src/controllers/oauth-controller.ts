@@ -1,54 +1,7 @@
 import { OAuth2Client } from "google-auth-library";
 import { Request, Response } from "express";
-import User from "../models/user";
+import saveUser from "../utils/save-google-user";
 import jwt from "jsonwebtoken";
-
-const saveUser = async (payload: any) => {
-  const { email, given_name, family_name, sub, picture } = payload;
-  const user = await User.findOne({ email: email });
-
-  const accessToken = jwt.sign(
-    {
-      email: email,
-      role: "Student",
-      avatarUrl: picture,
-      firstName: given_name,
-      lastName: family_name,
-    },
-    process.env.JWT_SECRET || "",
-    {
-      expiresIn: "2h",
-    }
-  );
-
-  if (!user) {
-    const newUser = new User({
-      email: email,
-      firstName: given_name,
-      lastName: family_name,
-      avatarUrl: picture,
-      authProvider: "google",
-      providerId: sub,
-      accessToken: accessToken,
-    });
-
-    await newUser.save();
-    return;
-  }
-
-  if (user && user.authProvider !== "google") {
-    user.authProvider = "google";
-    user.providerId = sub;
-    user.accessToken = accessToken;
-
-    await user.save();
-    return;
-  }
-
-  user.accessToken = accessToken;
-  await user.save();
-  return accessToken;
-};
 
 export default {
   googleAuth: async (req: Request, res: Response) => {
@@ -105,7 +58,13 @@ export default {
       );
 
       (req.session as any).userData = {
-        user: payload?.email,
+        user: {
+          email: payload!.email,
+          role: "Student",
+          avatarUrl: payload!.picture,
+          firstName: payload!.given_name,
+          lastName: payload!.family_name,
+        },
         accessToken: accessToken,
         refreshToken: refreshToken,
       };

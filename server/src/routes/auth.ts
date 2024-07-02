@@ -8,8 +8,10 @@ const router = Router();
 
 router.post("/login", userController.login);
 router.post("/logout", authenticateToken, userController.logout);
-router.get("/refresh", userController.refresh);
 router.post("/register", userController.register);
+
+router.get("/refresh", userController.refresh);
+
 router.post("/send-otp", otpController.sendOTP);
 router.post("/verify-otp", otpController.verifyOTP);
 

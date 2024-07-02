@@ -24,7 +24,7 @@ const ExpressConfig = (): Application => {
         secure: process.env.NODE_ENV === "production",
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-        sameSite: "none",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       },
       store: MongoStore.create({
         mongoUrl: dbUrl,
@@ -32,11 +32,22 @@ const ExpressConfig = (): Application => {
       }),
     })
   );
-
   app.use(
     cors({
       origin: ["http://localhost:1420", "https://lumen-omega.vercel.app"],
       credentials: true,
+      methods: ["GET", "POST", "HEAD", "PUT", "PATCH", "DELETE"],
+      allowedHeaders: [
+        "Content-Type",
+        "Authorization",
+        "X-Requested-With",
+        "Accept",
+        "Origin",
+        "Access-Control-Allow-Headers",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers",
+      ],
+      exposedHeaders: ["Content-Type"],
     })
   );
 

@@ -6,7 +6,6 @@ import { generateRefreshToken, verifyJWT } from "../utils/jwt";
 
 export default {
   login: async (req: Request, res: Response) => {
-    res.header("Access-Control-Allow-Credentials", "true");
     const { email, password } = req.body;
 
     try {
@@ -45,16 +44,28 @@ export default {
           const refreshToken = generateRefreshToken(user.email);
 
           (req.session as any).userData = {
-            user: user.email,
+            user: {
+              email: user.email,
+              role: user.role,
+              avatarUrl: user.avatarUrl,
+              firstName: user.firstName,
+              lastName: user.lastName,
+            },
             token: accessToken,
             refreshToken: refreshToken,
           };
 
           return res.status(200).json({
             message: "Login successful",
-            user: user.email,
+            user: {
+              email: user.email,
+              role: user.role,
+              avatarUrl: user.avatarUrl,
+              firstName: user.firstName,
+              lastName: user.lastName,
+            },
             token: accessToken,
-            refreshToken: refreshToken,
+            refreshToken,
           });
         }
 
@@ -114,7 +125,13 @@ export default {
 
       return res.status(200).json({
         message: "Token refreshed",
-        user: user.email,
+        user: {
+          email: user.email,
+          role: user.role,
+          avatarUrl: user.avatarUrl,
+          firstName: user.firstName,
+          lastName: user.lastName,
+        },
         token,
       });
     } catch (error) {

@@ -85,7 +85,7 @@ function ForgotPassword() {
       sessionStorage.setItem("email", form.getValues("email"));
       toast({
         title: result.message,
-        description: "You can now login with your new password.",
+        description: "You will be redirected to the next step..",
       });
       navigate("/forgot-password-2");
     } catch (error: any) {

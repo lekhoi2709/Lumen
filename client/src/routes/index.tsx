@@ -1,8 +1,12 @@
+import Navbar from "@/components/nav-bar";
+import Layout from "@/layouts/layout";
+
 function Home() {
   return (
-    <div>
+    <Layout>
+      <Navbar />
       <h1>Home</h1>
-    </div>
+    </Layout>
   );
 }
 
