@@ -105,8 +105,10 @@ export default {
       );
 
       res.cookie("refreshToken", refreshToken, {
-        httpOnly: process.env.NODE_ENV === "production" ? false : true,
+        httpOnly: true,
         secure: process.env.NODE_ENV === "production",
+        domain: process.env.NODE_ENV === "production" ? ".vercel.app" : "",
+        path: "/",
         sameSite: "none",
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });

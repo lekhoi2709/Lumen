@@ -43,8 +43,10 @@ export default {
 
           const refreshToken = generateRefreshToken(user.email);
           res.cookie("refreshToken", refreshToken, {
-            httpOnly: process.env.NODE_ENV === "production" ? false : true,
+            httpOnly: true,
+            domain: process.env.NODE_ENV === "production" ? ".vercel.app" : "",
             secure: process.env.NODE_ENV === "production",
+            path: "/",
             sameSite: "none",
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
           });
