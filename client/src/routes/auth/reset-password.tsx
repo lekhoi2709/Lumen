@@ -78,6 +78,7 @@ function ResetPassword() {
         description: "You can now login with your new password.",
       });
 
+      sessionStorage.removeItem("token");
       navigate("/login");
     } catch (error: any) {
       console.error(error);
