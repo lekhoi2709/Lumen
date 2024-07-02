@@ -17,7 +17,9 @@ const ExpressConfig = (): Application => {
     session({
       secret: process.env.SESSION_SECRET || "",
       resave: false,
-      saveUninitialized: false,
+      saveUninitialized: true,
+      proxy: true,
+      name: "sid",
       cookie: {
         secure: process.env.NODE_ENV === "production",
         httpOnly: true,
