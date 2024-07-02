@@ -10,12 +10,13 @@ function PrivateRoute() {
 
   useEffect(() => {
     let isMounted = true;
+    const refreshToken = localStorage.getItem("refreshToken");
     const verifyRefreshToken = async () => {
       try {
-        const response = await fetch(`${process.env.API_URL}/auth/refresh/`, {
+        const response = await fetch(`${process.env.API_URL}/auth/refresh`, {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("refreshToken")}`,
+            Authorization: `Bearer ${refreshToken}`,
           },
           credentials: "include",
         });

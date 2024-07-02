@@ -2,10 +2,11 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import User from "../models/user";
-import { generateRefreshToken, verifyJWT } from "../helper/jwt";
+import { generateRefreshToken, verifyJWT } from "../utils/jwt";
 
 export default {
   login: async (req: Request, res: Response) => {
+    res.header("Access-Control-Allow-Credentials", "true");
     const { email, password } = req.body;
 
     try {
