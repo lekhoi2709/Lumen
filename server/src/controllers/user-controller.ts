@@ -42,19 +42,18 @@ export default {
           user.save();
 
           const refreshToken = generateRefreshToken(user.email);
-          res.cookie("refreshToken", refreshToken, {
-            httpOnly: true,
-            domain: process.env.NODE_ENV === "production" ? ".vercel.app" : "",
-            secure: process.env.NODE_ENV === "production",
-            path: "/",
-            sameSite: "none",
-            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-          });
+
+          (req.session as any).userData = {
+            user: user.email,
+            token: accessToken,
+            refreshToken: refreshToken,
+          };
 
           return res.status(200).json({
             message: "Login successful",
             user: user.email,
             token: accessToken,
+            refreshToken: refreshToken,
           });
         }
 
@@ -70,16 +69,8 @@ export default {
   },
 
   refresh: async (req: Request, res: Response) => {
-    const cookie = req.cookies;
-    let cookieName = "refreshToken";
-
-    if (cookie && !cookie[cookieName]) {
-      return res.status(401).json({
-        message: "Unauthorized",
-      });
-    }
-
-    const refreshToken = cookie[cookieName];
+    const authHeader = req.headers["authorization"];
+    const refreshToken = authHeader && authHeader.split(" ")[1];
 
     if (!refreshToken) {
       return res.status(401).json({

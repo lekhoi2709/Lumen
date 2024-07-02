@@ -1,19 +1,13 @@
 import jwt from "jsonwebtoken";
 
 function generateRefreshToken(email: string) {
-  return new Promise((resolve, reject) => {
-    jwt.sign(
-      { email: email, provider: "local" },
-      process.env.JWT_REFRESH_SECRET || "",
-      { expiresIn: "7d" },
-      (err, token) => {
-        if (err) {
-          return reject(err);
-        }
-        return resolve(token);
-      }
-    );
-  });
+  return jwt.sign(
+    { email: email, provider: "local" },
+    process.env.JWT_REFRESH_SECRET || "",
+    {
+      expiresIn: "7d",
+    }
+  );
 }
 
 function verifyJWT(refreshToken: string) {

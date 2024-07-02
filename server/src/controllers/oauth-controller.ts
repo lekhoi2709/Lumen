@@ -47,12 +47,14 @@ const saveUser = async (payload: any) => {
 
   user.accessToken = accessToken;
   await user.save();
+  return accessToken;
 };
 
 export default {
   googleAuth: async (req: Request, res: Response) => {
     res.header("Access-Control-Allow-Credentials", "true");
     res.header("Referrer-Policy", "no-referrer-when-downgrade");
+
     const redirectURL = process.env.REDIRECT_URL;
 
     const oAuth2Client = new OAuth2Client(
@@ -61,7 +63,6 @@ export default {
       redirectURL
     );
 
-    // Generate the url that will be used for the consent dialog.
     const authorizeUrl = oAuth2Client.generateAuthUrl({
       access_type: "offline",
       scope: "https://www.googleapis.com/auth/userinfo.profile email openid ",
@@ -81,7 +82,6 @@ export default {
         process.env.GOOGLE_CLIENT_SECRET,
         redirectURL
       );
-
       const { tokens } = await oAuth2Client.getToken(code);
       oAuth2Client.setCredentials(tokens);
 
@@ -91,7 +91,7 @@ export default {
       });
 
       const payload = ticket.getPayload();
-      await saveUser(payload);
+      const accessToken = await saveUser(payload);
 
       const refreshToken = jwt.sign(
         {
@@ -104,19 +104,31 @@ export default {
         }
       );
 
-      res.cookie("refreshToken", refreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        domain: process.env.NODE_ENV === "production" ? ".vercel.app" : "",
-        path: "/",
-        sameSite: "none",
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-      });
+      (req.session as any).userData = {
+        user: payload?.email,
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+      };
 
-      return res.redirect(303, `${process.env.CLIENT_URL}/dashboard`);
+      return res.redirect(303, `${process.env.CLIENT_URL}/oauth/success`);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "Internal server error" });
+      return res.redirect(303, `${process.env.CLIENT_URL}/login`);
     }
+  },
+
+  googleSuccess: async (req: Request, res: Response) => {
+    const userData = (req.session as any).userData;
+
+    if (!userData) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    return res.status(200).json({
+      message: "Login successful",
+      user: userData.user,
+      token: userData.accessToken,
+      refreshToken: userData.refreshToken,
+    });
   },
 };

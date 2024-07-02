@@ -1,13 +1,10 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
-import { OAuth2Client, TokenPayload } from "google-auth-library";
-
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 declare global {
   namespace Express {
     interface Request {
-      user?: JwtPayload | TokenPayload;
+      user?: JwtPayload;
     }
   }
 }

@@ -15,6 +15,7 @@ router.post("/verify-otp", otpController.verifyOTP);
 
 router.post("/google", oauthController.googleAuth);
 router.get("/google/callback", oauthController.googleCallback);
+router.get("/google/success", oauthController.googleSuccess);
 
 router.put("/reset-password", authenticateToken, userController.resetPassword);
 

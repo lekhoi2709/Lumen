@@ -11,6 +11,7 @@ import PrivateRoute from "./routes/auth/private-route";
 import AuthRoute from "./routes/auth/auth-route";
 import Home from "./routes";
 import Dashboard from "./routes/dashboard";
+import GoogleSuccess from "./routes/auth/google-success";
 
 function App() {
   const [showSplash, setShowSplash] = useState(
@@ -40,6 +41,7 @@ function App() {
             <Route element={<AuthRoute />}>
               <Route path="/login" element={<SignIn />} />
               <Route path="/register" element={<SignUp />} />
+              <Route path="/oauth/success" element={<GoogleSuccess />} />
             </Route>
             {/* private route */}
             <Route element={<PrivateRoute />}>

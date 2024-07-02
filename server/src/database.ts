@@ -18,10 +18,7 @@ export default class MongooseConnection {
   public async connect(dbUrl: string) {
     if (!this.isConnected) {
       try {
-        await mongoose.connect(dbUrl, {
-          useNewUrlParser: true,
-          useUnifiedTopology: true,
-        } as ConnectOptions);
+        await mongoose.connect(dbUrl);
         this.isConnected = true;
         console.log("Connected to MongoDB");
       } catch (e) {

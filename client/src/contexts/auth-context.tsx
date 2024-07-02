@@ -27,6 +27,9 @@ export function AuthProvider({ children, ...props }: AuthProviderProps) {
   const loginAct = async (data: any) => {
     setUser(data.user);
     sessionStorage.setItem("token", data.token);
+    if (data.refreshToken) {
+      localStorage.setItem("refreshToken", data.refreshToken);
+    }
     navigate("/dashboard");
     return;
   };
@@ -34,6 +37,7 @@ export function AuthProvider({ children, ...props }: AuthProviderProps) {
   const logoutAct = () => {
     setUser(null);
     sessionStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
     navigate("/login");
   };
 

@@ -58,6 +58,7 @@ function SignIn() {
       const result = await response.json();
 
       if (result.token && result.user) {
+        console.log(result);
         auth.loginAct(result);
       } else {
         toast({

@@ -8,10 +8,7 @@ if (process.env.NODE_ENV != "production") {
 }
 
 const port = process.env.PORT || 5000;
-var dbUrl: string = process.env.DB_URI || "";
-if (process.env.NODE_ENV == "production") {
-  dbUrl = process.env.DB_URL || "";
-}
+var dbUrl: string = process.env.DB_URL!;
 
 async function main() {
   try {
