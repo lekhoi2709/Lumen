@@ -1,9 +1,11 @@
 import React from "react";
 import AuthBg from "@/assets/auth-bg.jpg";
+import Navbar from "@/components/nav-bar";
 
 function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="w-screen min-h-screen flex items-center justify-center relative">
+    <div className="w-screen min-h-screen flex flex-col items-center justify-between relative md:gap-8">
+      <Navbar className="static" />
       <div className="w-full h-full absolute z-0">
         <img
           src={AuthBg}
@@ -13,7 +15,7 @@ function AuthLayout({ children }: { children: React.ReactNode }) {
         />
       </div>
       {children}
-      <span className="absolute z-10 bottom-0 right-0 p-2 lg:p-3 bg-background/80 backdrop-blur-md rounded-tl-md text-sm lg:text-base transition-colors duration-500">
+      <span className="z-10 self-end p-2 lg:p-3 bg-background/80 backdrop-blur-md rounded-tl-md text-sm lg:text-base transition-colors duration-500">
         <p>
           Designed by{" "}
           <a

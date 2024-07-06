@@ -5,20 +5,23 @@ import { AuthProvider } from "./contexts/auth-context";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import SignIn from "./routes/auth/signin";
 import SignUp from "./routes/auth/signup";
+import ForgotPassword from "./routes/auth/forgot-password";
+import ResetPassword from "./routes/auth/reset-password";
 import PrivateRoute from "./routes/auth/private-route";
 import AuthRoute from "./routes/auth/auth-route";
 import Home from "./routes";
-import Navbar from "./components/nav-bar";
+import Dashboard from "./routes/dashboard";
+import GoogleSuccess from "./routes/auth/google-success";
+import Loading from "./components/loading";
 
 function App() {
   const [showSplash, setShowSplash] = useState(
-    () =>
-      !JSON.parse(sessionStorage.getItem("isFirstTimeShowSplash") || "false")
+    () => !JSON.parse(sessionStorage.getItem("show-splash") || "false")
   );
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      sessionStorage.setItem("isFirstTimeShowSplash", JSON.stringify(true));
+      sessionStorage.setItem("show-splash", JSON.stringify(true));
       setShowSplash(false);
     }, 2000);
 
@@ -28,20 +31,22 @@ function App() {
   return showSplash ? (
     <SplashScreen />
   ) : (
-    <Suspense fallback="loading">
+    <Suspense fallback={<Loading />}>
       <Router>
-        <Navbar />
         <AuthProvider>
           <Routes>
             {/* public route */}
             <Route path="/" element={<Home />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/forgot-password-2" element={<ResetPassword />} />
             <Route element={<AuthRoute />}>
               <Route path="/login" element={<SignIn />} />
               <Route path="/register" element={<SignUp />} />
+              <Route path="/oauth/success" element={<GoogleSuccess />} />
             </Route>
             {/* private route */}
             <Route element={<PrivateRoute />}>
-              <Route path="/dashboard" element={<Home />} />
+              <Route path="/dashboard" element={<Dashboard />} />
             </Route>
             {/* catch all route */}
             <Route path="*" element={<h1>Page not found</h1>} />

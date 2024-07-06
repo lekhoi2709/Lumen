@@ -15,6 +15,11 @@ import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/password-input";
 import { Button } from "@/components/ui/button";
 import { useNavigate, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { Toaster } from "@/components/ui/toaster";
+import { useToast } from "@/components/ui/use-toast";
+import { Loader2Icon } from "lucide-react";
+import axios from "axios";
 
 const formSchema = z
   .object({
@@ -41,35 +46,34 @@ function SignUp() {
   });
 
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const { toast } = useToast();
+  const { isDirty, isValid, isSubmitting } = form.formState;
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    try {
-      const payload = {
-        email: data.email,
-        password: data.password,
-        lastName: data.lastName,
-        firstName: data.firstName,
-        avatarUrl: "default-avatar",
-      };
+    const payload = {
+      email: data.email,
+      password: data.password,
+      lastName: data.lastName,
+      firstName: data.firstName,
+      avatarUrl: "default-avatar",
+    };
 
-      const response = await fetch(`${process.env.API_URL}/auth/register/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (response.ok) {
-        alert("Account created successfully!");
+    await axios
+      .post(`${process.env.API_URL}/auth/register/`, payload)
+      .then((res) => {
+        toast({
+          title: res.data.message,
+          description: "Please login to continue",
+        });
         navigate("/login");
-      } else {
-        const error = await response.json();
-        alert(error.message);
-      }
-    } catch (error) {
-      console.error(error);
-    }
+      })
+      .catch((err) => {
+        toast({
+          variant: "destructive",
+          description: err.response.data.message,
+        });
+      });
   }
 
   return (
@@ -79,10 +83,12 @@ function SignUp() {
           onSubmit={form.handleSubmit(onSubmit)}
           className="bg-background dark:bg-background/80 transition-colors duration-500 backdrop-blur-md rounded-lg drop-shadow-xl shadow-xl min-w-2/3 min-h-1/2 w-2/3 lg:w-1/3 flex flex-col p-8 py-12 lg:p-14 lg:py-16 items-center font-sans gap-8 lg:gap-12"
         >
-          <h1 className="text-xl lg:text-2xl font-bold">Sign Up</h1>
+          <h1 className="text-xl lg:text-2xl font-bold">
+            {t("register.title")}
+          </h1>
           <section className="w-full flex flex-col gap-4 lg:gap-6">
             <section className="w-full flex flex-col gap-3">
-              <FormLabel>Full Name</FormLabel>
+              <FormLabel>{t("register.fullName")}</FormLabel>
               <div className="flex flex-col lg:flex-row gap-4">
                 <FormField
                   control={form.control}
@@ -91,7 +97,7 @@ function SignUp() {
                     <FormItem className="w-full">
                       <FormControl>
                         <Input
-                          placeholder="First Name"
+                          placeholder={t("register.firstName")}
                           className="bg-accent dark:bg-accent/40"
                           {...field}
                         />
@@ -108,7 +114,7 @@ function SignUp() {
                     <FormItem className="w-full">
                       <FormControl>
                         <Input
-                          placeholder="Last Name"
+                          placeholder={t("register.lastName")}
                           className="bg-accent dark:bg-accent/40"
                           {...field}
                         />
@@ -127,7 +133,7 @@ function SignUp() {
                   <FormLabel>E-mail</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="E-mail"
+                      placeholder={t("register.email")}
                       className="bg-accent dark:bg-accent/40"
                       {...field}
                     />
@@ -141,10 +147,10 @@ function SignUp() {
               name="password"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>{t("register.password")}</FormLabel>
                   <FormControl>
                     <PasswordInput
-                      placeholder="Password"
+                      placeholder={t("register.password")}
                       className="bg-accent dark:bg-accent/40"
                       {...field}
                     />
@@ -158,10 +164,10 @@ function SignUp() {
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>Confirm password</FormLabel>
+                  <FormLabel>{t("register.confirmPassword")}</FormLabel>
                   <FormControl>
                     <PasswordInput
-                      placeholder="Confirm Password"
+                      placeholder={t("register.confirmPassword")}
                       className="bg-accent dark:bg-accent/40"
                       {...field}
                     />
@@ -173,21 +179,27 @@ function SignUp() {
           </section>
           <Button
             type="submit"
+            disabled={!isDirty || !isValid || isSubmitting}
             className="w-full py-6 transition-transform duration-500 hover:scale-[1.03] ease-in-out"
           >
-            Create Account
+            {isSubmitting ? (
+              <Loader2Icon className="animate-spin" />
+            ) : (
+              t("register.signup")
+            )}
           </Button>
           <FormDescription>
-            Already have an account?{" "}
+            {t("register.alreadyHaveAccount")}{" "}
             <Link
               to="/login"
               className="cursor-pointer font-bold text-foreground transition-colors duration-500 hover:text-blue-500"
             >
-              Sign In
+              {t("register.login")}
             </Link>
           </FormDescription>
         </form>
       </Form>
+      <Toaster />
     </AuthLayout>
   );
 }

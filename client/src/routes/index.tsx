@@ -6,7 +6,7 @@ import trendingImage2 from "../assets/home/trendingImage2.png";
 import trendingImage3 from "../assets/home/trendingImage3.png";
 import trendingImage4 from "../assets/home/trendingImage4.png";
 import Navbar from "@/components/nav-bar";
-
+import Footer from "@/components/footer";
 
 function HeroSection() {
   return (
@@ -114,6 +114,7 @@ function Home() {
       <Navbar />
       <HeroSection />
       <TrendingSection />
+      <Footer />
     </div>
   );
 }

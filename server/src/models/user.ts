@@ -4,28 +4,29 @@ const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
     required: true,
+    trim: true,
   },
   lastName: {
     type: String,
     required: true,
+    trim: true,
   },
   email: {
     type: String,
     unique: true,
     required: true,
+    trim: true,
   },
   avatarUrl: {
     type: String,
     required: true,
   },
-  password: {
-    type: String,
-    required: true,
-  },
+  password: String,
   role: {
     type: String,
     required: true,
-    default: "user",
+    default: "Student",
+    enum: ["Student", "Teacher", "Admin"],
   },
   authProvider: {
     type: String,
@@ -35,9 +36,7 @@ const userSchema = new mongoose.Schema({
   providerId: {
     type: String,
   },
-  accessToken: {
-    type: String,
-  },
+  accessToken: String,
 });
 
 const User = mongoose.model("User", userSchema);
