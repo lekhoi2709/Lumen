@@ -5,7 +5,21 @@
     "contact": "Contact",
     "login": "Log In",
     "register": "Sign Up",
-    "logout": "Log Out"
+    "logout": "Log Out",
+    "dashboard": "Dashboard"
+  },
+  "footer": {
+    "contact": "Contact",
+    "address": "Ho Chi Minh City, Vietnam",
+    "about": "About Lumen",
+    "mission": "Mission & Vision",
+    "team": "Our Team",
+    "blog": "Blog",
+    "links": "Useful Links",
+    "help": "Help Center",
+    "faq": "FAQ",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Use"
   },
   "register": {
     "title": "Sign Up",
