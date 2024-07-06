@@ -5,7 +5,21 @@
     "contact": "Liên hệ",
     "login": "Đăng nhập",
     "register": "Đăng ký",
-    "logout": "Đăng xuất"
+    "logout": "Đăng xuất",
+    "dashboard": "Bảng điều khiển"
+  },
+  "footer": {
+    "contact": "Liên hệ",
+    "address": "Thành phố Hồ Chí Minh, Việt Nam",
+    "about": "Về Lumen",
+    "mission": "Sứ mệnh & Tầm nhìn",
+    "team": "Đội ngũ",
+    "blog": "Blog",
+    "links": "Liên kết hữu ích",
+    "help": "Trung tâm trợ giúp",
+    "faq": "Câu hỏi thường gặp",
+    "privacy": "Chính sách bảo mật",
+    "terms": "Điều khoản sử dụng"
   },
   "register": {
     "title": "Đăng ký",

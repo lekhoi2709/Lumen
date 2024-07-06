@@ -23,6 +23,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useState, useEffect } from "react";
 import { Loader2Icon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const formSchema = z.object({
   email: z.string().email().trim(),
@@ -57,72 +58,51 @@ function ForgotPassword() {
   const { isValid, isDirty, isSubmitting } = form.formState;
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    try {
-      console.log(data);
-      const response = await fetch(`${process.env.API_URL}/auth/verify-otp`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: data.email,
-          otp: data.otp,
-        }),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
+    await axios
+      .post(`${process.env.API_URL}/auth/verify-otp`, {
+        email: data.email,
+        otp: data.otp,
+      })
+      .then((res) => {
+        sessionStorage.setItem("token", res.data.token);
+        sessionStorage.setItem("email", form.getValues("email"));
+        toast({
+          title: res.data.message,
+          description: "You will be redirected to the next step..",
+        });
+        navigate("/forgot-password-2");
+      })
+      .catch((err) => {
         toast({
           variant: "destructive",
           title: "Uh oh! Something went wrong.",
-          description: result.message,
+          description: err.response.data.message,
         });
-        return;
-      }
-
-      sessionStorage.setItem("token", result.token);
-      sessionStorage.setItem("email", form.getValues("email"));
-      toast({
-        title: result.message,
-        description: "You will be redirected to the next step..",
       });
-      navigate("/forgot-password-2");
-    } catch (error: any) {
-      console.error(error);
-    }
   };
 
   const handleSendOTP = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(`${process.env.API_URL}/auth/send-otp`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: form.getValues("email") }),
-      });
-
-      const result = await response.json();
-      setLoading(false);
-      if (!response.ok) {
+    setLoading(true);
+    await axios
+      .post(`${process.env.API_URL}/auth/send-otp`, {
+        email: form.getValues("email"),
+      })
+      .then((res) => {
+        setLoading(false);
+        toast({
+          title: res.data.message,
+          description: "Please check your e-mail for the OTP.",
+        });
+        setIsCounting(true);
+      })
+      .catch((err) => {
+        setLoading(false);
         toast({
           variant: "destructive",
           title: "Uh oh! Something went wrong.",
-          description: result.message,
+          description: err.response.data.message,
         });
-        return;
-      }
-
-      toast({
-        title: result.message,
-        description: "Please check your e-mail for the OTP.",
       });
-      setIsCounting(true);
-    } catch (error: any) {
-      console.error(error);
-    }
   };
 
   return (

@@ -171,7 +171,7 @@ export default {
         const newUser = await user.save();
 
         return res.status(201).json({
-          message: "User created successfully",
+          message: "Account created successfully",
           data: newUser,
         });
       } catch (error: any) {
@@ -203,6 +203,12 @@ export default {
         if (err) {
           return res.status(500).json({
             message: "Internal Server Error",
+          });
+        }
+
+        if (hash === user.password) {
+          return res.status(400).json({
+            message: "New password must be different from the current password",
           });
         }
 

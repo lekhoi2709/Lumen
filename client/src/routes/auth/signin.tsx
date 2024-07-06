@@ -22,6 +22,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Loader2Icon } from "lucide-react";
 import GoogleButton from "@/components/google-button";
 import { Separator } from "@/components/ui/separator";
+import axios from "axios";
 
 const formSchema = z.object({
   email: z.string().email().trim(),
@@ -40,34 +41,28 @@ function SignIn() {
   const { isDirty, isValid, isSubmitting } = form.formState;
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    try {
-      const payload = {
-        email: data.email,
-        password: data.password,
-      };
-
-      const response = await fetch(`${process.env.API_URL}/auth/login/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-        redirect: "follow",
-      });
-
-      const result = await response.json();
-
-      if (result.token && result.user) {
-        auth.loginAct(result);
-      } else {
+    const payload = {
+      email: data.email,
+      password: data.password,
+    };
+    await axios
+      .post(`${process.env.API_URL}/auth/login/`, payload)
+      .then((res) => {
+        if (res.data.token && res.data.user) {
+          auth.loginAct(res.data);
+        } else {
+          toast({
+            variant: "destructive",
+            description: res.data.message,
+          });
+        }
+      })
+      .catch((err) => {
         toast({
           variant: "destructive",
-          description: result.message,
+          description: err.response.data.message,
         });
-      }
-    } catch (error) {
-      console.error(error);
-    }
+      });
   }
 
   return (

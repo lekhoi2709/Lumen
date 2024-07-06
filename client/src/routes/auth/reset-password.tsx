@@ -17,6 +17,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2Icon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const formSchema = z
   .object({
@@ -46,43 +47,35 @@ function ResetPassword() {
   const { isValid, isDirty, isSubmitting } = form.formState;
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    try {
-      const response = await fetch(
+    await axios
+      .put(
         `${process.env.API_URL}/auth/reset-password`,
         {
-          method: "PUT",
+          email: sessionStorage.getItem("email"),
+          newPassword: data.newPassword,
+        },
+        {
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           },
-          body: JSON.stringify({
-            email: sessionStorage.getItem("email"),
-            newPassword: data.newPassword,
-          }),
         }
-      );
-
-      const result = await response.json();
-
-      if (!response.ok) {
+      )
+      .then((res) => {
+        toast({
+          title: res.data.message,
+          description: "You can now login with your new password.",
+        });
+        sessionStorage.removeItem("token");
+        localStorage.removeItem("refreshToken");
+        navigate("/login");
+      })
+      .catch((err) => {
         toast({
           variant: "destructive",
           title: "Uh oh! Something went wrong.",
-          description: result.message,
+          description: err.response.data.message,
         });
-        return;
-      }
-
-      toast({
-        title: result.message,
-        description: "You can now login with your new password.",
       });
-
-      sessionStorage.removeItem("token");
-      navigate("/login");
-    } catch (error: any) {
-      console.error(error);
-    }
   };
 
   return (
