@@ -19,6 +19,7 @@ import { useTranslation } from "react-i18next";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2Icon } from "lucide-react";
+import axios from "axios";
 
 const formSchema = z
   .object({
@@ -50,39 +51,29 @@ function SignUp() {
   const { isDirty, isValid, isSubmitting } = form.formState;
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    try {
-      const payload = {
-        email: data.email,
-        password: data.password,
-        lastName: data.lastName,
-        firstName: data.firstName,
-        avatarUrl: "default-avatar",
-      };
+    const payload = {
+      email: data.email,
+      password: data.password,
+      lastName: data.lastName,
+      firstName: data.firstName,
+      avatarUrl: "default-avatar",
+    };
 
-      const response = await fetch(`${process.env.API_URL}/auth/register/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (response.ok) {
+    await axios
+      .post(`${process.env.API_URL}/auth/register/`, payload)
+      .then((res) => {
         toast({
-          title: "Account created successfully",
+          title: res.data.message,
           description: "Please login to continue",
         });
         navigate("/login");
-      } else {
-        const error = await response.json();
+      })
+      .catch((err) => {
         toast({
           variant: "destructive",
-          description: error.message,
+          description: err.response.data.message,
         });
-      }
-    } catch (error) {
-      console.error(error);
-    }
+      });
   }
 
   return (

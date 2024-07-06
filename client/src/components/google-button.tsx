@@ -1,17 +1,19 @@
 import { Button } from "./ui/button";
 import { useTranslation } from "react-i18next";
+import axios from "axios";
 
 function GoogleButton() {
   const { t } = useTranslation();
 
   const googleAuth = async () => {
-    const response = await fetch(`${process.env.API_URL}/auth/google`, {
-      method: "POST",
-    });
-
-    const result = await response.json();
-
-    window.open(result.url, "_self");
+    await axios
+      .post(`${process.env.API_URL}/auth/google`)
+      .then((res) => {
+        window.open(res.data.url, "_self");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (

@@ -2,6 +2,7 @@ import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/auth-context";
 import { useEffect, useState } from "react";
 import Loading from "@/components/loading";
+import axios from "axios";
 
 function PrivateRoute() {
   const { user, loginAct } = useAuth();
@@ -12,26 +13,24 @@ function PrivateRoute() {
     let isMounted = true;
     const refreshToken = localStorage.getItem("refreshToken");
     const verifyRefreshToken = async () => {
-      try {
-        const response = await fetch(`${process.env.API_URL}/auth/refresh`, {
-          method: "GET",
+      await axios
+        .get(`${process.env.API_URL}/auth/refresh`, {
           headers: {
             Authorization: `Bearer ${refreshToken}`,
           },
-          credentials: "include",
+          withCredentials: true,
+        })
+        .then((res) => {
+          loginAct(res.data);
+        })
+        .catch((err) => {
+          console.error(err);
+        })
+        .finally(() => {
+          if (isMounted) {
+            setLoading(false);
+          }
         });
-
-        if (response.ok) {
-          const data = await response.json();
-          loginAct(data);
-        }
-      } catch (error) {
-        console.error(error);
-      } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
-      }
     };
 
     if (!user) {

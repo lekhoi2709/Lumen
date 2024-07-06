@@ -2,6 +2,7 @@ import { useAuth } from "@/contexts/auth-context";
 import { useEffect, useState } from "react";
 import Loading from "@/components/loading";
 import { Navigate, useLocation } from "react-router-dom";
+import axios from "axios";
 
 function GoogleSuccess() {
   const { user, loginAct } = useAuth();
@@ -11,26 +12,21 @@ function GoogleSuccess() {
   useEffect(() => {
     let isMounted = true;
     const getUserData = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.API_URL}/auth/google/success/`,
-          {
-            method: "GET",
-            credentials: "include",
+      await axios
+        .get(`${process.env.API_URL}/auth/google/success/`, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          loginAct(res.data);
+        })
+        .catch((err) => {
+          console.error(err);
+        })
+        .finally(() => {
+          if (isMounted) {
+            setLoading(false);
           }
-        );
-
-        if (response.ok) {
-          const data = await response.json();
-          loginAct(data);
-        }
-      } catch (error) {
-        console.error(error);
-      } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
-      }
+        });
     };
 
     if (!user) {

@@ -50,7 +50,6 @@ export default {
         .limit(1);
 
       if (checkOTP.length === 0 || checkOTP[0].otp !== otp) {
-        console.log(checkOTP);
         return res.status(404).json({ message: "OTP not found" });
       }
 
