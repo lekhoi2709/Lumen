@@ -12,6 +12,7 @@ import AuthRoute from "./routes/auth/auth-route";
 import Home from "./routes";
 import Dashboard from "./routes/dashboard";
 import GoogleSuccess from "./routes/auth/google-success";
+import Loading from "./components/loading";
 
 function App() {
   const [showSplash, setShowSplash] = useState(
@@ -30,7 +31,7 @@ function App() {
   return showSplash ? (
     <SplashScreen />
   ) : (
-    <Suspense fallback="loading">
+    <Suspense fallback={<Loading />}>
       <Router>
         <AuthProvider>
           <Routes>
