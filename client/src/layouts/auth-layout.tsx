@@ -1,6 +1,6 @@
 import React from "react";
 import AuthBg from "@/assets/auth-bg.jpg";
-import Navbar from "@/components/nav-bar";
+import Navbar from "@/components/nav-bar/index";
 
 function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
