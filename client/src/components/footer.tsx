@@ -29,7 +29,7 @@ function Footer({ className }: { className?: string }) {
           link: "#",
         },
         {
-          title: t("team"),
+          title: t("footer.team"),
           link: "#",
         },
         {
@@ -63,7 +63,7 @@ function Footer({ className }: { className?: string }) {
   return (
     <footer
       className={twMerge(
-        "rounded-t-md w-full flex flex-col items-center justify-center p-6 bg-orange-500 text-black gap-8",
+        "rounded-t-md w-full flex flex-col items-center justify-center p-6 bg-orange-500 dark:bg-orange-600 text-[#121212] gap-8",
         className
       )}
     >
