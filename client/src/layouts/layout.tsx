@@ -1,11 +1,23 @@
 import React from "react";
-import Navbar from "@/components/nav-bar";
+import Navbar from "@/components/nav-bar/index";
 import Footer from "@/components/footer";
+import { twMerge } from "tailwind-merge";
 
-function Layout({ children }: { children: React.ReactNode }) {
+function Layout({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
-    <div className="w-screen min-h-screen flex flex-col items-center justify-between">
-      <Navbar className="self-start static" />
+    <div
+      className={twMerge(
+        "min-h-screen flex flex-col items-center justify-between",
+        className
+      )}
+    >
+      <Navbar className="self-start fixed" />
       <main className="w-full h-full flex-1">{children}</main>
       <Footer />
     </div>
