@@ -69,12 +69,12 @@ function TrendingSection() {
   ];
 
   return (
-    <div className="py-16 bg-white">
+    <div className="py-16 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-4xl font-extrabold text-gray-900 text-center mb-4">
+        <h2 className="text-4xl font-extrabold text-foreground text-center mb-4">
           <span className="text-orange-500">Top</span> Trending
         </h2>
-        <p className="text-gray-600 text-center mb-12">
+        <p className="text-muted-foreground text-center mb-12">
           Here are top trending categories across multiple platforms you can
           pick your field and start learning with the best match for you.
         </p>
@@ -82,7 +82,7 @@ function TrendingSection() {
           {trendingCourses.map((course, index) => (
             <div
               key={index}
-              className="bg-white shadow-lg rounded-lg overflow-hidden"
+              className="bg-muted shadow-lg rounded-lg overflow-hidden"
             >
               <img
                 src={course.image}
@@ -90,13 +90,15 @@ function TrendingSection() {
                 className="w-full h-48 object-cover"
               />
               <div className="p-4">
-                <h3 className="text-xl font-bold text-gray-800">
+                <h3 className="text-xl font-bold text-foreground">
                   {course.title}
                 </h3>
                 <div className="flex items-center mt-2">
                   <StarIcon size={20} className="text-orange-500" />
-                  <span className="text-gray-800 ml-1">{course.rating}</span>
-                  <span className="text-gray-600 ml-2">({course.reviews})</span>
+                  <span className="text-foreground ml-1">{course.rating}</span>
+                  <span className="text-muted-foreground ml-2">
+                    ({course.reviews})
+                  </span>
                 </div>
               </div>
             </div>

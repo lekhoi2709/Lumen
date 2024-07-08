@@ -66,11 +66,11 @@ function Footer({ className }: { className?: string }) {
   return (
     <footer
       className={twMerge(
-        "rounded-t-md w-full flex flex-col items-center justify-center p-6 bg-orange-500 gap-8",
+        "rounded-t-[10px] w-full flex flex-col items-center justify-center p-6 bg-orange-500 gap-8 transition-colors duration-300 ease-in-out text-foreground",
         className
       )}
     >
-      <div className="w-full max-w-[900px] flex flex-wrap items-start justify-center text-sm gap-8 md:flex-row md:text-base md:gap-12 text-foreground">
+      <div className="w-full max-w-[900px] flex flex-wrap items-start justify-center text-sm gap-8 md:flex-row md:text-base md:gap-12">
         <div className="relative w-32 md:w-48">
           <img
             src={
@@ -79,7 +79,7 @@ function Footer({ className }: { className?: string }) {
                 : "/logo/logo-no-bg-white.png"
             }
             alt="Lumen Logo"
-            className="h-auto max-w-full object-fill"
+            className="h-auto max-w-full object-fill transition-all duration-300 ease-in-out"
             loading="eager"
           />
         </div>
@@ -101,7 +101,7 @@ function Footer({ className }: { className?: string }) {
       </div>
       <div className="row">
         <div className="col-md-12">
-          <p className="text-xs md:text-sm text-foreground">
+          <p className="text-xs md:text-sm transition-colors duration-300 ease-in-out text-foreground">
             2024 Lumen LMS. Built by LDK, VLTP
           </p>
         </div>
