@@ -150,7 +150,7 @@ export default {
   },
 
   register: async (req: Request, res: Response) => {
-    const { lastName, firstName, email, password, avatarUrl } = req.body;
+    const { lastName, firstName, email, password, avatarUrl, role } = req.body;
 
     bcrypt.hash(password, 10, async (err, hash) => {
       if (err) {
@@ -166,6 +166,7 @@ export default {
           email,
           password: hash,
           avatarUrl,
+          role,
         });
 
         const newUser = await user.save();
