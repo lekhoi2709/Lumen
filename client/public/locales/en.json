@@ -55,5 +55,11 @@
     "newPass": "New Password",
     "send": "Send OTP",
     "reset": "Reset Password"
+  },
+  "404": {
+    "title": "Oops! The page you are looking for no longer exists.",
+    "message": "We're sorry, but the page you're looking for is no longer available. It may be because the page has been deleted, moved, or the URL has changed.",
+    "back": "Back to Home",
+    "contact": "Contact Us"
   }
 }

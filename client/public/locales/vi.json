@@ -55,5 +55,11 @@
     "newPass": "Mật khẩu mới",
     "send": "Gửi OTP",
     "reset": "Đặt lại mật khẩu"
+  },
+  "404": {
+    "title": "Oops! Trang bạn tìm kiếm không còn tồn tại.",
+    "message": "Rất tiếc, trang bạn đang tìm kiếm không còn khả dụng. Có thể trang đã bị xóa, di chuyển hoặc URL đã thay đổi.",
+    "back": "Quay lại trang chủ",
+    "contact": "Liên hệ với chúng tôi"
   }
 }

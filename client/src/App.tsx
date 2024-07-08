@@ -13,6 +13,7 @@ import Home from "./routes";
 import Dashboard from "./routes/dashboard";
 import GoogleSuccess from "./routes/auth/google-success";
 import Loading from "./components/loading";
+import PageNotFound from "./routes/404";
 
 function App() {
   const [showSplash, setShowSplash] = useState(
@@ -49,7 +50,7 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
             </Route>
             {/* catch all route */}
-            <Route path="*" element={<h1>Page not found</h1>} />
+            <Route path="*" element={<PageNotFound />} />
           </Routes>
         </AuthProvider>
       </Router>
