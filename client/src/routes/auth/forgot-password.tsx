@@ -70,7 +70,7 @@ function ForgotPassword() {
           title: res.data.message,
           description: "You will be redirected to the next step..",
         });
-        navigate("/forgot-password-2");
+        navigate("/reset-password");
       })
       .catch((err) => {
         toast({

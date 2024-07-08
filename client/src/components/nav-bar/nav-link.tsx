@@ -1,6 +1,5 @@
 import { NavLink } from "react-router-dom";
 import { User } from "@/contexts/auth-context";
-import { TFunction } from "i18next";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -10,21 +9,20 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import { useTheme } from "@/contexts/theme-provider";
+import { sitemap } from "@/data/sitemap";
+import { useTranslation } from "react-i18next";
 
-function CustomNavLink({
-  user,
-  t,
-}: {
-  user: User | null;
-  t: TFunction<"translation", undefined>;
-}) {
-  const links = [
-    { title: t("nav.home"), path: "/" },
-    { title: t("nav.dashboard"), path: "/dashboard" },
-    { title: t("nav.about"), path: "/about" },
-    { title: t("nav.contact"), path: "/contact" },
-  ];
+function CustomNavLink({ user }: { user: User | null }) {
   const themeSetting = useTheme();
+  const { t } = useTranslation();
+
+  const filteredLinks = sitemap.filter((link) => {
+    if (!user) {
+      return link.auth === false && link.navigate === true;
+    }
+    return link.navigate === true;
+  });
+
   return (
     <div>
       <div className="md:flex md:gap-4 md:items-center md:justify-center hidden">
@@ -37,24 +35,17 @@ function CustomNavLink({
           alt="Lumen Nav Logo"
           className="h-auto max-w-full w-16 object-fill hidden md:block"
         />
-        {links
-          .filter((link) => {
-            if (!user) {
-              return link.title !== t("nav.dashboard");
+        {filteredLinks.map((link) => (
+          <NavLink
+            key={link.title}
+            to={link.path}
+            className={({ isActive }) =>
+              isActive ? "text-orange-500" : "text-foreground"
             }
-            return link;
-          })
-          .map((link) => (
-            <NavLink
-              key={link.title}
-              to={link.path}
-              className={({ isActive }) =>
-                isActive ? "text-orange-500" : "text-foreground"
-              }
-            >
-              {link.title}
-            </NavLink>
-          ))}
+          >
+            {t(link.title)}
+          </NavLink>
+        ))}
       </div>
       <NavigationMenu className="md:hidden">
         <NavigationMenuList>
@@ -71,30 +62,26 @@ function CustomNavLink({
                   className="h-auto max-w-full w-12 object-fill md:hidden"
                 />
                 <p>
-                  {links.find((link) => link.path === window.location.pathname)
-                    ?.title || "Lumen"}
+                  {t(
+                    filteredLinks.find(
+                      (link) => link.path === window.location.pathname
+                    )?.title!
+                  ) || "Lumen"}
                 </p>
               </div>
             </NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="flex flex-col p-4 gap-6">
-                {links
-                  .filter((link) => {
-                    if (!user) {
-                      return link.title !== t("nav.dashboard");
-                    }
-                    return link;
-                  })
-                  .map(
-                    (link) =>
-                      link.path !== window.location.pathname && (
-                        <li key={link.title} className="">
-                          <NavigationMenuLink asChild>
-                            <NavLink to={link.path}>{link.title}</NavLink>
-                          </NavigationMenuLink>
-                        </li>
-                      )
-                  )}
+                {filteredLinks.map(
+                  (link) =>
+                    link.path !== window.location.pathname && (
+                      <li key={link.title} className="">
+                        <NavigationMenuLink asChild>
+                          <NavLink to={link.path}>{t(link.title)}</NavLink>
+                        </NavigationMenuLink>
+                      </li>
+                    )
+                )}
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>

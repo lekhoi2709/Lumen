@@ -21,7 +21,7 @@ function Navbar({ className }: { className?: string }) {
         className
       )}
     >
-      <CustomNavLink user={user} t={t} />
+      <CustomNavLink user={user} />
       <div className="hidden md:flex md:gap-4">
         {user ? (
           <UserSection user={user} t={t} logoutAct={logoutAct} />

@@ -38,8 +38,8 @@ function App() {
           <Routes>
             {/* public route */}
             <Route path="/" element={<Home />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/forgot-password-2" element={<ResetPassword />} />
+            <Route path="/verify-user" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route element={<AuthRoute />}>
               <Route path="/login" element={<SignIn />} />
               <Route path="/register" element={<SignUp />} />
