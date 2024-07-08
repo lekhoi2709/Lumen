@@ -11,7 +11,7 @@ function PrivateRoute() {
 
   useEffect(() => {
     let isMounted = true;
-    const refreshToken = localStorage.getItem("refreshToken");
+    const refreshToken = window.localStorage.getItem("refreshToken");
     const verifyRefreshToken = async () => {
       await axios
         .get(`${process.env.API_URL}/auth/refresh`, {
