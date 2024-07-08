@@ -21,7 +21,6 @@ import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2Icon } from "lucide-react";
 import GoogleButton from "@/components/google-button";
-import { Separator } from "@/components/ui/separator";
 import axios from "axios";
 
 const formSchema = z.object({
@@ -123,7 +122,7 @@ function SignIn() {
             <Button
               type="submit"
               disabled={!isDirty || !isValid || isSubmitting}
-              className="w-full py-6 transition-transform duration-500 hover:scale-[1.03] ease-in-out"
+              className="w-full py-6 transition-transform duration-500 hover:scale-[1.03] ease-in-out text-xs md:text-base"
             >
               {isSubmitting ? (
                 <Loader2Icon className="animate-spin" />
@@ -131,11 +130,7 @@ function SignIn() {
                 t("login.signin")
               )}
             </Button>
-            <div className="flex items-center justify-center gap-2 w-full">
-              <Separator className="bg-black h-[0.5px] w-1/3" />
-              <p>{t("login.or")}</p>
-              <Separator className="bg-black h-[0.5px] w-1/3" />
-            </div>
+            <p>{t("login.or")}</p>
             <GoogleButton />
           </div>
           <FormDescription>
