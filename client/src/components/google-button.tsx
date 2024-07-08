@@ -56,7 +56,7 @@ function GoogleButton() {
       {!loading && (
         <span className="text-xs md:text-base">{t("login.google")}</span>
       )}
-      {loading && <Loader2Icon size={24} />}
+      {loading && <Loader2Icon size={24} className="animate-spin" />}
     </Button>
   );
 }
