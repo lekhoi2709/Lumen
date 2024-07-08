@@ -6,8 +6,9 @@ import { twMerge } from "tailwind-merge";
 import { Button } from "../ui/button";
 import { useAuth, User } from "@/contexts/auth-context";
 import { TFunction } from "i18next";
-import NavDrawer from "./nav-bar-drawer";
+import NavDrawer from "./nav-drawer";
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
+import CustomNavLink from "./nav-link";
 
 function Navbar({ className }: { className?: string }) {
   const { t } = useTranslation();
@@ -20,28 +21,7 @@ function Navbar({ className }: { className?: string }) {
         className
       )}
     >
-      <ul className="flex gap-4 items-center justify-center">
-        <NavLink
-          to="/"
-          className={({ isActive }) =>
-            isActive ? "text-orange-500" : "text-foreground"
-          }
-        >
-          {t("nav.home")}
-        </NavLink>
-        {user && (
-          <NavLink
-            to="/dashboard"
-            className={({ isActive }) =>
-              isActive ? "text-orange-500" : "text-foreground"
-            }
-          >
-            {t("nav.dashboard")}
-          </NavLink>
-        )}
-        <li>{t("nav.about")}</li>
-        <li>{t("nav.contact")}</li>
-      </ul>
+      <CustomNavLink user={user} t={t} />
       <div className="hidden md:flex md:gap-4">
         {user ? (
           <UserSection user={user} t={t} logoutAct={logoutAct} />
