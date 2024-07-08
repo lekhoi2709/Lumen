@@ -1,66 +1,10 @@
 import { useTheme } from "@/contexts/theme-provider";
 import { useTranslation } from "react-i18next";
 import { twMerge } from "tailwind-merge";
+import { data } from "@/data/footer";
 
 function Footer({ className }: { className?: string }) {
   const { t } = useTranslation();
-  const data = [
-    {
-      title: t("footer.contact"),
-      items: [
-        {
-          title: "lumenn.lms@gmail.com",
-          link: "mailto:lumenn.lms@gmail.com",
-        },
-        {
-          title: "(+1) 234-567-890",
-          link: "tel:+1234567890",
-        },
-        {
-          title: t("footer.address"),
-          link: "#",
-        },
-      ],
-    },
-    {
-      title: t("footer.about"),
-      items: [
-        {
-          title: t("footer.mission"),
-          link: "#",
-        },
-        {
-          title: t("footer.team"),
-          link: "#",
-        },
-        {
-          title: t("footer.blog"),
-          link: "#",
-        },
-      ],
-    },
-    {
-      title: t("footer.links"),
-      items: [
-        {
-          title: t("footer.help"),
-          link: "#",
-        },
-        {
-          title: t("footer.faq"),
-          link: "#",
-        },
-        {
-          title: t("footer.privacy"),
-          link: "#",
-        },
-        {
-          title: t("footer.terms"),
-          link: "#",
-        },
-      ],
-    },
-  ];
   const themeSetting = useTheme();
 
   return (
@@ -71,7 +15,7 @@ function Footer({ className }: { className?: string }) {
       )}
     >
       <div className="w-full max-w-[900px] flex flex-wrap items-start justify-center text-sm gap-8 md:flex-row md:text-base md:gap-12">
-        <div className="relative w-32 md:w-48">
+        <div className="relative w-32 md:w-48 self-center md:self-start">
           <img
             src={
               themeSetting.theme === "light"
@@ -79,8 +23,8 @@ function Footer({ className }: { className?: string }) {
                 : "/logo/logo-no-bg-white.png"
             }
             alt="Lumen Logo"
-            className="h-auto max-w-full object-fill transition-all duration-300 ease-in-out"
-            loading="eager"
+            className="h-auto max-w-full object-fill top-1/2"
+            loading="lazy"
           />
         </div>
         {data.map((section, index) => (
@@ -88,11 +32,11 @@ function Footer({ className }: { className?: string }) {
             key={index}
             className="flex flex-col gap-6 items-start max-w-32 w-32 md:w-auto md:max-w-none"
           >
-            <h3 className="text-lg font-bold">{section.title}</h3>
+            <h3 className="text-lg font-bold">{t(section.title)}</h3>
             <ul className="flex flex-col gap-2 items-start">
               {section.items.map((item, index) => (
                 <li key={index}>
-                  <a href={item.link}>{item.title}</a>
+                  <a href={item.link}>{t(item.title)}</a>
                 </li>
               ))}
             </ul>
