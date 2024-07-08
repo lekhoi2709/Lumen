@@ -9,7 +9,7 @@ import Layout from "@/layouts/layout";
 
 function HeroSection() {
   return (
-    <div className="flex items-center justify-between p-10 bg-orange-50 mt-[70px]">
+    <div className="flex items-center justify-between p-10 bg-orange-50">
       <div className="max-w-lg">
         <h1 className="text-5xl font-bold text-gray-800 mb-4">
           Turn your ambition into a{" "}

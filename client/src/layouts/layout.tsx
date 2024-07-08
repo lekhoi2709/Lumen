@@ -18,7 +18,7 @@ function Layout({
       )}
     >
       <Navbar className="self-start fixed" />
-      <main className="w-full h-full flex-1">{children}</main>
+      <main className="w-full h-full flex-1 mt-[70px]">{children}</main>
       <Footer />
     </div>
   );
