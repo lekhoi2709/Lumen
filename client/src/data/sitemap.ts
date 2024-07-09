@@ -1,15 +1,20 @@
+import { LayoutDashboardIcon } from "lucide-react";
+import { HomeIcon } from "lucide-react";
+
 export const sitemap = [
   {
     title: "nav.home",
     path: "/",
     auth: false,
     navigate: true,
+    icon: HomeIcon,
   },
   {
     title: "nav.dashboard",
     path: "/dashboard",
     auth: true,
     navigate: true,
+    icon: LayoutDashboardIcon,
   },
   {
     title: "nav.login",
@@ -34,17 +39,5 @@ export const sitemap = [
     path: "/reset-password",
     auth: false,
     navigate: false,
-  },
-  {
-    title: "nav.about",
-    path: "/about",
-    auth: false,
-    navigate: true,
-  },
-  {
-    title: "nav.contact",
-    path: "/contact",
-    auth: false,
-    navigate: true,
   },
 ];

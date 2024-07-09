@@ -32,7 +32,7 @@ function NavDrawer({
           <MenuIcon size={20} />
         </Button>
       </DrawerTrigger>
-      <DrawerContent className="bg-background dark:bg-dark-background text-current">
+      <DrawerContent className="top-0 rounded-b-[10px] ">
         <DrawerHeader className="hidden">
           <DrawerTitle>Navigation bar</DrawerTitle>
           <DrawerDescription>This is a navigation bar</DrawerDescription>
@@ -50,6 +50,7 @@ function NavDrawer({
             <LanguageToggle />
           </div>
         </div>
+        <div className="mx-auto mb-4 h-2 w-[100px] rounded-full bg-muted" />
       </DrawerContent>
     </Drawer>
   );

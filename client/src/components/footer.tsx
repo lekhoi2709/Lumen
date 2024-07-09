@@ -1,11 +1,10 @@
-import { useTheme } from "@/contexts/theme-provider";
 import { useTranslation } from "react-i18next";
 import { twMerge } from "tailwind-merge";
 import { data } from "@/data/footer";
+import Logo from "./logo";
 
 function Footer({ className }: { className?: string }) {
   const { t } = useTranslation();
-  const themeSetting = useTheme();
 
   return (
     <footer
@@ -16,16 +15,7 @@ function Footer({ className }: { className?: string }) {
     >
       <div className="w-full max-w-[900px] flex flex-wrap items-start justify-center text-sm gap-8 md:flex-row md:text-base md:gap-12">
         <div className="relative w-32 md:w-48 self-center md:self-start">
-          <img
-            src={
-              themeSetting.theme === "light"
-                ? "/logo/logo-no-background.png"
-                : "/logo/logo-no-bg-white.png"
-            }
-            alt="Lumen Logo"
-            className="h-auto max-w-full object-fill top-1/2"
-            loading="lazy"
-          />
+          <Logo loading="lazy" />
         </div>
         {data.map((section, index) => (
           <div
