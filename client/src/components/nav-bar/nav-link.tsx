@@ -69,8 +69,11 @@ function CustomNavLink({ user }: { user: User | null }) {
           </DrawerHeader>
           <div className="w-full h-full flex pr-4 items-center">
             <ScrollArea className="w-full h-full">
-              <div className="flex flex-col gap-6 w-full h-full p-4 items-center">
-                <Logo className="w-16" />
+              <div className="flex flex-col gap-4 w-full h-full p-4 items-center">
+                <div className="flex items-center gap-2 self-start">
+                  <Logo className="w-16 ml-6" />
+                  <h1 className="text-base font-bold font-sans">LMS</h1>
+                </div>
                 <Separator />
                 <ul className="flex flex-col items-start justify-start w-full pl-4 gap-2">
                   {filteredLinks.map((link) => (
@@ -79,15 +82,15 @@ function CustomNavLink({ user }: { user: User | null }) {
                         to={link.path}
                         className={({ isActive }) =>
                           twMerge(
-                            "flex gap-4 items-center w-full py-2 px-4 backdrop-blur-md",
+                            "w-full flex gap-4 items-center py-2 px-4 backdrop-blur-md rounded-r-full",
                             isActive
-                              ? "bg-orange-500/20 rounded-r-full text-orange-500"
+                              ? "bg-orange-500/20 text-orange-500"
                               : "text-foreground"
                           )
                         }
                       >
                         {link.icon && <link.icon size={20} />}
-                        <span>{t(link.title)}</span>
+                        <p className="truncate">{t(link.title)}</p>
                       </NavLink>
                     </li>
                   ))}
