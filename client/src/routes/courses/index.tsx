@@ -1,13 +1,13 @@
 import Layout from "@/layouts/layout";
 
-function Dashboard() {
+function CoursesPage() {
   return (
     <Layout>
       <div className="w-full p-6">
-        <h1>Dashboard</h1>
+        <h1>Courses</h1>
       </div>
     </Layout>
   );
 }
 
-export default Dashboard;
+export default CoursesPage;

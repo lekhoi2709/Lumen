@@ -1,13 +1,13 @@
 import Layout from "@/layouts/layout";
 
-function Dashboard() {
+function SchedulePage() {
   return (
     <Layout>
       <div className="w-full p-6">
-        <h1>Dashboard</h1>
+        <h1>Schedule</h1>
       </div>
     </Layout>
   );
 }
 
-export default Dashboard;
+export default SchedulePage;

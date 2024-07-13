@@ -1,5 +1,10 @@
-import { LayoutDashboardIcon } from "lucide-react";
-import { HomeIcon } from "lucide-react";
+import {
+  LayoutDashboardIcon,
+  HomeIcon,
+  ShapesIcon,
+  CalendarCheck2Icon,
+  BookOpenCheckIcon,
+} from "lucide-react";
 
 export const sitemap = [
   {
@@ -39,5 +44,23 @@ export const sitemap = [
     path: "/reset-password",
     auth: false,
     navigate: false,
+  },
+];
+
+export const mainRoutes = [
+  {
+    title: "nav.courses",
+    path: "/courses",
+    icon: ShapesIcon,
+  },
+  {
+    title: "nav.schedule",
+    path: "/schedule",
+    icon: CalendarCheck2Icon,
+  },
+  {
+    title: "nav.gradebook",
+    path: "/gradebook",
+    icon: BookOpenCheckIcon,
   },
 ];
