@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { User } from "@/contexts/auth-context";
-import { sitemap } from "@/data/sitemap";
+import { sitemap, mainRoutes } from "@/data/sitemap";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import {
@@ -15,8 +15,8 @@ import { ScrollArea } from "../ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Separator } from "../ui/separator";
 import Logo from "../logo";
-import { twMerge } from "tailwind-merge";
 import { ChevronRight } from "lucide-react";
+import { NavigateList } from "./nav-link-list";
 
 function CustomNavLink({ user }: { user: User | null }) {
   const { t } = useTranslation();
@@ -75,27 +75,9 @@ function CustomNavLink({ user }: { user: User | null }) {
                   <h1 className="text-base font-bold font-sans">LMS</h1>
                 </div>
                 <Separator />
-                <ul className="flex flex-col items-start justify-start w-full pl-4 gap-2">
-                  {filteredLinks.map((link) => (
-                    <li key={link.title} className="w-full">
-                      <NavLink
-                        to={link.path}
-                        className={({ isActive }) =>
-                          twMerge(
-                            "w-full flex gap-4 items-center py-2 px-4 backdrop-blur-md rounded-r-full",
-                            isActive
-                              ? "bg-orange-500/20 text-orange-500"
-                              : "text-foreground"
-                          )
-                        }
-                      >
-                        {link.icon && <link.icon size={20} />}
-                        <p className="truncate">{t(link.title)}</p>
-                      </NavLink>
-                    </li>
-                  ))}
-                </ul>
+                <NavigateList data={filteredLinks} />
                 <Separator />
+                <NavigateList data={mainRoutes} />
               </div>
             </ScrollArea>
             <div className="mx-auto mb-4 h-[100px] w-2 rounded-full bg-muted" />

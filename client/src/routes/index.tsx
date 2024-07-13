@@ -111,7 +111,7 @@ function TrendingSection() {
 
 function Home() {
   return (
-    <Layout>
+    <Layout sidebar={false} footer={true}>
       <HeroSection />
       <TrendingSection />
     </Layout>
