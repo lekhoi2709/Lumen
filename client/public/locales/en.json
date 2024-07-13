@@ -6,7 +6,10 @@
     "login": "Log In",
     "register": "Sign Up",
     "logout": "Log Out",
-    "dashboard": "Dashboard"
+    "dashboard": "Dashboard",
+    "courses": "Courses",
+    "schedule": "Schedule",
+    "gradebook": "Gradebook"
   },
   "footer": {
     "contact": "Contact",

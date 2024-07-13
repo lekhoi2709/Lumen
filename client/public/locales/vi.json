@@ -6,7 +6,10 @@
     "login": "Đăng nhập",
     "register": "Đăng ký",
     "logout": "Đăng xuất",
-    "dashboard": "Bảng điều khiển"
+    "dashboard": "Bảng điều khiển",
+    "courses": "Khóa học",
+    "schedule": "Lịch học",
+    "gradebook": "Bảng điểm"
   },
   "footer": {
     "contact": "Liên hệ",
