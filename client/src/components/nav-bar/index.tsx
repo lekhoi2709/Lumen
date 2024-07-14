@@ -17,7 +17,7 @@ function Navbar({ className }: { className?: string }) {
   return (
     <nav
       className={twMerge(
-        "fixed w-full flex justify-between items-center p-4 backdrop-blur-md bg-background/80 font-custom z-50 transition-colors duration-500 font-sans",
+        "fixed w-full flex justify-between items-center p-4 backdrop-blur-md bg-background/80 font-custom z-50 transition-colors duration-500 font-nunito",
         className
       )}
     >
@@ -46,7 +46,7 @@ function UserSection({
   logoutAct: () => void;
 }) {
   return (
-    <section className="flex items-center gap-4">
+    <section className="flex items-center gap-4 font-nunito">
       <Avatar>
         <AvatarImage src={user.avatarUrl} alt="User avatar" />
         <AvatarFallback>{user.firstName.split("")[0]}</AvatarFallback>
@@ -63,7 +63,7 @@ function UserSection({
 
 function LoginSection({ t }: { t: TFunction<"translation", undefined> }) {
   return (
-    <section className="flex gap-4">
+    <section className="flex gap-4 font-nunito">
       <NavLink
         to="/login"
         className={({ isActive }) => (isActive ? "hidden" : "block")}

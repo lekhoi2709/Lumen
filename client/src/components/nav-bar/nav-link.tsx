@@ -31,7 +31,7 @@ function CustomNavLink({ user }: { user: User | null }) {
 
   return (
     <div>
-      <div className="md:flex md:gap-4 md:items-center md:justify-center hidden">
+      <div className="md:flex md:gap-4 md:items-center md:justify-center hidden font-nunito">
         <Logo className="w-16 hidden md:block" />
         {filteredLinks.map((link) => (
           <NavLink
