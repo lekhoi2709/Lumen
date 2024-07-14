@@ -40,6 +40,7 @@ function CustomNavLink({ user }: { user: User | null }) {
             className={({ isActive }) =>
               isActive ? "text-orange-500" : "text-foreground"
             }
+            onClick={() => sessionStorage.setItem("history", link.path)}
           >
             {t(link.title)}
           </NavLink>
@@ -59,7 +60,7 @@ function CustomNavLink({ user }: { user: User | null }) {
                 )?.title!
               ) || "Lumen"}
             </p>
-            <ChevronRight size={15} className="mt-[2px]" />
+            <ChevronRight size={15} className="mt-[1px]" />
           </Button>
         </DrawerTrigger>
         <DrawerContent className="left-0 inset-0 bottom-0 h-full w-2/3 max-w-[350px] rounded-r-[10px]">
@@ -76,8 +77,8 @@ function CustomNavLink({ user }: { user: User | null }) {
                 </div>
                 <Separator />
                 <NavigateList data={filteredLinks} />
-                <Separator />
-                <NavigateList data={mainRoutes} />
+                {user && <Separator />}
+                {user && <NavigateList data={mainRoutes} />}
               </div>
             </ScrollArea>
             <div className="mx-auto mb-4 h-[100px] w-2 rounded-full bg-muted" />

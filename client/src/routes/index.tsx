@@ -6,6 +6,8 @@ import trendingImage2 from "../assets/home/trendingImage2.png";
 import trendingImage3 from "../assets/home/trendingImage3.png";
 import trendingImage4 from "../assets/home/trendingImage4.png";
 import Layout from "@/layouts/layout";
+import { useAuth } from "@/contexts/auth-context";
+import axios from "axios";
 
 function HeroSection() {
   return (
@@ -110,8 +112,31 @@ function TrendingSection() {
 }
 
 function Home() {
+  const { user, loginAct } = useAuth();
+  const refreshToken = localStorage.getItem("refreshToken");
+
+  const verifyRefreshToken = async () => {
+    await axios
+      .get(`${process.env.API_URL}/auth/refresh`, {
+        headers: {
+          Authorization: `Bearer ${refreshToken}`,
+        },
+        withCredentials: true,
+      })
+      .then((res) => {
+        loginAct(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  if (!user && refreshToken) {
+    verifyRefreshToken();
+  }
+
   return (
-    <Layout sidebar={false} footer={true}>
+    <Layout sidebar={false} footer={true} className="pt-0 mt-[72px]">
       <HeroSection />
       <TrendingSection />
     </Layout>

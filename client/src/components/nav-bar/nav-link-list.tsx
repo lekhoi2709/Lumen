@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 import { useTranslation } from "react-i18next";
+import { ScrollArea } from "../ui/scroll-area";
 
 type DataProps = {
   title: string;
@@ -27,6 +28,7 @@ function NavigateList({ data }: { data: DataProps[] }) {
                   : "text-foreground"
               )
             }
+            onClick={() => sessionStorage.setItem("history", link.path)}
           >
             {link.icon && <link.icon size={20} />}
             <p className="truncate">{t(link.title)}</p>
@@ -41,26 +43,31 @@ function NavigateListDesktop({ data }: { data: DataProps[] }) {
   const { t } = useTranslation();
 
   return (
-    <ul className="md:flex md:flex-col md:gap-4 md:items-center md:justify-start hidden w-1/5 max-w-[200px] pt-4 pr-2 bg-background">
-      {data.map((link) => (
-        <li key={link.title + "-desktop"} className="w-full">
-          <NavLink
-            to={link.path}
-            className={({ isActive }) =>
-              twMerge(
-                "w-full flex gap-4 items-center py-2 px-4 backdrop-blur-md rounded-r-full",
-                isActive
-                  ? "bg-orange-500/20 text-orange-500"
-                  : "text-foreground"
-              )
-            }
-          >
-            {link.icon && <link.icon size={20} />}
-            <p className="truncate">{t(link.title)}</p>
-          </NavLink>
-        </li>
-      ))}
-    </ul>
+    <div className="hidden md:inline-block w-1/5 max-w-[200px] h-full bg-background border-r border-border fixed">
+      <ScrollArea className="w-full h-full">
+        <ul className="md:flex md:flex-col md:gap-4 md:items-center md:justify-start w-full h-full pt-6 pr-2">
+          {data.map((link) => (
+            <li key={link.title + "-desktop"} className="w-full">
+              <NavLink
+                to={link.path}
+                className={({ isActive }) =>
+                  twMerge(
+                    "w-full flex gap-4 items-center py-2 px-4 backdrop-blur-md rounded-r-full",
+                    isActive
+                      ? "bg-orange-500/20 text-orange-500"
+                      : "text-foreground"
+                  )
+                }
+                onClick={() => sessionStorage.setItem("history", link.path)}
+              >
+                {link.icon && <link.icon size={20} />}
+                <p className="truncate">{t(link.title)}</p>
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+      </ScrollArea>
+    </div>
   );
 }
 

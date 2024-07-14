@@ -34,18 +34,19 @@ export function AuthProvider({ children, ...props }: AuthProviderProps) {
 
   const loginAct = async (data: any) => {
     setUser(data.user);
-    window.sessionStorage.setItem("token", data.token);
+    sessionStorage.setItem("token", data.token);
     if (data.refreshToken) {
-      window.localStorage.setItem("refreshToken", data.refreshToken);
+      localStorage.setItem("refreshToken", data.refreshToken);
     }
-    navigate("/dashboard");
+    navigate(sessionStorage.getItem("history") ?? "/dashboard");
     return;
   };
 
   const logoutAct = () => {
     setUser(null);
-    window.sessionStorage.removeItem("token");
-    window.localStorage.removeItem("refreshToken");
+    sessionStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
+    sessionStorage.removeItem("history");
     navigate("/login");
   };
 
