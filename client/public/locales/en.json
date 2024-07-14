@@ -64,5 +64,20 @@
     "message": "We're sorry, but the page you're looking for is no longer available. It may be because the page has been deleted, moved, or the URL has changed.",
     "back": "Back to Home",
     "contact": "Contact Us"
+  },
+  "courses": {
+    "title": "Courses",
+    "dialog": {
+      "join": "Join Course",
+      "description": "You're currently signed in as",
+      "code": "Course Code",
+      "code-des": "Ask your teacher for the class code, then enter it here.",
+      "create": "Create Course",
+      "name": "Course Name",
+      "name-des": "Enter the name of the course you want to create.",
+      "join-btn": "Join",
+      "create-btn": "Create",
+      "cancel": "Cancel"
+    }
   }
 }

@@ -64,5 +64,20 @@
     "message": "Rất tiếc, trang bạn đang tìm kiếm không còn khả dụng. Có thể trang đã bị xóa, di chuyển hoặc URL đã thay đổi.",
     "back": "Quay lại trang chủ",
     "contact": "Liên hệ với chúng tôi"
+  },
+  "courses": {
+    "title": "Khóa học",
+    "dialog": {
+      "join": "Tham gia khóa học",
+      "description": "Bạn đang đăng nhập với tư cách",
+      "code": "Mã khóa học",
+      "code-des": "Hỏi giáo viên của bạn về mã lớp, sau đó nhập mã vào đây.",
+      "create": "Tạo khóa học",
+      "name": "Tên khóa học",
+      "name-des": "Nhập tên khóa học của bạn vào đây.",
+      "join-btn": "Tham gia",
+      "create-btn": "Tạo",
+      "cancel": "Hủy"
+    }
   }
 }
