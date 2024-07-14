@@ -17,18 +17,16 @@ function Layout({
   sidebar?: boolean;
 }) {
   return (
-    <div
-      className={twMerge(
-        "min-h-screen flex flex-col items-center justify-between",
-        className
-      )}
-    >
-      <Navbar className="self-start fixed" />
-      <main className="w-full min-h-screen h-full flex-1 mt-[72px] md:flex justify-start bg-background">
+    <div className="min-h-screen flex flex-col items-center justify-between font-nunito">
+      <Navbar className="self-start fixed border-b border-border font-nunito" />
+      <main
+        className={twMerge(
+          "w-full min-h-screen h-full flex-1 md:flex justify-start bg-background pt-[72px] relative",
+          className
+        )}
+      >
         {sidebar && <NavigateListDesktop data={mainRoutes} />}
-        <section className="w-full min-h-screen h-full md:rounded-l-[10px] bg-muted">
-          {children}
-        </section>
+        <section className="w-full min-h-screen h-full">{children}</section>
       </main>
       {footer && <Footer />}
     </div>
