@@ -1,13 +1,6 @@
+import { User } from "@/types/user";
 import { useContext, useState, createContext } from "react";
 import { useNavigate } from "react-router-dom";
-
-export type User = {
-  email: string;
-  role: "Student" | "Teacher" | "Admin";
-  avatarUrl: string;
-  firstName: string;
-  lastName: string;
-};
 
 type AuthContextType = {
   user: User | null;

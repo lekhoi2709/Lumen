@@ -4,11 +4,12 @@ import LanguageToggle from "@/components/nav-bar/language-toggle";
 import { useTranslation } from "react-i18next";
 import { twMerge } from "tailwind-merge";
 import { Button } from "../ui/button";
-import { useAuth, User } from "@/contexts/auth-context";
+import { useAuth } from "@/contexts/auth-context";
 import { TFunction } from "i18next";
 import NavDrawer from "./nav-drawer";
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 import CustomNavLink from "./nav-link";
+import { User } from "@/types/user";
 
 function Navbar({ className }: { className?: string }) {
   const { t } = useTranslation();
