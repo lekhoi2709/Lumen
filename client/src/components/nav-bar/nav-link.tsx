@@ -1,5 +1,4 @@
 import { NavLink } from "react-router-dom";
-import { User } from "@/contexts/auth-context";
 import { sitemap, mainRoutes } from "@/data/sitemap";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
@@ -17,6 +16,7 @@ import { Separator } from "../ui/separator";
 import Logo from "../logo";
 import { ChevronRight } from "lucide-react";
 import { NavigateList } from "./nav-link-list";
+import { User } from "@/types/user";
 
 function CustomNavLink({ user }: { user: User | null }) {
   const { t } = useTranslation();
