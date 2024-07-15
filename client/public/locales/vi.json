@@ -75,6 +75,8 @@
       "create": "Tạo khóa học",
       "name": "Tên khóa học",
       "name-des": "Nhập tên khóa học của bạn vào đây.",
+      "course-des": "Mô tả khóa học",
+      "course-des-placeholder": "Nhập mô tả ngắn gọn về khóa học.",
       "join-btn": "Tham gia",
       "create-btn": "Tạo",
       "cancel": "Hủy"

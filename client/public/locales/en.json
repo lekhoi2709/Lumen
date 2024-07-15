@@ -75,6 +75,8 @@
       "create": "Create Course",
       "name": "Course Name",
       "name-des": "Enter the name of the course you want to create.",
+      "course-des": "Course Description",
+      "course-des-placeholder": "Enter a brief description of the course.",
       "join-btn": "Join",
       "create-btn": "Create",
       "cancel": "Cancel"
