@@ -11,7 +11,6 @@ function PrivateRoute() {
 
   useEffect(() => {
     let isMounted = true;
-    console.log(isMounted);
     const refreshToken = localStorage.getItem("refreshToken");
     const verifyRefreshToken = async () => {
       await axios

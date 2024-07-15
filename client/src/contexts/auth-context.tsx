@@ -31,7 +31,7 @@ export function AuthProvider({ children, ...props }: AuthProviderProps) {
     if (data.refreshToken) {
       localStorage.setItem("refreshToken", data.refreshToken);
     }
-    navigate(sessionStorage.getItem("history") ?? "/dashboard");
+    navigate(sessionStorage.getItem("history") || "/dashboard");
     return;
   };
 

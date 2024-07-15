@@ -26,7 +26,8 @@ import { useTranslation } from "react-i18next";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2Icon } from "lucide-react";
-import axios from "axios";
+import { register } from "@/services/api";
+import { User } from "@/types/user";
 
 const formSchema = z
   .object({
@@ -35,7 +36,9 @@ const formSchema = z
     email: z.string().email(),
     password: z.string().min(6),
     confirmPassword: z.string().min(6),
-    role: z.string().optional(),
+    role: z.string().refine((value) => {
+      return value === "Student" || value === "Teacher";
+    }),
   })
   .refine(
     (values) => {
@@ -59,7 +62,7 @@ function SignUp() {
   const { isDirty, isValid, isSubmitting } = form.formState;
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    const payload = {
+    const payload: User = {
       email: data.email,
       password: data.password,
       lastName: data.lastName,
@@ -68,11 +71,10 @@ function SignUp() {
       role: data.role,
     };
 
-    await axios
-      .post(`${process.env.API_URL}/auth/register/`, payload)
+    await register(payload)
       .then((res) => {
         toast({
-          title: res.data.message,
+          title: res.message,
           description: "Please login to continue",
         });
         navigate("/login");
@@ -80,7 +82,7 @@ function SignUp() {
       .catch((err) => {
         toast({
           variant: "destructive",
-          description: err.response.data.message,
+          description: err.response.data.message || err.message,
         });
       });
   }

@@ -14,7 +14,9 @@ function AuthLayout({ children }: { children: React.ReactNode }) {
           loading="eager"
         />
       </div>
-      {children}
+      <main className="w-full h-full flex items-center justify-center relative">
+        {children}
+      </main>
       <span className="z-10 self-end p-2 lg:p-3 bg-background/80 backdrop-blur-md rounded-tl-md text-sm lg:text-base transition-colors duration-500">
         <p>
           Designed by{" "}

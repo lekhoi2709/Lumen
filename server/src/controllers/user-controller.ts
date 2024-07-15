@@ -143,6 +143,8 @@ export default {
 
   logout: async (req: Request, res: Response) => {
     res.clearCookie("refreshToken");
+    (req.session as any).userData = null;
+    req.user = null;
 
     return res.status(200).json({
       message: "Logout successful",

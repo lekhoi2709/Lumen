@@ -21,7 +21,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2Icon } from "lucide-react";
 import GoogleButton from "@/components/google-button";
-import axios from "axios";
+import { login } from "@/services/api";
 
 const formSchema = z.object({
   email: z.string().email().trim(),
@@ -40,26 +40,17 @@ function SignIn() {
   const { isDirty, isValid, isSubmitting } = form.formState;
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    const payload = {
-      email: data.email,
-      password: data.password,
-    };
-    await axios
-      .post(`${process.env.API_URL}/auth/login/`, payload)
+    await login(data.email, data.password)
       .then((res) => {
-        if (res.data.token && res.data.user) {
-          auth.loginAct(res.data);
-        } else {
-          toast({
-            variant: "destructive",
-            description: res.data.message,
-          });
+        if (res.token && res.user) {
+          return auth.loginAct(res);
         }
+        return res;
       })
       .catch((err) => {
         toast({
           variant: "destructive",
-          description: err.response.data.message,
+          description: err.response.data.message || err.message,
         });
       });
   }

@@ -2,7 +2,7 @@ import { useAuth } from "@/contexts/auth-context";
 import { useEffect, useState } from "react";
 import Loading from "@/components/loading";
 import { Navigate, useLocation } from "react-router-dom";
-import axios from "axios";
+import { getGoogleUser } from "@/services/api";
 
 function GoogleSuccess() {
   const { user, loginAct } = useAuth();
@@ -12,12 +12,9 @@ function GoogleSuccess() {
   useEffect(() => {
     let isMounted = true;
     const getUserData = async () => {
-      await axios
-        .get(`${process.env.API_URL}/auth/google/success/`, {
-          withCredentials: true,
-        })
+      await getGoogleUser()
         .then((res) => {
-          loginAct(res.data);
+          loginAct(res);
         })
         .catch((err) => {
           console.error(err);
