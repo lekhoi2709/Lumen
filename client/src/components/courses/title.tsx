@@ -1,4 +1,4 @@
-import CourseDialog from "./add-dialog";
+import CourseDialog from "./course-dialog";
 import { useTranslation } from "react-i18next";
 
 function Title() {

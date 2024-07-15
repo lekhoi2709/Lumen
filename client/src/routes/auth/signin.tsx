@@ -31,6 +31,10 @@ const formSchema = z.object({
 function SignIn() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
     mode: "onBlur",
   });
 

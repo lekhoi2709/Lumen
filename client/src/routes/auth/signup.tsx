@@ -53,6 +53,14 @@ const formSchema = z
 function SignUp() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      role: "Student",
+    },
     mode: "onBlur",
   });
 

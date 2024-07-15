@@ -1,9 +1,11 @@
 import axios from "axios";
 import { Profile, User } from "@/types/user";
+import { Course } from "@/types/course";
 
 const BASE_URL = process.env.API_URL;
 const axiosInstance = axios.create({ baseURL: BASE_URL });
 
+// Auth API
 export const login = async (email: string, password: string) => {
   const response = await axiosInstance.post("/auth/login", {
     email,
@@ -64,6 +66,26 @@ export const verifyRefreshToken = async () => {
       Authorization: `Bearer ${refreshToken}`,
     },
     withCredentials: true,
+  });
+  return response.data;
+};
+
+// Courses API
+export const getCourses = async () => {
+  const response = await axiosInstance.get("/courses");
+  return response.data;
+};
+
+export const getCourse = async (id: string) => {
+  const response = await axiosInstance.get(`/courses/${id}`);
+  return response.data;
+};
+
+export const createCourse = async (course: Course) => {
+  const response = await axiosInstance.post("/courses", course, {
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+    },
   });
   return response.data;
 };

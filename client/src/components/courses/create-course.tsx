@@ -1,0 +1,160 @@
+import {
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { useTranslation } from "react-i18next";
+import { User } from "@/types/user";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useCreateCourse } from "@/services/mutations";
+import { Course } from "@/types/course";
+
+const formSchema = z.object({
+  title: z.string().trim(),
+  description: z.string().trim(),
+});
+
+function CreateCourse({ user }: { user: User | null }) {
+  const { t } = useTranslation();
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      title: "",
+      description: "",
+    },
+    mode: "onBlur",
+  });
+
+  const { isDirty, isValid, isSubmitting } = form.formState;
+  const createCourseMutation = useCreateCourse();
+
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    const payload: Course = {
+      title: data.title,
+      description: data.description,
+      instructor: {
+        name: user!.firstName + " " + user!.lastName,
+        email: user!.email,
+      },
+      students: [],
+    };
+    createCourseMutation.mutate(payload);
+  }
+
+  return (
+    <DialogContent className="max-w-[400px] rounded-lg font-nunito">
+      <DialogHeader>
+        <DialogTitle>{t("courses.dialog.create")}</DialogTitle>
+        <DialogDescription className="hidden">
+          Join a class by entering
+        </DialogDescription>
+      </DialogHeader>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col gap-4"
+        >
+          <section className="rounded-md border border-border p-4 py-6 flex flex-col gap-4">
+            <p className="text-muted-foreground text-sm">
+              {t("courses.dialog.description")}
+            </p>
+            <div className="flex items-center gap-2">
+              <Avatar>
+                <AvatarImage src={user!.avatarUrl} alt="User avatar" />
+                <AvatarFallback>{user!.firstName.split("")[0]}</AvatarFallback>
+              </Avatar>
+              <div>
+                <p className="font-bold text-foreground text-sm">
+                  {user!.firstName} {user!.lastName}
+                </p>
+                <p className="text-muted-foreground text-xs">{user!.email}</p>
+              </div>
+            </div>
+          </section>
+          <section className="rounded-md border border-border p-4 py-6 flex flex-col gap-4">
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem className="flex flex-col gap-4">
+                  <div>
+                    <FormLabel className="text-sm">
+                      {t("courses.dialog.name")}
+                    </FormLabel>
+                    <FormDescription className="text-sm text-muted-foreground">
+                      {t("courses.dialog.name-des")}
+                    </FormDescription>
+                  </div>
+                  <FormControl>
+                    <Input
+                      placeholder={t("courses.dialog.name")}
+                      className="py-6 focus-visible:ring-0 focus-visible:ring-offset-0"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage className="hidden" />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem className="flex flex-col gap-4">
+                  <div className="hidden">
+                    <FormLabel className="text-sm">
+                      {t("courses.dialog.course-des")}
+                    </FormLabel>
+                    <FormDescription className="text-sm text-muted-foreground">
+                      {t("courses.dialog.course-des")}
+                    </FormDescription>
+                  </div>
+                  <FormControl>
+                    <Input
+                      placeholder={t("courses.dialog.course-des-placeholder")}
+                      className="py-6 focus-visible:ring-0 focus-visible:ring-offset-0"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage className="hidden" />
+                </FormItem>
+              )}
+            />
+          </section>
+          <div className="flex w-full md:flex-row gap-2 justify-end">
+            <DialogClose asChild>
+              <Button variant="outline" className="hidden md:block">
+                {t("courses.dialog.cancel")}
+              </Button>
+            </DialogClose>
+            <Button
+              type="submit"
+              className="w-full md:w-fit"
+              disabled={!isDirty || !isValid || isSubmitting}
+            >
+              {t("courses.dialog.create-btn")}
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </DialogContent>
+  );
+}
+
+export default CreateCourse;
