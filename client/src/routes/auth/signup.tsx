@@ -29,6 +29,11 @@ import { Loader2Icon } from "lucide-react";
 import { register } from "@/services/api";
 import { User } from "@/types/user";
 
+enum RoleType {
+  Student = "Student",
+  Teacher = "Teacher",
+}
+
 const formSchema = z
   .object({
     firstName: z.string().min(2).max(50),
@@ -36,9 +41,7 @@ const formSchema = z
     email: z.string().email(),
     password: z.string().min(6),
     confirmPassword: z.string().min(6),
-    role: z.string().refine((value) => {
-      return value === "Student" || value === "Teacher";
-    }),
+    role: z.nativeEnum(RoleType),
   })
   .refine(
     (values) => {
@@ -59,7 +62,7 @@ function SignUp() {
       email: "",
       password: "",
       confirmPassword: "",
-      role: "Student",
+      role: RoleType.Student,
     },
     mode: "onBlur",
   });
@@ -179,10 +182,10 @@ function SignUp() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="Student">
+                      <SelectItem value={RoleType.Student}>
                         {t("register.student")}
                       </SelectItem>
-                      <SelectItem value="Teacher">
+                      <SelectItem value={RoleType.Teacher}>
                         {t("register.teacher")}
                       </SelectItem>
                     </SelectContent>
