@@ -8,7 +8,7 @@ export type User = {
 };
 
 export type Profile = {
-  user: User;
+  user?: User;
   token: string;
   refreshToken?: string;
 };

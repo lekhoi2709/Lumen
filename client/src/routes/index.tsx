@@ -7,7 +7,9 @@ import trendingImage3 from "../assets/home/trendingImage3.png";
 import trendingImage4 from "../assets/home/trendingImage4.png";
 import Layout from "@/layouts/layout";
 import { useAuth } from "@/contexts/auth-context";
-import axios from "axios";
+import { verifyRefreshToken } from "@/services/api";
+import { useEffect, useState } from "react";
+import Loading from "@/components/loading";
 
 function HeroSection() {
   return (
@@ -113,26 +115,38 @@ function TrendingSection() {
 
 function Home() {
   const { user, loginAct } = useAuth();
-  const refreshToken = localStorage.getItem("refreshToken");
+  const [loading, setLoading] = useState(true);
 
-  const verifyRefreshToken = async () => {
-    await axios
-      .get(`${process.env.API_URL}/auth/refresh`, {
-        headers: {
-          Authorization: `Bearer ${refreshToken}`,
-        },
-        withCredentials: true,
-      })
-      .then((res) => {
-        loginAct(res.data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
+  useEffect(() => {
+    let isMounted = true;
+    const fetchUser = async () => {
+      await verifyRefreshToken()
+        .then((res) => {
+          loginAct(res);
+        })
+        .catch((err) => {
+          console.error(err);
+        })
+        .finally(() => {
+          if (isMounted) {
+            setLoading(false);
+          }
+        });
+    };
 
-  if (!user && refreshToken) {
-    verifyRefreshToken();
+    if (!user) {
+      fetchUser();
+    } else {
+      setLoading(false);
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  if (loading) {
+    return <Loading />;
   }
 
   return (

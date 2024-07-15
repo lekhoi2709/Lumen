@@ -45,6 +45,11 @@ export const resetPassword = async (email: string, newPassword: string) => {
   return response.data;
 };
 
+export const googleAuth = async () => {
+  const response = await axiosInstance.post("/auth/google");
+  return response.data;
+};
+
 export const getGoogleUser = async () => {
   const response = await axiosInstance.get("/auth/google/success", {
     withCredentials: true,

@@ -14,7 +14,10 @@ function GoogleSuccess() {
     const getUserData = async () => {
       await getGoogleUser()
         .then((res) => {
-          loginAct(res);
+          if (res.token) {
+            return loginAct(res);
+          }
+          throw new Error("Invalid response");
         })
         .catch((err) => {
           console.error(err);

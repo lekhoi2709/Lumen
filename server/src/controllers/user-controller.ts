@@ -57,13 +57,6 @@ export default {
 
           return res.status(200).json({
             message: "Login successful",
-            user: {
-              email: user.email,
-              role: user.role,
-              avatarUrl: user.avatarUrl,
-              firstName: user.firstName,
-              lastName: user.lastName,
-            },
             token: accessToken,
             refreshToken,
           });

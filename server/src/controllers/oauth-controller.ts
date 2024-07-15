@@ -85,7 +85,6 @@ export default {
 
     return res.status(200).json({
       message: "Login successful",
-      user: userData.user,
       token: userData.accessToken,
       refreshToken: userData.refreshToken,
     });

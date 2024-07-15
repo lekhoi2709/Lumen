@@ -34,7 +34,7 @@ function SignIn() {
     mode: "onBlur",
   });
 
-  const auth = useAuth();
+  const { loginAct } = useAuth();
   const { t } = useTranslation();
   const { toast } = useToast();
   const { isDirty, isValid, isSubmitting } = form.formState;
@@ -42,10 +42,10 @@ function SignIn() {
   async function onSubmit(data: z.infer<typeof formSchema>) {
     await login(data.email, data.password)
       .then((res) => {
-        if (res.token && res.user) {
-          return auth.loginAct(res);
+        if (res.token) {
+          return loginAct(res);
         }
-        return res;
+        throw new Error("Invalid response");
       })
       .catch((err) => {
         toast({
