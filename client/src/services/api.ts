@@ -71,13 +71,17 @@ export const verifyRefreshToken = async () => {
 };
 
 // Courses API
-export const getCourses = async () => {
-  const response = await axiosInstance.get("/courses");
+export const getCourses = async (role: "student" | "teacher") => {
+  const response = await axiosInstance.get<Course[]>(`/courses/${role}`, {
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+    },
+  });
   return response.data;
 };
 
 export const getCourse = async (id: string) => {
-  const response = await axiosInstance.get(`/courses/${id}`);
+  const response = await axiosInstance.get(`/courses/c/${id}`);
   return response.data;
 };
 
