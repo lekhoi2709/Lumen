@@ -143,13 +143,15 @@ function CreateCourse({ user }: { user: User | null }) {
                 {t("courses.dialog.cancel")}
               </Button>
             </DialogClose>
-            <Button
-              type="submit"
-              className="w-full md:w-fit"
-              disabled={!isDirty || !isValid || isSubmitting}
-            >
-              {t("courses.dialog.create-btn")}
-            </Button>
+            <DialogClose asChild>
+              <Button
+                type="submit"
+                className="w-full md:w-fit"
+                disabled={!isDirty || !isValid || isSubmitting}
+              >
+                {t("courses.dialog.create-btn")}
+              </Button>
+            </DialogClose>
           </div>
         </form>
       </Form>
