@@ -4,8 +4,25 @@ import Course from "../models/course";
 export default {
   getCourses: async (req: Request, res: Response) => {
     try {
-      const courses = await Course.find();
-      res.status(200).json(courses);
+      const role = req.params.role;
+      const email = req.user?.email;
+      console.log(req.params.role);
+
+      if (role === "student") {
+        const courses = await Course.find({
+          students: {
+            $elemMatch: { email: email },
+          },
+        });
+        return res.status(200).json(courses);
+      }
+
+      if (role === "teacher") {
+        const courses = await Course.find({ "instructor.email": email });
+        return res.status(200).json(courses);
+      }
+
+      return res.status(400).json({ message: "Invalid role" });
     } catch (error) {
       res.status(500).json({ message: "Internal Server Error" });
     }
@@ -14,6 +31,7 @@ export default {
   getCourse: async (req: Request, res: Response) => {
     try {
       const course = await Course.findById(req.params.id);
+      console.log(req.params.id);
       res.status(200).json(course);
     } catch (error) {
       res.status(500).json({ message: "Internal Server Error" });
@@ -22,13 +40,11 @@ export default {
 
   createCourse: async (req: Request, res: Response) => {
     try {
-      const { title, description, instructor, image, students } = req.body;
+      const { title, description, instructor } = req.body;
       const course = new Course({
         title,
         description,
         instructor,
-        image,
-        students,
       });
       await course.save();
       res.status(201).json(course);

@@ -4,8 +4,8 @@ import courseController from "../controllers/course-controller";
 
 const router = Router();
 
-router.get("/", courseController.getCourses);
-router.get("/:id", courseController.getCourse);
+router.get("/:role", authenticateToken, courseController.getCourses);
+router.get("/c/:id", authenticateToken, courseController.getCourse);
 router.post("/", authenticateToken, courseController.createCourse);
 
 export default router;
