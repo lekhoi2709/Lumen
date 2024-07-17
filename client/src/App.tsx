@@ -15,6 +15,7 @@ import GoogleSuccess from "./routes/auth/google-success";
 import Loading from "./components/loading";
 import PageNotFound from "./routes/404";
 import CoursesPage from "./routes/courses";
+import CourseDetail from "./routes/courses/course-detail";
 import SchedulePage from "./routes/schedule";
 import GradeBookPage from "./routes/gradebook";
 
@@ -52,6 +53,7 @@ function App() {
             <Route element={<PrivateRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/courses" element={<CoursesPage />} />
+              <Route path="/courses/:id" element={<CourseDetail />} />
               <Route path="/schedule" element={<SchedulePage />} />
               <Route path="/gradebook" element={<GradeBookPage />} />
             </Route>

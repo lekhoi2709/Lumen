@@ -81,7 +81,11 @@ export const getCourses = async (role: "student" | "teacher") => {
 };
 
 export const getCourse = async (id: string) => {
-  const response = await axiosInstance.get(`/courses/c/${id}`);
+  const response = await axiosInstance.get<Course>(`/courses/c/${id}`, {
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+    },
+  });
   return response.data;
 };
 
