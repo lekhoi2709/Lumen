@@ -13,7 +13,7 @@ function CourseDialog() {
       <DialogTrigger asChild className="fixed bottom-4 right-4 md:static">
         <Button
           variant="outline"
-          className="w-14 h-14 bg-orange-500 border-transparent z-[40] md:w-16 md:h-[2.5rem] md:bg-transparent md:border-border md:z-0"
+          className="w-14 h-14 bg-orange-500 border-transparent z-[40] md:w-16 md:h-12 md:bg-transparent md:border-border md:z-0"
         >
           <PlusIcon size={20} className="text-background md:text-foreground" />
         </Button>

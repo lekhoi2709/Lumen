@@ -45,17 +45,17 @@ function NavigateListDesktop({ data }: { data: DataProps[] }) {
   return (
     <div className="hidden md:inline-block w-[12rem] lg:w-[14rem] h-full bg-background border-r border-border fixed z-10">
       <ScrollArea className="w-full h-full">
-        <ul className="md:flex md:flex-col md:gap-4 md:items-center md:justify-start w-full h-full pt-8 pr-2">
+        <ul className="md:flex md:flex-col md:items-center md:justify-start w-full h-full pt-4 pr-2">
           {data.map((link) => (
             <li key={link.title + "-desktop"} className="w-full">
               <NavLink
                 to={link.path}
                 className={({ isActive }) =>
                   twMerge(
-                    "w-full flex gap-4 items-center py-2 px-4 backdrop-blur-md rounded-r-full",
+                    "w-full flex gap-4 items-center py-3 px-4 backdrop-blur-md rounded-r-full",
                     isActive
-                      ? "bg-orange-500/20 text-orange-500"
-                      : "text-foreground"
+                      ? "bg-orange-500/20 text-orange-500 hover:bg-orange-500/30"
+                      : "text-foreground hover:bg-muted"
                   )
                 }
                 onClick={() => sessionStorage.setItem("history", link.path)}
