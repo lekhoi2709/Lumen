@@ -43,7 +43,7 @@ function NavigateListDesktop({ data }: { data: DataProps[] }) {
   const { t } = useTranslation();
 
   return (
-    <div className="hidden md:inline-block w-1/5 max-w-[14rem] h-full bg-background border-r border-border fixed z-10">
+    <div className="hidden md:inline-block w-[12rem] lg:w-[14rem] h-full bg-background border-r border-border fixed z-10">
       <ScrollArea className="w-full h-full">
         <ul className="md:flex md:flex-col md:gap-4 md:items-center md:justify-start w-full h-full pt-8 pr-2">
           {data.map((link) => (
