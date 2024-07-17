@@ -81,13 +81,15 @@ function CreateCourse({ user }: { user: User | null }) {
               </Avatar>
               <div>
                 <p className="font-bold text-foreground text-sm">
-                  {user!.firstName} {user!.lastName}
+                  {user!.firstName} {user!.lastName} -{" "}
+                  {user?.role === "Teacher" && t("register.teacher")}
+                  {user?.role === "Student" && t("register.student")}
                 </p>
                 <p className="text-muted-foreground text-xs">{user!.email}</p>
               </div>
             </div>
           </section>
-          <section className="rounded-md border border-border p-4 py-6 flex flex-col gap-4">
+          <section className="rounded-md border border-border p-4 py-6 flex flex-col gap-2">
             <FormField
               control={form.control}
               name="title"
