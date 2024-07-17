@@ -66,7 +66,7 @@
     "contact": "Liên hệ với chúng tôi"
   },
   "courses": {
-    "title": "Khóa học",
+    "title": "Khóa học của tôi",
     "dialog": {
       "join": "Tham gia khóa học",
       "description": "Bạn đang đăng nhập với tư cách",
@@ -80,6 +80,12 @@
       "join-btn": "Tham gia",
       "create-btn": "Tạo",
       "cancel": "Hủy"
+    },
+    "detail": {
+      "overview": "Tổng quan",
+      "assignments": "Bài tập",
+      "people": "Mọi người",
+      "grades": "Điểm"
     }
   }
 }
