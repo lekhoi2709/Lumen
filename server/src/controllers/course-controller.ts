@@ -6,7 +6,6 @@ export default {
     try {
       const role = req.params.role;
       const email = req.user?.email;
-      console.log(req.params.role);
 
       if (role === "student") {
         const courses = await Course.find({
@@ -30,8 +29,7 @@ export default {
 
   getCourse: async (req: Request, res: Response) => {
     try {
-      const course = await Course.findById(req.params.id);
-      console.log(req.params.id);
+      const course = await Course.findOne({ classCode: req.params.id });
       res.status(200).json(course);
     } catch (error) {
       res.status(500).json({ message: "Internal Server Error" });
