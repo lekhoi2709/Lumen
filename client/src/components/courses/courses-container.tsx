@@ -25,8 +25,8 @@ function CoursesContainer() {
       <section className="w-full h-full flex flex-col gap-6 md:gap-8 md:grid md:grid-cols-[repeat(auto-fill,18rem)]">
         {data?.map((item) => (
           <div
-            onClick={() => navigate(`/courses/${item.classCode}`)}
-            key={item.classCode}
+            onClick={() => navigate(`/courses/${item.courseCode}`)}
+            key={item.courseCode}
             className="rounded-lg border border-border relative hover:shadow-lg transition-shadow duration-300 ease-in-out hover:cursor-pointer dark:shadow-white/20"
           >
             <img

@@ -29,7 +29,7 @@ export default {
 
   getCourse: async (req: Request, res: Response) => {
     try {
-      const course = await Course.findOne({ classCode: req.params.id });
+      const course = await Course.findOne({ courseCode: req.params.id });
       res.status(200).json(course);
     } catch (error) {
       res.status(500).json({ message: "Internal Server Error" });

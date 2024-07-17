@@ -16,7 +16,9 @@ function CourseMenu() {
         <StyledNavLink path="people">
           {t("courses.detail.people")}
         </StyledNavLink>
-        <StyledNavLink path="grade">{t("courses.detail.grades")}</StyledNavLink>
+        <StyledNavLink path="grades">
+          {t("courses.detail.grades")}
+        </StyledNavLink>
       </div>
       <ScrollBar orientation="horizontal" />
     </ScrollArea>

@@ -1,5 +1,5 @@
 export type Course = {
-  classCode?: string;
+  courseCode?: string;
   title: string;
   description?: string;
   price?: number;

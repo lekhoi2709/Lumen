@@ -13,7 +13,7 @@ function getRandomImageUrl() {
 }
 
 const courseSchema = new mongoose.Schema({
-  classCode: {
+  courseCode: {
     type: String,
     unique: true,
   },
@@ -41,8 +41,8 @@ const courseSchema = new mongoose.Schema({
 });
 
 courseSchema.pre("save", function (next) {
-  if (!this.classCode) {
-    this.classCode = uid.rnd();
+  if (!this.courseCode) {
+    this.courseCode = uid.rnd();
   }
 
   if (!this.image) {
