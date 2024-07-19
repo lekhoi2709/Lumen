@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import ShortUniqueId from "short-unique-id";
 
-const uid = new ShortUniqueId({ length: 10 });
 function getRandomImageUrl() {
   const imageUrls = [
     "https://xwoquihsuegkchtzpfdp.supabase.co/storage/v1/object/sign/Courses%20Image/Background%20Image/bg_1.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJDb3Vyc2VzIEltYWdlL0JhY2tncm91bmQgSW1hZ2UvYmdfMS5qcGciLCJpYXQiOjE3MjExNDA4NjQsImV4cCI6MTc1MjY3Njg2NH0.ogeMX3_EywyW6zWyhGON1U7n461EsnIvqcwxzeigsWg&t=2024-07-16T14%3A41%3A04.190Z",
@@ -12,10 +11,12 @@ function getRandomImageUrl() {
   return imageUrls[Math.floor(Math.random() * imageUrls.length)];
 }
 
+const { randomUUID } = new ShortUniqueId();
+
 const courseSchema = new mongoose.Schema({
   courseCode: {
     type: String,
-    unique: true,
+    default: () => randomUUID(),
   },
   title: {
     type: String,
@@ -32,23 +33,15 @@ const courseSchema = new mongoose.Schema({
     name: { type: String },
     email: { type: String },
   },
-  image: String,
-  students: [{ name: String, email: String }],
+  image: {
+    type: String,
+    default: () => getRandomImageUrl(),
+  },
+  students: [{ name: String, email: String, avatarUrl: String }],
   createdAt: {
     type: Date,
     default: Date.now,
   },
-});
-
-courseSchema.pre("save", function (next) {
-  if (!this.courseCode) {
-    this.courseCode = uid.rnd();
-  }
-
-  if (!this.image) {
-    this.image = getRandomImageUrl();
-  }
-  next();
 });
 
 const Course = mongoose.model("Course", courseSchema);
