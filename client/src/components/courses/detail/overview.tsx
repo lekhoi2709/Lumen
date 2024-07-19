@@ -10,7 +10,7 @@ import { useState } from "react";
 
 function CourseOverview({ data }: { data: Course }) {
   return (
-    <div className="w-full md:max-w-[65rem] flex flex-col gap-4 md:gap-6">
+    <section className="w-full md:max-w-[65rem] flex flex-col gap-4 md:gap-6">
       <div className="relative w-full rounded-lg border border-border">
         <img
           src={data.image}
@@ -20,9 +20,9 @@ function CourseOverview({ data }: { data: Course }) {
         <Banner title={data.title} description={data.description!} />
       </div>
       <div className="flex">
-        <CourseCode code={data.courseCode!} />
+        <CourseCode code={data._id!} />
       </div>
-    </div>
+    </section>
   );
 }
 
