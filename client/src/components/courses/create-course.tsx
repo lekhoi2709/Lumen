@@ -55,6 +55,7 @@ function CreateCourse({ user }: { user: User | null }) {
       students: [],
     };
     createCourseMutation.mutate(payload);
+    form.reset();
   }
 
   return (
