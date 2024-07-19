@@ -1,8 +1,7 @@
 import { useParams } from "react-router-dom";
-import Layout from "@/layouts/layout";
 import { useCourse } from "@/services/queries";
+import CourseLayout from "@/layouts/course-layout";
 import Loading from "@/components/loading";
-import CourseMenu from "@/components/courses/detail/menu";
 import CourseOverview from "@/components/courses/detail/overview";
 
 function CourseDetail() {
@@ -19,12 +18,9 @@ function CourseDetail() {
 
   if (data) {
     return (
-      <Layout>
-        <CourseMenu />
-        <div className="w-full md:pt-20 px-2 p-4 md:p-8 md:pl-[16rem] relative z-0 flex justify-center">
-          <CourseOverview data={data} />
-        </div>
-      </Layout>
+      <CourseLayout>
+        <CourseOverview data={data} />
+      </CourseLayout>
     );
   }
 }
