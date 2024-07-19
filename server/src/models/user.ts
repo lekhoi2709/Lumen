@@ -37,6 +37,7 @@ const userSchema = new mongoose.Schema({
     type: String,
   },
   accessToken: String,
+  coursesCode: [String],
 });
 
 const User = mongoose.model("User", userSchema);

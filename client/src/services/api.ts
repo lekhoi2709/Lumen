@@ -71,8 +71,8 @@ export const verifyRefreshToken = async () => {
 };
 
 // Courses API
-export const getCourses = async (role: "student" | "teacher") => {
-  const response = await axiosInstance.get<Course[]>(`/courses/${role}`, {
+export const getCourses = async () => {
+  const response = await axiosInstance.get<Course[]>(`/courses/`, {
     headers: {
       Authorization: `Bearer ${sessionStorage.getItem("token")}`,
     },

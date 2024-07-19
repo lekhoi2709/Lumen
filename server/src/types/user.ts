@@ -8,4 +8,5 @@ export type UserType = {
   authProvider?: string;
   providerId?: string;
   accessToken?: string;
+  coursesCode?: string[];
 };

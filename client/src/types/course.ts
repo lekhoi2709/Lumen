@@ -1,14 +1,20 @@
 export type Course = {
-  courseCode?: string;
+  _id?: string;
   title: string;
   description?: string;
   price?: number;
-  instructor: {
+  instructor?: {
     name: string;
     email: string;
+    avatarUrl: string;
   };
   image?: string;
-  students: Array<{
+  instructors?: Array<{
+    name: string;
+    email: string;
+    avatarUrl: string;
+  }>;
+  students?: Array<{
     name: string;
     email: string;
     avatarUrl: string;
