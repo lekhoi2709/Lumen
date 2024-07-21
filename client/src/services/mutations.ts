@@ -1,6 +1,7 @@
-import { Course } from "@/types/course";
+import { AddCoursePeopleType, Course } from "@/types/course";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createCourse } from "./api";
+import { addPeopleToCourse, createCourse } from "./api";
+import { SearchedUserData } from "@/types/user";
 
 export function useCreateCourse() {
   const queryClient = useQueryClient();
@@ -18,6 +19,26 @@ export function useCreateCourse() {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["courses"] });
+    },
+  });
+}
+
+export function useAddPeopleToCourse() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (people: AddCoursePeopleType) => addPeopleToCourse(people),
+    onMutate: () => {
+      console.log("mutate");
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+    onSuccess: () => {
+      console.log("success");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["course-people"] });
     },
   });
 }

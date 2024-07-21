@@ -1,6 +1,6 @@
 import axios from "axios";
-import { Profile, User } from "@/types/user";
-import { Course } from "@/types/course";
+import { Profile, User, SearchedUserType } from "@/types/user";
+import { AddCoursePeopleType, Course, CoursePeople } from "@/types/course";
 
 const BASE_URL = process.env.API_URL;
 const axiosInstance = axios.create({ baseURL: BASE_URL });
@@ -95,5 +95,45 @@ export const createCourse = async (course: Course) => {
       Authorization: `Bearer ${sessionStorage.getItem("token")}`,
     },
   });
+  return response.data;
+};
+
+export const getCoursePeople = async (id: string) => {
+  const response = await axiosInstance.get<CoursePeople>(
+    `/courses/c/${id}/people`,
+    {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    }
+  );
+  return response.data;
+};
+
+export const getSearchedPeople = async (id: string, data: string) => {
+  if (data === "") {
+    return { users: [] };
+  }
+  const response = await axiosInstance.get<SearchedUserType>(
+    `/courses/c/${id}/people/search/${data}`,
+    {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    }
+  );
+  return response.data;
+};
+
+export const addPeopleToCourse = async (data: AddCoursePeopleType) => {
+  const response = await axiosInstance.put(
+    `/courses/c/${data.id}/people/add`,
+    { users: data.users, type: data.type },
+    {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    }
+  );
   return response.data;
 };

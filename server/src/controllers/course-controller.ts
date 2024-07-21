@@ -22,7 +22,7 @@ export default {
         const user = await User.findOne({ email });
         if (user) {
           const courses = await Course.find({
-            _id: { $in: user.coursesCode },
+            _id: { $in: user.courses.map((course) => course.code) },
           });
           return res.status(200).json(courses);
         }
@@ -44,31 +44,92 @@ export default {
   },
 
   createCourse: async (req: Request, res: Response) => {
-    // try {
-    const { title, description, instructor } = req.body;
-    const { randomUUID } = new ShortUniqueId();
-    const imageUrl = getRandomImageUrl();
+    try {
+      const { title, description, instructor } = req.body;
+      const { randomUUID } = new ShortUniqueId();
+      const imageUrl = getRandomImageUrl();
 
-    const course = new Course({
-      _id: randomUUID(),
-      title,
-      description,
-      image: imageUrl,
-    });
-    course.instructors.push(instructor);
-    await course.save().then(async (data) => {
-      const user = await User.findOne({ email: instructor.email });
-      if (user) {
-        user.coursesCode.push(data._id);
-        await user.save();
-        console.log(user);
-        res.status(201).json({ message: "Course created" });
-      } else {
-        return res.status(400).json({ message: "Instructor not found" });
+      const course = new Course({
+        _id: randomUUID(),
+        title,
+        description,
+        image: imageUrl,
+      });
+      await course.save().then(async (data) => {
+        const user = await User.findOne({ email: instructor.email });
+        if (user) {
+          user.courses.push({ code: data._id, role: "Teacher" });
+          await user.save();
+          res.status(201).json({ message: "Course created" });
+        } else {
+          return res.status(400).json({ message: "Instructor not found" });
+        }
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  },
+
+  getCoursePeople: async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const instructors = await User.find({
+        "courses.code": id,
+        "courses.role": "Teacher",
+      }).select("email firstName lastName avatarUrl");
+
+      const students = await User.find({
+        "courses.code": id,
+        "courses.role": "Student",
+      }).select("email firstName lastName avatarUrl");
+
+      if (instructors && students) {
+        return res
+          .status(200)
+          .json({ instructors: instructors, students: students });
       }
-    });
-    // } catch (error) {
-    //   res.status(500).json({ message: error });
-    // }
+
+      if (instructors) {
+        return res.status(200).json({ instructors: instructors, students: [] });
+      }
+
+      if (students) {
+        return res.status(200).json({ instructors: [], students: students });
+      }
+
+      return res.status(400).json({ message: "User not found" });
+    } catch (error) {
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  },
+
+  addPeople: async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const { users, type } = req.body;
+      const emails = users.map((user: any) => user.email);
+
+      const updateUsers = await User.updateMany(
+        { email: { $in: emails }, "courses.code": { $ne: id } },
+        {
+          $push: {
+            courses: { code: id, role: type === "stu" ? "Student" : "Teacher" },
+          },
+        }
+      );
+
+      if (updateUsers) {
+        return res.status(200).json({ message: "Added successfully" });
+      }
+
+      return res.status(400).json({ message: "Can not add these email" });
+    } catch (error: any) {
+      if (error.name === "MongoServerError" && error.code === 11000) {
+        return res.status(409).json({
+          message: "These emails have already been added to this course.",
+        });
+      }
+      res.status(500).json({ message: "Internal Server Error" });
+    }
   },
 };

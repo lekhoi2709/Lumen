@@ -21,15 +21,26 @@ import { useDebounceCallback } from "usehooks-ts";
 import { useState } from "react";
 import { SearchedUserData } from "@/types/user";
 import CustomSelect from "../custom-select";
+import { useAddPeopleToCourse } from "@/services/mutations";
+import { useParams } from "react-router-dom";
 
 function AddPeopleDialog({ type }: { type: "ins" | "stu" }) {
   const { t } = useTranslation();
+  const { id } = useParams();
   const [search, setSearch] = useState<string>("");
   const [users, setUsers] = useState<SearchedUserData[]>([]);
 
   const debounced = useDebounceCallback(setSearch, 1000);
+  const addPeopleToCourseMutation = useAddPeopleToCourse();
 
-  console.log(users);
+  const handleSubmit = () => {
+    if (users.length === 0 || !id) return;
+    addPeopleToCourseMutation.mutate({
+      users: users,
+      type,
+      id: id.toString(),
+    });
+  };
 
   return (
     <Dialog
@@ -67,7 +78,11 @@ function AddPeopleDialog({ type }: { type: "ins" | "stu" }) {
             </Button>
           </DialogClose>
           <DialogClose asChild>
-            <Button type="submit" className="w-full md:w-fit">
+            <Button
+              type="submit"
+              className="w-full md:w-fit"
+              onClick={handleSubmit}
+            >
               {t("courses.people.invite-btn")}
             </Button>
           </DialogClose>
