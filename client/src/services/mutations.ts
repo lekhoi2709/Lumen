@@ -1,7 +1,6 @@
 import { AddCoursePeopleType, Course } from "@/types/course";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addPeopleToCourse, createCourse } from "./api";
-import { SearchedUserData } from "@/types/user";
 
 export function useCreateCourse() {
   const queryClient = useQueryClient();
