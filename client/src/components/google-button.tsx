@@ -1,19 +1,18 @@
 import { Button } from "./ui/button";
 import { useTranslation } from "react-i18next";
-import axios from "axios";
 import { useState } from "react";
 import { Loader2Icon } from "lucide-react";
+import { googleAuth } from "@/services/api";
 
 function GoogleButton() {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
 
-  const googleAuth = async () => {
+  const openGoogleAuth = async () => {
     setLoading(true);
-    await axios
-      .post(`${process.env.API_URL}/auth/google`)
+    await googleAuth()
       .then((res) => {
-        window.open(res.data.url, "_self");
+        window.open(res.url, "_self");
       })
       .catch((err) => {
         console.log(err);
@@ -25,7 +24,7 @@ function GoogleButton() {
     <Button
       className="w-full flex items-center justify-center gap-4 py-6 transition-transform duration-500 hover:scale-[1.03] ease-in-out"
       type="button"
-      onClick={() => googleAuth()}
+      onClick={() => openGoogleAuth()}
     >
       {!loading && (
         <svg

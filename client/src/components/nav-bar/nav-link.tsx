@@ -1,6 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { User } from "@/contexts/auth-context";
-import { sitemap } from "@/data/sitemap";
+import { sitemap, mainRoutes } from "@/data/sitemap";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import {
@@ -15,8 +14,9 @@ import { ScrollArea } from "../ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Separator } from "../ui/separator";
 import Logo from "../logo";
-import { twMerge } from "tailwind-merge";
 import { ChevronRight } from "lucide-react";
+import { NavigateList } from "./nav-link-list";
+import { User } from "@/types/user";
 
 function CustomNavLink({ user }: { user: User | null }) {
   const { t } = useTranslation();
@@ -31,7 +31,7 @@ function CustomNavLink({ user }: { user: User | null }) {
 
   return (
     <div>
-      <div className="md:flex md:gap-4 md:items-center md:justify-center hidden">
+      <div className="md:flex md:gap-4 md:items-center md:justify-center hidden font-nunito">
         <Logo className="w-16 hidden md:block" />
         {filteredLinks.map((link) => (
           <NavLink
@@ -40,6 +40,7 @@ function CustomNavLink({ user }: { user: User | null }) {
             className={({ isActive }) =>
               isActive ? "text-orange-500" : "text-foreground"
             }
+            onClick={() => sessionStorage.setItem("history", link.path)}
           >
             {t(link.title)}
           </NavLink>
@@ -59,7 +60,7 @@ function CustomNavLink({ user }: { user: User | null }) {
                 )?.title!
               ) || "Lumen"}
             </p>
-            <ChevronRight size={15} className="mt-[2px]" />
+            <ChevronRight size={15} className="mt-[1px]" />
           </Button>
         </DrawerTrigger>
         <DrawerContent className="left-0 inset-0 bottom-0 h-full w-2/3 max-w-[350px] rounded-r-[10px]">
@@ -75,27 +76,9 @@ function CustomNavLink({ user }: { user: User | null }) {
                   <h1 className="text-base font-bold font-sans">LMS</h1>
                 </div>
                 <Separator />
-                <ul className="flex flex-col items-start justify-start w-full pl-4 gap-2">
-                  {filteredLinks.map((link) => (
-                    <li key={link.title} className="w-full">
-                      <NavLink
-                        to={link.path}
-                        className={({ isActive }) =>
-                          twMerge(
-                            "w-full flex gap-4 items-center py-2 px-4 backdrop-blur-md rounded-r-full",
-                            isActive
-                              ? "bg-orange-500/20 text-orange-500"
-                              : "text-foreground"
-                          )
-                        }
-                      >
-                        {link.icon && <link.icon size={20} />}
-                        <p className="truncate">{t(link.title)}</p>
-                      </NavLink>
-                    </li>
-                  ))}
-                </ul>
-                <Separator />
+                <NavigateList data={filteredLinks} />
+                {user && <Separator />}
+                {user && <NavigateList data={mainRoutes} />}
               </div>
             </ScrollArea>
             <div className="mx-auto mb-4 h-[100px] w-2 rounded-full bg-muted" />

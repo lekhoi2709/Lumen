@@ -13,7 +13,8 @@ import { MenuIcon } from "lucide-react";
 import { ModeToggle } from "./mode-toggle";
 import LanguageToggle from "@/components/nav-bar/language-toggle";
 import { UserSection, LoginSection } from ".";
-import { useAuth, User } from "@/contexts/auth-context";
+import { useAuth } from "@/contexts/auth-context";
+import { User } from "@/types/user";
 
 function NavDrawer({
   user,

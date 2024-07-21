@@ -1,8 +1,11 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 function AuthRoute() {
-  if (localStorage.getItem("refreshToken")) {
-    return <Navigate to="/dashboard" />;
+  const token = sessionStorage.getItem("token");
+  const location = useLocation();
+
+  if (token) {
+    return <Navigate to="/dashboard" state={{ from: location }} />;
   }
 
   return <Outlet />;

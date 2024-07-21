@@ -28,7 +28,6 @@ async function sendVerificationEmail(email: string, otp: string) {
       <p>Please complete the verification process in 5 minutes.</p>
       Lumen`
     );
-    console.log("Email sent successfully: ", mailResponse);
   } catch (error) {
     console.log(error);
     throw error;

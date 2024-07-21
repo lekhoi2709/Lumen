@@ -36,7 +36,7 @@ export default {
             process.env.JWT_SECRET || "",
             {
               expiresIn: "2h",
-            }
+            },
           );
           user.accessToken = accessToken;
           user.save();
@@ -57,13 +57,6 @@ export default {
 
           return res.status(200).json({
             message: "Login successful",
-            user: {
-              email: user.email,
-              role: user.role,
-              avatarUrl: user.avatarUrl,
-              firstName: user.firstName,
-              lastName: user.lastName,
-            },
             token: accessToken,
             refreshToken,
           });
@@ -118,7 +111,7 @@ export default {
         process.env.JWT_SECRET || "",
         {
           expiresIn: "2h",
-        }
+        },
       );
       user.accessToken = token;
       user.save();
@@ -143,6 +136,8 @@ export default {
 
   logout: async (req: Request, res: Response) => {
     res.clearCookie("refreshToken");
+    (req.session as any).userData = null;
+    req.user = null;
 
     return res.status(200).json({
       message: "Logout successful",
@@ -219,6 +214,31 @@ export default {
         return res.status(200).json({
           message: "Password updated successfully",
         });
+      });
+    } catch (error) {
+      return res.status(500).json({
+        message: "Internal Server Error",
+      });
+    }
+  },
+
+  getSearchedUser: async (req: Request, res: Response) => {
+    const { data } = req.params;
+
+    try {
+      const user = await User.find({
+        email: { $regex: data, $options: "i" },
+      })
+        .select("email firstName lastName avatarUrl")
+        .limit(5);
+      if (user.length === 0) {
+        return res.status(404).json({
+          message: "User not found",
+        });
+      }
+      return res.status(200).json({
+        message: "User found",
+        users: user,
       });
     } catch (error) {
       return res.status(500).json({

@@ -45,8 +45,8 @@ export default {
     try {
       const { email, otp } = req.body;
 
-      const checkOTP = await OTP.find({ email })
-        .sort({ createdAt: -1 })
+      const checkOTP = await OTP.find({ email: email })
+        .sort({ createAt: -1 })
         .limit(1);
 
       if (checkOTP.length === 0 || checkOTP[0].otp !== otp) {

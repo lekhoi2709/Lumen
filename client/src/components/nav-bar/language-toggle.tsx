@@ -30,7 +30,7 @@ function LanguageToggle() {
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="font-nunito">
         {LANGUAGES.map((lang) => (
           <DropdownMenuItem
             key={lang.value}
