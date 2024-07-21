@@ -1,12 +1,10 @@
 import Title from "@/components/courses/title";
 import { useCourses } from "@/services/queries";
 import Loading from "../loading";
-import { useAuth } from "@/contexts/auth-context";
 import { useNavigate } from "react-router-dom";
 import { Course } from "@/types/course";
 
 function CoursesContainer() {
-  const { user } = useAuth();
   const { data, isLoading } = useCourses();
   const navigate = useNavigate();
 
@@ -41,11 +39,6 @@ function CoursesContainer() {
               <p className="text-sm text-muted-foreground group-hover:underline underline-offset-2 truncate">
                 {item.description}
               </p>
-              {user?.role === "Student" && item.instructors && (
-                <p className="text-sm text-muted-foreground">
-                  {item.instructors[0].name}
-                </p>
-              )}
             </div>
           </div>
         ))}

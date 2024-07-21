@@ -16,11 +16,9 @@ const courseSchema = new mongoose.Schema({
     trim: true,
   },
   price: Number,
-  instructors: [{ name: String, email: String, avatarUrl: String }],
   image: {
     type: String,
   },
-  students: [{ name: String, email: String, avatarUrl: String }],
   createdAt: {
     type: Date,
     default: Date.now,

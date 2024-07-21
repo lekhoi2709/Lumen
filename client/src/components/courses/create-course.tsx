@@ -23,7 +23,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useCreateCourse } from "@/services/mutations";
-import { Course } from "@/types/course";
 
 const formSchema = z.object({
   title: z.string().trim(),
@@ -45,7 +44,7 @@ function CreateCourse({ user }: { user: User | null }) {
   const createCourseMutation = useCreateCourse();
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    const payload: Course = {
+    const payload: any = {
       title: data.title,
       description: data.description,
       instructor: {
