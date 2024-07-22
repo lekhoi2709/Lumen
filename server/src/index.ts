@@ -3,6 +3,8 @@ import ExpressConfig from "./express.config";
 import MongooseConnection from "./database";
 import * as dotenv from "dotenv";
 import AuthRoute from "./routes/auth";
+import UploadRoute from "./routes/upload"; // Import route upload
+
 if (process.env.NODE_ENV != "production") {
   dotenv.config();
 }
@@ -16,6 +18,7 @@ async function main() {
     dbConnection.connect(dbUrl).then(() => {
       const app = ExpressConfig();
       app.use("/api/auth", AuthRoute);
+      app.use("/api/upload", UploadRoute); // Sử dụng route upload
 
       app.get("/", (req: Request, res: Response) => {
         res.send("Lumen Server");
