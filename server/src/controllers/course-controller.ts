@@ -70,17 +70,45 @@ export default {
     }
   },
 
+  joinCourse: async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const { email } = req.body;
+
+      if (email) {
+        const course = await Course.findOne({ _id: id });
+
+        if (course) {
+          const user = await User.findOneAndUpdate(
+            { email, "courses.code": { $ne: id } },
+            {
+              $push: { courses: { code: id, role: "Student" } },
+            }
+          );
+          if (!user) {
+            return res.status(400).json({ message: "User already joined" });
+          }
+          user.save();
+          return res.status(200).json({ message: "Course joined" });
+        }
+        return res.status(400).json({ message: "Course not found" });
+      }
+
+      return res.status(400).json({ message: "Email not found" });
+    } catch (error) {
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  },
+
   getCoursePeople: async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
       const instructors = await User.find({
-        "courses.code": id,
-        "courses.role": "Teacher",
+        courses: { $elemMatch: { code: id, role: "Teacher" } },
       }).select("email firstName lastName avatarUrl");
 
       const students = await User.find({
-        "courses.code": id,
-        "courses.role": "Student",
+        courses: { $elemMatch: { code: id, role: "Student" } },
       }).select("email firstName lastName avatarUrl");
 
       if (instructors && students) {
@@ -108,6 +136,17 @@ export default {
       const { id } = req.params;
       const { users, type } = req.body;
       const emails = users.map((user: any) => user.email);
+
+      const checkExist = await User.find({
+        email: { $in: emails },
+        "courses.code": id,
+      });
+
+      if (checkExist.length > 0) {
+        return res.status(409).json({
+          message: "These emails have already been added to this course.",
+        });
+      }
 
       const updateUsers = await User.updateMany(
         { email: { $in: emails }, "courses.code": { $ne: id } },

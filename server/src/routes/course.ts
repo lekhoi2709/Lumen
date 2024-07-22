@@ -20,6 +20,7 @@ router.get(
 
 router.post("/", authenticateToken, courseController.createCourse);
 
+router.put("/join/:id", authenticateToken, courseController.joinCourse);
 router.put("/c/:id/people/add", authenticateToken, courseController.addPeople);
 
 export default router;

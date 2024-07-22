@@ -10,9 +10,26 @@ import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useTranslation } from "react-i18next";
 import { User } from "@/types/user";
+import { useJoinCourse } from "@/services/mutations";
+import { toast } from "../ui/use-toast";
 
 function JoinCourse({ user }: { user: User | null }) {
   const { t } = useTranslation();
+  const joinCourseMutation = useJoinCourse();
+
+  const handleSubmit = () => {
+    const id = document.querySelector("input")?.value;
+    if (id === "" || !id) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Please enter a code",
+      });
+      return;
+    }
+
+    joinCourseMutation.mutate({ email: user!.email, courseId: id });
+  };
 
   return (
     <DialogContent className="max-w-[400px] rounded-lg font-nunito">
@@ -60,9 +77,15 @@ function JoinCourse({ user }: { user: User | null }) {
               {t("courses.dialog.cancel")}
             </Button>
           </DialogClose>
-          <Button type="submit" className="w-full md:w-fit">
-            {t("courses.dialog.join-btn")}
-          </Button>
+          <DialogClose asChild>
+            <Button
+              type="button"
+              onClick={handleSubmit}
+              className="w-full md:w-fit"
+            >
+              {t("courses.dialog.join-btn")}
+            </Button>
+          </DialogClose>
         </div>
       </form>
     </DialogContent>

@@ -98,6 +98,19 @@ export const createCourse = async (course: Course) => {
   return response.data;
 };
 
+export const joinCourse = async (data: { email: string; courseId: string }) => {
+  const response = await axiosInstance.put(
+    `/courses/join/${data.courseId}`,
+    { email: data.email },
+    {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    }
+  );
+  return response.data;
+};
+
 export const getCoursePeople = async (id: string) => {
   const response = await axiosInstance.get<CoursePeople>(
     `/courses/c/${id}/people`,
