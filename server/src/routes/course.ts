@@ -2,6 +2,7 @@ import { Router } from "express";
 import { authenticateToken } from "../middlewares/auth";
 import courseController from "../controllers/course-controller";
 import userController from "../controllers/user-controller";
+import postController from "../controllers/post-controller";
 
 const router = Router();
 
@@ -17,10 +18,27 @@ router.get(
   authenticateToken,
   userController.getSearchedUser
 );
+router.get("/c/:id/post", authenticateToken, postController.getPosts);
 
 router.post("/", authenticateToken, courseController.createCourse);
+router.post("/c/:id/post", authenticateToken, postController.createPost);
+router.post(
+  "/c/:id/post/:postId/delete",
+  authenticateToken,
+  postController.deletePost
+);
 
 router.put("/join/:id", authenticateToken, courseController.joinCourse);
 router.put("/c/:id/people/add", authenticateToken, courseController.addPeople);
+router.put(
+  "/c/:id/post/:postId/comment",
+  authenticateToken,
+  postController.commentPost
+);
+router.put(
+  "/c/:id/post/:postId/update",
+  authenticateToken,
+  postController.updatePost
+);
 
 export default router;
