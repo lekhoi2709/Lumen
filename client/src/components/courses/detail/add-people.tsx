@@ -52,40 +52,42 @@ function AddPeopleDialog({ type }: { type: "ins" | "stu" }) {
       }}
     >
       <IconTrigger type={type} t={t} />
-      <DialogContent className="max-w-[400px] rounded-lg font-nunito">
-        <DialogHeader>
-          <DialogTitle>
-            {type === "ins" && t("courses.people.add-instructor")}
-            {type === "stu" && t("courses.people.add-student")}
-          </DialogTitle>
-          <DialogDescription className="hidden">
-            Join a class by entering
-          </DialogDescription>
-        </DialogHeader>
-        <section className="rounded-md border border-border p-4 py-6 flex flex-col gap-4">
-          <CustomSelect
-            placeholder={t("courses.people.invite-input")}
-            debounced={debounced}
-            users={users}
-            setUsers={setUsers}
-            search={search}
-          />
-        </section>
-        <div className="flex w-full md:flex-row gap-2 justify-end">
-          <DialogClose asChild>
-            <Button variant="outline" className="hidden md:block">
-              {t("courses.dialog.cancel")}
-            </Button>
-          </DialogClose>
-          <DialogClose asChild>
-            <Button
-              type="submit"
-              className="w-full md:w-fit"
-              onClick={handleSubmit}
-            >
-              {t("courses.people.invite-btn")}
-            </Button>
-          </DialogClose>
+      <DialogContent className="rounded-lg font-nunito bg-transparent border-none p-4">
+        <div className="w-full h-full rounded-lg bg-background border border-border p-6 flex flex-col gap-4">
+          <DialogHeader className="mb-2">
+            <DialogTitle>
+              {type === "ins" && t("courses.people.add-instructor")}
+              {type === "stu" && t("courses.people.add-student")}
+            </DialogTitle>
+            <DialogDescription className="hidden">
+              Join a class by entering
+            </DialogDescription>
+          </DialogHeader>
+          <section className="rounded-md border border-border p-4 py-6 flex flex-col gap-4">
+            <CustomSelect
+              placeholder={t("courses.people.invite-input")}
+              debounced={debounced}
+              users={users}
+              setUsers={setUsers}
+              search={search}
+            />
+          </section>
+          <div className="flex w-full md:flex-row gap-2 justify-end">
+            <DialogClose asChild>
+              <Button variant="outline" className="hidden md:block">
+                {t("courses.dialog.cancel")}
+              </Button>
+            </DialogClose>
+            <DialogClose asChild>
+              <Button
+                type="submit"
+                className="w-full md:w-fit"
+                onClick={handleSubmit}
+              >
+                {t("courses.people.invite-btn")}
+              </Button>
+            </DialogClose>
+          </div>
         </div>
       </DialogContent>
     </Dialog>
