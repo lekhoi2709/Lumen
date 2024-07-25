@@ -1,6 +1,10 @@
 import { AddCoursePeopleType, Course } from "@/types/course";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addPeopleToCourse, createCourse, joinCourse } from "./api";
+import {
+  addPeopleToCourse,
+  createCourse,
+  joinCourse,
+} from "../api/courses-api";
 import { toast } from "@/components/ui/use-toast";
 
 export function useCreateCourse() {

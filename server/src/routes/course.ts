@@ -23,7 +23,7 @@ router.get("/c/:id/post", authenticateToken, postController.getPosts);
 router.post("/", authenticateToken, courseController.createCourse);
 router.post("/c/:id/post", authenticateToken, postController.createPost);
 router.post(
-  "/c/:id/post/:postId/delete",
+  "/c/p/:postId/delete",
   authenticateToken,
   postController.deletePost
 );
@@ -31,14 +31,10 @@ router.post(
 router.put("/join/:id", authenticateToken, courseController.joinCourse);
 router.put("/c/:id/people/add", authenticateToken, courseController.addPeople);
 router.put(
-  "/c/:id/post/:postId/comment",
+  "/c/p/:postId/comment",
   authenticateToken,
   postController.commentPost
 );
-router.put(
-  "/c/:id/post/:postId/update",
-  authenticateToken,
-  postController.updatePost
-);
+router.put("/c/p/:postId/update", authenticateToken, postController.updatePost);
 
 export default router;

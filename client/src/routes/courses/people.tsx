@@ -1,10 +1,10 @@
 import CourseLayout from "@/layouts/course-layout";
 import { useTranslation } from "react-i18next";
-import { useCoursePeople } from "@/services/queries";
+import { useCoursePeople } from "@/services/queries/courses";
 import { useParams } from "react-router-dom";
 import Loading from "@/components/loading";
-import PeopleList from "@/components/courses/detail/people-list";
-import AddPeopleDialog from "@/components/courses/detail/add-people";
+import PeopleList from "@/components/courses/people/people-list";
+import AddPeopleDialog from "@/components/courses/people/add-people";
 
 function CoursePeople() {
   const { t } = useTranslation();
@@ -13,7 +13,7 @@ function CoursePeople() {
 
   if (isLoading) {
     return (
-      <div className="absolute top-0 left-0">
+      <div className="absolute left-0 top-0">
         <Loading />
       </div>
     );
@@ -21,19 +21,19 @@ function CoursePeople() {
 
   return (
     <CourseLayout>
-      <section className="w-full max-w-[50rem] flex flex-col gap-8 md:gap-16">
-        <div className="flex flex-col w-full p-2 gap-2 md:gap-4">
+      <section className="flex w-full max-w-[50rem] flex-col gap-8 md:gap-16">
+        <div className="flex w-full flex-col gap-2 p-2 md:gap-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-xl md:text-2xl font-bold pl-2 md:p-0">
+            <h1 className="pl-2 text-xl font-bold md:p-0 md:text-2xl">
               {t("courses.people.instructors")}
             </h1>
             <AddPeopleDialog type="ins" />
           </div>
           <PeopleList people={data?.instructors} />
         </div>
-        <div className="flex flex-col w-full p-2 gap-2 md:gap-4">
+        <div className="flex w-full flex-col gap-2 p-2 md:gap-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-xl md:text-2xl font-bold pl-2 md:p-0">
+            <h1 className="pl-2 text-xl font-bold md:p-0 md:text-2xl">
               {t("courses.people.students")}
             </h1>
             <AddPeopleDialog type="stu" />

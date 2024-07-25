@@ -22,7 +22,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useCreateCourse } from "@/services/mutations";
+import { useCreateCourse } from "@/services/mutations/courses";
 
 const formSchema = z.object({
   title: z.string().trim(),
@@ -58,8 +58,8 @@ function CreateCourse({ user }: { user: User | null }) {
   }
 
   return (
-    <DialogContent className="rounded-lg font-nunito bg-transparent border-none p-4">
-      <div className="w-full h-full rounded-lg bg-background border border-border p-6 flex flex-col gap-6">
+    <DialogContent className="rounded-lg border-none bg-transparent p-4 font-nunito">
+      <div className="flex h-full w-full flex-col gap-6 rounded-lg border border-border bg-background p-6">
         <DialogHeader>
           <DialogTitle>{t("courses.dialog.create")}</DialogTitle>
           <DialogDescription className="hidden">
@@ -71,8 +71,8 @@ function CreateCourse({ user }: { user: User | null }) {
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col gap-4"
           >
-            <section className="rounded-md border border-border p-4 py-6 flex flex-col gap-4">
-              <p className="text-muted-foreground text-sm">
+            <section className="flex flex-col gap-4 rounded-md border border-border p-4 py-6">
+              <p className="text-sm text-muted-foreground">
                 {t("courses.dialog.description")}
               </p>
               <div className="flex items-center gap-2">
@@ -83,16 +83,16 @@ function CreateCourse({ user }: { user: User | null }) {
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <p className="font-bold text-foreground text-sm">
+                  <p className="text-sm font-bold text-foreground">
                     {user!.firstName} {user!.lastName} -{" "}
                     {user?.role === "Teacher" && t("register.teacher")}
                     {user?.role === "Student" && t("register.student")}
                   </p>
-                  <p className="text-muted-foreground text-xs">{user!.email}</p>
+                  <p className="text-xs text-muted-foreground">{user!.email}</p>
                 </div>
               </div>
             </section>
-            <section className="rounded-md border border-border p-4 py-6 flex flex-col gap-2">
+            <section className="flex flex-col gap-2 rounded-md border border-border p-4 py-6">
               <FormField
                 control={form.control}
                 name="title"
@@ -142,7 +142,7 @@ function CreateCourse({ user }: { user: User | null }) {
                 )}
               />
             </section>
-            <div className="flex w-full md:flex-row gap-2 justify-end">
+            <div className="flex w-full justify-end gap-2 md:flex-row">
               <DialogClose asChild>
                 <Button variant="outline" className="hidden md:block">
                   {t("courses.dialog.cancel")}
