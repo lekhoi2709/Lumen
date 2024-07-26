@@ -171,4 +171,48 @@ export default {
       res.status(500).json({ message: "Internal Server Error" });
     }
   },
+
+  removePeople: async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const { users } = req.body;
+      const emails = users.map((user: any) => user.email);
+
+      const updateUsers = await User.updateMany(
+        { email: { $in: emails }, "courses.code": id },
+        {
+          $pull: { courses: { code: id } },
+        }
+      );
+
+      if (updateUsers) {
+        return res.status(200).json({ message: "Removed successfully" });
+      }
+
+      return res.status(400).json({ message: "Can not remove these email" });
+    } catch (error) {
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  },
+
+  deleteCourse: async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const course = await Course.findOneAndDelete({ _id: id });
+
+      if (course) {
+        await User.updateMany(
+          { "courses.code": id },
+          {
+            $pull: { courses: { code: id } },
+          }
+        );
+
+        return res.status(200).json({ message: "Course deleted" });
+      }
+      return res.status(400).json({ message: "Course not found" });
+    } catch (error) {
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  },
 };

@@ -8,9 +8,14 @@ enum PostType {
 }
 
 const postSchema = new mongoose.Schema({
-  userEmail: {
-    type: String,
-    required: true,
+  user: {
+    email: {
+      type: String,
+      required: true,
+    },
+    firstName: String,
+    lastName: String,
+    avatarUrl: String,
   },
   courseId: {
     type: String,
@@ -21,7 +26,7 @@ const postSchema = new mongoose.Schema({
     enum: PostType,
     default: "Text",
   },
-  content: {
+  text: {
     type: String,
     default: "",
   },
@@ -41,14 +46,22 @@ const postSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  updateAt: {
+  updatedAt: {
     type: Date,
     default: Date.now,
   },
   comments: [
     {
-      userEmail: String,
-      content: String,
+      user: {
+        email: {
+          type: String,
+          required: true,
+        },
+        firstName: String,
+        lastName: String,
+        avatarUrl: String,
+      },
+      text: String,
       createdAt: {
         type: Date,
         default: Date.now,

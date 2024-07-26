@@ -4,7 +4,7 @@ import {
   getCourse,
   getCoursePeople,
   getSearchedPeople,
-} from "./api/courses-api";
+} from "../api/courses-api";
 
 export const useCourses = () => {
   return useQuery({

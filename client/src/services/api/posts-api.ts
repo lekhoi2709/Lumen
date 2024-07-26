@@ -1,7 +1,9 @@
 import { axiosInstance } from "@/services/api/axios-instance";
+import { SearchedUserData } from "@/types/user";
+import { TPost } from "@/types/post";
 
 export const getPosts = async (id: string) => {
-  const response = await axiosInstance.get(`/courses/c/${id}/post`, {
+  const response = await axiosInstance.get<TPost[]>(`/courses/c/${id}/post`, {
     headers: {
       Authorization: `Bearer ${sessionStorage.getItem("token")}`,
     },
@@ -10,12 +12,8 @@ export const getPosts = async (id: string) => {
 };
 
 export const createPost = async (data: {
-  userEmail: string;
   courseId: string;
-  type: string;
-  content: string;
-  images: string[];
-  videos: string[];
+  postData: TPost;
 }) => {
   const response = await axiosInstance.post(
     `/courses/c/${data.courseId}/post`,
@@ -42,13 +40,7 @@ export const deletePost = async (postId: string) => {
   return response.data;
 };
 
-export const updatePost = async (data: {
-  postId: string;
-  type: string;
-  content: string;
-  images: string[];
-  videos: string[];
-}) => {
+export const updatePost = async (data: { postId: string; postData: TPost }) => {
   const response = await axiosInstance.put(
     `/courses/c/p/${data.postId}/update`,
     data,
@@ -63,8 +55,8 @@ export const updatePost = async (data: {
 
 export const commentPost = async (data: {
   postId: string;
-  userEmail: string;
-  content: string;
+  user: SearchedUserData;
+  text: string;
 }) => {
   const response = await axiosInstance.put(
     `/courses/c/p/${data.postId}/comment`,

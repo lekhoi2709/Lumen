@@ -4,14 +4,19 @@ import Post from "../models/post";
 export default {
   createPost: async (req: Request, res: Response) => {
     try {
-      const { userEmail, courseId, type, content, images, videos } = req.body;
+      const { courseId, postData } = req.body;
       const post = new Post({
-        userEmail,
+        user: {
+          email: postData.user.email,
+          firstName: postData.user.firstName,
+          lastName: postData.user.lastName,
+          avatarUrl: postData.user.avatarUrl,
+        },
         courseId,
-        type,
-        content,
-        images,
-        videos,
+        type: postData.type,
+        text: postData.text,
+        images: postData.images,
+        videos: postData.videos,
       });
       await post.save();
       res.status(201).json({ message: "Post created" });
@@ -22,8 +27,21 @@ export default {
 
   getPosts: async (req: Request, res: Response) => {
     try {
-      const { courseId } = req.params;
-      const posts = await Post.find({ courseId });
+      const { id } = req.params;
+      const posts = await Post.aggregate([
+        { $match: { courseId: id } },
+        { $sort: { createdAt: -1 } },
+        {
+          $addFields: {
+            comments: {
+              $sortArray: {
+                input: "$comments",
+                sortBy: { createdAt: -1 },
+              },
+            },
+          },
+        },
+      ]).exec();
       res.status(200).json(posts);
     } catch (error) {
       res.status(500).json({ message: "Internal Server Error" });
@@ -33,10 +51,16 @@ export default {
   updatePost: async (req: Request, res: Response) => {
     try {
       const { postId } = req.params;
-      const { type, content, images, videos } = req.body;
+      const { postData } = req.body;
       await Post.updateOne(
         { _id: postId },
-        { type, content, images, videos, updateAt: Date.now() }
+        {
+          type: postData.type,
+          text: postData.text,
+          images: postData.images,
+          videos: postData.videos,
+          updateAt: Date.now(),
+        }
       );
       res.status(200).json({ message: "Post updated" });
     } catch (error) {
@@ -47,11 +71,19 @@ export default {
   commentPost: async (req: Request, res: Response) => {
     try {
       const { postId } = req.params;
-      const { userEmail, content } = req.body;
+      const { user, text } = req.body;
       const post = await Post.findOne({ _id: postId });
 
       if (post) {
-        post.comments.push({ userEmail, content });
+        post.comments.push({
+          user: {
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            avatarUrl: user.avatarUrl,
+          },
+          text,
+        });
         await post.save();
         res.status(201).json({ message: "Comment added" });
       } else {
