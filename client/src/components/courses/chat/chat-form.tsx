@@ -1,72 +1,81 @@
-import {
-  Form,
-  FormField,
-  FormControl,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import TipTapRichTextEditor from "./tiptap-editor";
-import { DialogClose } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { useTranslation } from "react-i18next";
+import { useParams } from "react-router-dom";
+import { PostType } from "@/types/post";
+import { useAuth } from "@/contexts/auth-context";
+import { useCreatePost } from "@/services/mutations/posts";
+import FormLayout from "./chatform-layout";
 
 const formSchema = z.object({
-  data: z.string().min(1),
+  text: z.string().min(1),
+  images: z
+    .array(
+      z.object({
+        src: z.string(),
+        alt: z.string(),
+      }),
+    )
+    .optional(),
+  videos: z
+    .array(
+      z.object({
+        src: z.string(),
+        thumbnail: z.string(),
+      }),
+    )
+    .optional(),
 });
 
 function ChatForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      data: "",
+      text: "",
+      images: [],
+      videos: [],
     },
     mode: "onBlur",
   });
-  const { t } = useTranslation();
+  const { id } = useParams<{ id: string }>();
+  const { user } = useAuth();
+  const createPostMutation = useCreatePost();
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log(data);
+    let type = PostType.Text;
+
+    if (
+      (data.images?.length && data.videos?.length) ||
+      (data.images?.length && data.text) ||
+      (data.videos?.length && data.text)
+    ) {
+      type = PostType.Mixed;
+    }
+
+    if (data.images?.length) {
+      type = PostType.Image;
+    }
+
+    if (data.videos?.length) {
+      type = PostType.Video;
+    }
+
+    await createPostMutation.mutate({
+      courseId: id!,
+      postData: {
+        ...data,
+        type,
+        user: {
+          email: user?.email!,
+          firstName: user?.firstName!,
+          lastName: user?.lastName!,
+          avatarUrl: user?.avatarUrl!,
+        },
+      },
+    });
   }
 
-  return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="w-full h-full flex flex-col gap-4 md:gap-6 items-center justify-center"
-      >
-        <FormField
-          control={form.control}
-          name="data"
-          render={({ field }) => (
-            <FormItem className="w-full max-w-[50rem]">
-              <FormLabel className="hidden">Message</FormLabel>
-              <FormControl>
-                <TipTapRichTextEditor
-                  data={field.value}
-                  onChange={field.onChange}
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        <div className="flex w-full md:flex-row gap-2 justify-end">
-          <DialogClose asChild>
-            <Button variant="outline" className="hidden md:block">
-              {t("courses.dialog.cancel")}
-            </Button>
-          </DialogClose>
-          <DialogClose asChild>
-            <Button type="submit" className="w-full md:w-fit">
-              {t("courses.overview.chat-btn")}
-            </Button>
-          </DialogClose>
-        </div>
-      </form>
-    </Form>
-  );
+  return <FormLayout form={form} onSubmit={onSubmit} />;
 }
 
 export default ChatForm;
