@@ -12,6 +12,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import OptionPopover from "./option-popover";
 
 function ChatSection() {
   const { id } = useParams();
@@ -56,24 +57,27 @@ function ChatSection() {
       {data?.map((post: TPost) => (
         <div
           key={post._id}
-          className="flex min-h-[4rem] w-full flex-col gap-2 rounded-lg border border-border p-4 px-6"
+          className="flex min-h-[4rem] w-full flex-col gap-2 rounded-lg border border-border"
         >
-          <div className="flex w-full items-center gap-4">
-            <img
-              src={post.user.avatarUrl}
-              alt="user-avatar"
-              className="h-8 w-8 rounded-full"
-            />
-            <div className="flex flex-col truncate">
-              <p className="truncate font-bold">
-                {post.user.firstName} {post.user.lastName}
-              </p>
-              <p className="truncate text-xs text-muted-foreground">
-                {dateFormat(new Date(post.createdAt!))}
-              </p>
+          <div className="flex w-full items-center justify-between px-6 pt-4">
+            <div className="flex w-full items-center gap-4">
+              <img
+                src={post.user.avatarUrl}
+                alt="user-avatar"
+                className="h-10 w-10 rounded-full"
+              />
+              <div className="flex flex-col truncate">
+                <p className="truncate font-bold">
+                  {post.user.firstName} {post.user.lastName}
+                </p>
+                <p className="truncate text-xs text-muted-foreground">
+                  {dateFormat(new Date(post.createdAt!))}
+                </p>
+              </div>
             </div>
+            <OptionPopover className="translate-x-2" postId={post._id!} />
           </div>
-          <div className="mt-2 flex flex-col gap-1">
+          <div className="mt-2 flex flex-col gap-1 px-6">
             {post.text && htmlFromString(post.text)}
             {post.images && (
               <div className="flex gap-2">
@@ -100,8 +104,8 @@ function ChatSection() {
               </div>
             )}
           </div>
-          <Separator className="my-1" />
-          <div className="flex flex-col gap-2">
+          <Separator />
+          <div className="flex flex-col gap-2 px-6 pb-4">
             <CommentSection
               comments={post.comments!}
               dateFormat={dateFormat}
@@ -121,8 +125,8 @@ function CommentTrigger({ postId }: { postId: string }) {
 
   return (
     <Dialog>
-      <DialogTrigger className="mt-1 flex h-8 w-full items-center gap-2">
-        <Avatar>
+      <DialogTrigger className="mt-1 flex h-8 w-full items-center gap-4">
+        <Avatar className="h-8 w-8">
           <AvatarImage src={user?.avatarUrl} alt={user?.email} />
           <AvatarFallback>{user?.firstName}</AvatarFallback>
         </Avatar>
@@ -147,6 +151,7 @@ function CommentSection({
   htmlFromString: (text: string) => string | JSX.Element | JSX.Element[];
 }) {
   const [showAll, setShowAll] = useState(false);
+  const { t } = useTranslation();
 
   if (!comments.length) {
     return <section></section>;
@@ -158,7 +163,7 @@ function CommentSection({
       <section className="flex flex-col gap-2">
         <div className="flex items-start justify-between">
           <div className="flex items-start gap-4">
-            <Avatar>
+            <Avatar className="h-8 w-8">
               <AvatarImage
                 src={comment.user?.avatarUrl}
                 alt={comment.user?.email}
@@ -188,9 +193,15 @@ function CommentSection({
         <Button
           variant="ghost"
           onClick={() => setShowAll(!showAll)}
-          className="h-fit w-fit self-start !p-0 text-sm text-orange-500 hover:bg-transparent hover:underline"
+          className="my-2 h-fit w-fit self-start !p-0 text-sm text-orange-500 hover:bg-transparent hover:underline"
         >
-          {showAll ? "Show less" : "Show all"}
+          {showAll && t("courses.overview.comment-collapse")}
+          {!showAll &&
+            t("courses.overview.comment-expand") +
+              " " +
+              comments.length +
+              " " +
+              t("courses.overview.comments")}
         </Button>
       )}
       <div className="my-2 flex flex-col gap-4">
@@ -198,7 +209,7 @@ function CommentSection({
           comments.map((comment) => (
             <div key={comment._id} className="flex items-start justify-between">
               <div className="flex items-start gap-4">
-                <Avatar>
+                <Avatar className="h-8 w-8">
                   <AvatarImage
                     src={comment.user?.avatarUrl}
                     alt={comment.user?.email}
@@ -223,7 +234,7 @@ function CommentSection({
           comments.slice(0, 1).map((comment) => (
             <div key={comment._id} className="flex items-start justify-between">
               <div className="flex items-start gap-4">
-                <Avatar>
+                <Avatar className="h-8 w-8">
                   <AvatarImage
                     src={comment.user?.avatarUrl}
                     alt={comment.user?.email}

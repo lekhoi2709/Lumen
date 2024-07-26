@@ -119,7 +119,7 @@ function ChatTrigger({
 }) {
   return (
     <Dialog>
-      <DialogTrigger className="h-[4rem] w-full cursor-pointer truncate rounded-lg border border-border hover:shadow-md">
+      <DialogTrigger className="h-[4rem] w-full cursor-pointer truncate rounded-lg border border-border transition-shadow duration-300 ease-in-out hover:shadow-md dark:shadow-white/20">
         <div className="flex h-full w-full items-center gap-4 pl-4 md:gap-6 md:pl-6">
           <Avatar>
             <AvatarImage src={user?.avatarUrl} alt={user?.email} />
