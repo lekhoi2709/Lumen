@@ -94,7 +94,13 @@
       "chat-btn": "Đăng",
       "chat-no-msg": "Chưa có thông báo nào.",
       "comment-title": "Bình luận",
-      "comment-placeholder": "Nhập bình luận của bạn vào đây..."
+      "comment-placeholder": "Nhập bình luận của bạn vào đây...",
+      "comment-expand": "Hiển thị tất cả",
+      "comment-collapse": "Thu gọn",
+      "comments": "bình luận",
+      "delete-post": "Xóa",
+      "delete-post-confirm": "Bạn có chắc chắn muốn xóa bài viết này?",
+      "edit-post": "Chỉnh sửa"
     },
     "people": {
       "students": "Học sinh",

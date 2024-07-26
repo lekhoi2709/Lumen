@@ -94,7 +94,13 @@
       "chat-btn": "Post",
       "chat-no-msg": "No announcements yet.",
       "comment-title": "Comments",
-      "comment-placeholder": "Write a comment..."
+      "comment-placeholder": "Write a comment...",
+      "comment-expand": "Show all",
+      "comment-collapse": "Show less",
+      "comments": "comments",
+      "delete-post": "Delete",
+      "delete-post-confirm": "Are you sure you want to delete this post?",
+      "edit-post": "Edit"
     },
     "people": {
       "students": "Students",
