@@ -87,6 +87,15 @@
       "people": "People",
       "grades": "Grades"
     },
+    "overview": {
+      "course-code": "Course Code",
+      "chat-placeholder": "Press to announce something...",
+      "chat-title": "Announcements",
+      "chat-btn": "Post",
+      "chat-no-msg": "No announcements yet.",
+      "comment-title": "Comments",
+      "comment-placeholder": "Write a comment..."
+    },
     "people": {
       "students": "Students",
       "instructors": "Instructors",

@@ -87,6 +87,15 @@
       "people": "Mọi người",
       "grades": "Điểm"
     },
+    "overview": {
+      "course-code": "Mã khóa học",
+      "chat-placeholder": "Nhấn để thông báo điều gì đó...",
+      "chat-title": "Thông báo",
+      "chat-btn": "Đăng",
+      "chat-no-msg": "Chưa có thông báo nào.",
+      "comment-title": "Bình luận",
+      "comment-placeholder": "Nhập bình luận của bạn vào đây..."
+    },
     "people": {
       "students": "Học sinh",
       "instructors": "Người hướng dẫn",
