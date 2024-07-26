@@ -33,22 +33,56 @@ const formSchema = z.object({
 function ForgotPassword() {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const [loading, setLoading] = useState(false);
-  const [countdown, setCountdown] = useState(60 * 5);
-  const [isCounting, setIsCounting] = useState(false);
+
+  const calculateTimeLeft = (endTime: number) => {
+    const now = Date.now();
+    const diff = endTime - now;
+    return diff > 0 ? Math.floor(diff / 1000) : 0;
+  };
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const [countdown, setCountdown] = useState<number>(() => {
+    const savedTime = localStorage.getItem("otp-end-time");
+    if (savedTime) {
+      return calculateTimeLeft(parseInt(savedTime, 10));
+    }
+    return 0;
+  });
+  const [isCounting, setIsCounting] = useState<boolean>(() => {
+    const savedEndTime = localStorage.getItem("otp-end-time");
+    if (savedEndTime) {
+      return calculateTimeLeft(parseInt(savedEndTime, 10)) > 0;
+    }
+    return false;
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
+    let timer: NodeJS.Timeout;
     if (isCounting) {
-      const interval = setInterval(() => {
-        setCountdown((prev: any) => prev - 1);
+      timer = setInterval(() => {
+        const savedEndTime = localStorage.getItem("otp-end-time");
+        if (savedEndTime) {
+          const timeLeft = calculateTimeLeft(parseInt(savedEndTime, 10));
+          setCountdown(timeLeft);
+          if (timeLeft <= 0) {
+            setIsCounting(false);
+            localStorage.removeItem("otp-end-time");
+            clearInterval(timer);
+          }
+        }
       }, 1000);
-
-      return () => {
-        clearInterval(interval);
-      };
     }
+
+    return () => clearInterval(timer);
   }, [isCounting]);
+
+  const startCountdown = () => {
+    const endTime = Date.now() + 300000; // 300 seconds
+    localStorage.setItem("otp-end-time", endTime.toString());
+    setCountdown(calculateTimeLeft(endTime));
+    setIsCounting(true);
+  };
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -86,7 +120,7 @@ function ForgotPassword() {
           title: res.message,
           description: "Please check your e-mail for the OTP.",
         });
-        setIsCounting(true);
+        !isCounting && startCountdown();
       })
       .catch((err) => {
         setLoading(false);
@@ -150,13 +184,8 @@ function ForgotPassword() {
                       type="button"
                       onClick={() => handleSendOTP()}
                     >
-                      {loading ? (
-                        <Loader2Icon className="animate-spin" />
-                      ) : isCounting ? (
-                        countdown
-                      ) : (
-                        t("forgot.send")
-                      )}
+                      {loading && <Loader2Icon className="animate-spin" />}
+                      {!loading && (isCounting ? countdown : t("forgot.send"))}
                     </Button>
                   </div>
                   <FormMessage />
