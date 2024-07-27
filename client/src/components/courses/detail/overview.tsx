@@ -21,7 +21,7 @@ function CourseOverview({ data }: { data: Course }) {
   const { t } = useTranslation();
 
   return (
-    <section className="flex w-full flex-col gap-4 md:max-w-[65rem] md:gap-6">
+    <section className="flex w-full flex-col gap-4 md:max-w-[65rem] xl:gap-6">
       <div className="relative w-full rounded-lg border border-border">
         <img
           src={data.image}
@@ -30,9 +30,9 @@ function CourseOverview({ data }: { data: Course }) {
         />
         <Banner title={data.title} description={data.description!} />
       </div>
-      <div className="relative flex flex-col gap-4 md:flex-row md:gap-6">
+      <div className="relative flex w-full flex-col gap-4 xl:flex-row xl:gap-6">
         {user?.role === "Teacher" && <CourseCode code={data._id!} t={t} />}
-        <div className="flex w-full flex-col gap-4 md:gap-6">
+        <div className="flex w-full flex-col gap-4 xl:max-w-[calc(80%-1.5rem)] xl:gap-6">
           <ChatTrigger user={user} t={t} />
           <ChatSection />
         </div>
@@ -78,7 +78,7 @@ function CourseCode({
     return () => clearTimeout(timeoutId);
   };
   return (
-    <div className="z-0 flex max-h-[8rem] w-full items-center justify-between gap-6 truncate rounded-lg border border-border p-3 px-6 pr-4 md:w-fit md:pr-[3rem]">
+    <div className="z-0 flex max-h-[8rem] w-full items-center justify-between gap-6 rounded-lg border border-border p-3 px-6 pr-4 xl:max-w-[20%]">
       <div className="flex flex-col items-start gap-4">
         <h1 className="truncate">{t("courses.overview.course-code")}</h1>
         <p className="text-orange-500">{code}</p>

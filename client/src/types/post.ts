@@ -33,6 +33,6 @@ export type TPost = {
   type: PostType;
   createdAt?: string;
   updatedAt?: string;
-  user: SearchedUserData;
+  user?: SearchedUserData;
   comments?: TComment[];
 };

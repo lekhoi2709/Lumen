@@ -59,7 +59,7 @@ export default {
           text: postData.text,
           images: postData.images,
           videos: postData.videos,
-          updateAt: Date.now(),
+          updatedAt: Date.now(),
         }
       );
       res.status(200).json({ message: "Post updated" });
