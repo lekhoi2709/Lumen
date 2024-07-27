@@ -4,6 +4,7 @@ import {
   deletePost,
   updatePost,
   commentPost,
+  deleteComment,
 } from "../api/posts-api";
 import { TPost } from "@/types/post";
 import { SearchedUserData } from "@/types/user";
@@ -110,6 +111,30 @@ export function useCommentPost() {
       toast({
         title: "Success",
         description: "Comment added",
+      });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+    },
+  });
+}
+
+export function useDeleteComment() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: { postId: string; commentId: string }) =>
+      deleteComment(data),
+    onMutate: () => {
+      console.log("mutate");
+    },
+    onError: (error: any) => {
+      console.log(error);
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success",
+        description: "Comment removed",
       });
     },
     onSettled: () => {

@@ -103,4 +103,17 @@ export default {
       res.status(500).json({ message: "Internal Server Error" });
     }
   },
+
+  deleteComment: async (req: Request, res: Response) => {
+    try {
+      const { postId, commentId } = req.params;
+      await Post.findOneAndUpdate(
+        { _id: postId },
+        { $pull: { comments: { _id: commentId } } }
+      );
+      return res.status(200).json({ message: "Comment deleted" });
+    } catch (error) {
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  },
 };

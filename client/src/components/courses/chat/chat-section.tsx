@@ -107,6 +107,7 @@ function ChatSection() {
           <Separator />
           <div className="flex flex-col gap-2 px-6 pb-4">
             <CommentSection
+              postId={post._id!}
               comments={post.comments!}
               dateFormat={dateFormat}
               htmlFromString={htmlFromString}
@@ -142,10 +143,12 @@ function CommentTrigger({ postId }: { postId: string }) {
 }
 
 function CommentSection({
+  postId,
   comments,
   dateFormat,
   htmlFromString,
 }: {
+  postId: string;
   comments: TComment[];
   dateFormat: (date: Date) => string;
   htmlFromString: (text: string) => string | JSX.Element | JSX.Element[];
@@ -160,8 +163,8 @@ function CommentSection({
   if (comments.length === 1) {
     const comment = comments[0];
     return (
-      <section className="flex flex-col gap-2">
-        <div className="flex items-start justify-between">
+      <section className="my-2 flex flex-col">
+        <div className="group flex items-start justify-between hover:cursor-pointer">
           <div className="flex items-start gap-4">
             <Avatar className="h-8 w-8">
               <AvatarImage
@@ -179,9 +182,17 @@ function CommentSection({
               </div>
             </div>
           </div>
-          <p className="text-xs text-muted-foreground">
-            {dateFormat(new Date(comment.createdAt!))}
-          </p>
+          <div className="relative flex items-center gap-2">
+            <OptionPopover
+              postId={postId}
+              commentId={comment._id!}
+              type="Comment"
+              className="invisible group-hover:visible"
+            />
+            <p className="text-xs text-muted-foreground">
+              {dateFormat(new Date(comment.createdAt!))}
+            </p>
+          </div>
         </div>
       </section>
     );
@@ -207,7 +218,10 @@ function CommentSection({
       <div className="my-2 flex flex-col gap-4">
         {showAll &&
           comments.map((comment) => (
-            <div key={comment._id} className="flex items-start justify-between">
+            <div
+              key={comment._id}
+              className="group flex items-start justify-between hover:cursor-pointer"
+            >
               <div className="flex items-start gap-4">
                 <Avatar className="h-8 w-8">
                   <AvatarImage
@@ -225,14 +239,25 @@ function CommentSection({
                   </div>
                 </div>
               </div>
-              <p className="text-xs text-muted-foreground">
-                {dateFormat(new Date(comment.createdAt!))}
-              </p>
+              <div className="relative flex items-center gap-2">
+                <OptionPopover
+                  postId={postId}
+                  commentId={comment._id!}
+                  type="Comment"
+                  className="invisible group-hover:visible"
+                />
+                <p className="text-xs text-muted-foreground">
+                  {dateFormat(new Date(comment.createdAt!))}
+                </p>
+              </div>
             </div>
           ))}
         {!showAll &&
           comments.slice(0, 1).map((comment) => (
-            <div key={comment._id} className="flex items-start justify-between">
+            <div
+              key={comment._id}
+              className="group flex items-start justify-between hover:cursor-pointer"
+            >
               <div className="flex items-start gap-4">
                 <Avatar className="h-8 w-8">
                   <AvatarImage
@@ -250,9 +275,17 @@ function CommentSection({
                   </div>
                 </div>
               </div>
-              <p className="text-xs text-muted-foreground">
-                {dateFormat(new Date(comment.createdAt!))}
-              </p>
+              <div className="relative flex items-center gap-2">
+                <OptionPopover
+                  postId={postId}
+                  commentId={comment._id!}
+                  type="Comment"
+                  className="invisible group-hover:visible"
+                />
+                <p className="text-xs text-muted-foreground">
+                  {dateFormat(new Date(comment.createdAt!))}
+                </p>
+              </div>
             </div>
           ))}
       </div>

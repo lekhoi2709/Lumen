@@ -69,3 +69,19 @@ export const commentPost = async (data: {
   );
   return response.data;
 };
+
+export const deleteComment = async (data: {
+  postId: string;
+  commentId: string;
+}) => {
+  const response = await axiosInstance.put(
+    `/courses/c/p/${data.postId}/comment/${data.commentId}/delete`,
+    null,
+    {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    },
+  );
+  return response.data;
+};

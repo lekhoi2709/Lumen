@@ -16,32 +16,40 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { useTranslation } from "react-i18next";
-import { useDeletePost } from "@/services/mutations/posts";
+import { useDeleteComment, useDeletePost } from "@/services/mutations/posts";
 
 function OptionPopover({
+  type = "Post",
   className,
   postId,
+  commentId,
 }: {
+  type?: "Post" | "Comment";
   className?: string;
   postId: string;
+  commentId?: string;
 }) {
   const { t } = useTranslation();
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button variant="ghost" className={twMerge("p-2", className)}>
-          <EllipsisVerticalIcon className="h-5 w-5" />
+          <EllipsisVerticalIcon className="h-5 w-5 text-muted-foreground" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-fit max-w-[12rem] p-2 px-4 text-sm">
         <div className="flex flex-col">
-          <Button
-            variant="ghost"
-            className="flex items-center justify-start gap-4 rounded-sm hover:bg-muted"
-          >
-            <PencilIcon className="h-4 w-4" />
-            <span>{t("courses.overview.edit-post")}</span>
-          </Button>
+          {type === "Post" && (
+            <Button
+              variant="ghost"
+              className="flex items-center justify-start gap-4 rounded-sm hover:bg-muted"
+            >
+              <PencilIcon className="h-4 w-4 text-muted-foreground" />
+              <span className="text-muted-foreground">
+                {t("courses.overview.edit-post")}
+              </span>
+            </Button>
+          )}
           <Dialog>
             <DialogTrigger asChild>
               <Button
@@ -49,10 +57,12 @@ function OptionPopover({
                 className="flex items-center justify-start gap-4 rounded-sm hover:bg-muted"
               >
                 <TrashIcon className="h-4 w-4 text-destructive" />
-                <span>{t("courses.overview.delete-post")}</span>
+                <span className="text-destructive">
+                  {t("courses.overview.delete-post")}
+                </span>
               </Button>
             </DialogTrigger>
-            <DeleteDialog postId={postId} />
+            <DeleteDialog postId={postId} commentId={commentId} />
           </Dialog>
         </div>
       </PopoverContent>
@@ -60,12 +70,23 @@ function OptionPopover({
   );
 }
 
-function DeleteDialog({ postId }: { postId: string }) {
+function DeleteDialog({
+  postId,
+  commentId,
+}: {
+  postId: string;
+  commentId?: string;
+}) {
   const { t } = useTranslation();
   const deletePost = useDeletePost();
+  const deleteComment = useDeleteComment();
 
-  const handleDelete = () => {
+  const handlePostDelete = () => {
     deletePost.mutate(postId);
+  };
+
+  const handleCommentDelete = () => {
+    deleteComment.mutate({ postId, commentId: commentId! });
   };
 
   return (
@@ -75,7 +96,13 @@ function DeleteDialog({ postId }: { postId: string }) {
           <DialogTitle>{t("courses.overview.delete-post")}</DialogTitle>
           <DialogDescription className="hidden">delete post</DialogDescription>
         </DialogHeader>
-        <p>{t("courses.overview.delete-post-confirm")}</p>
+        <p>
+          {t(
+            commentId
+              ? "courses.overview.delete-comment-confirm"
+              : "courses.overview.delete-post-confirm",
+          )}
+        </p>
         <div className="mt-4 flex gap-4">
           <DialogClose asChild>
             <Button variant="ghost" className="w-full">
@@ -84,7 +111,7 @@ function DeleteDialog({ postId }: { postId: string }) {
           </DialogClose>
           <DialogClose asChild>
             <Button
-              onClick={handleDelete}
+              onClick={commentId ? handleCommentDelete : handlePostDelete}
               variant="destructive"
               className="w-full"
             >

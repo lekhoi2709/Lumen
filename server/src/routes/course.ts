@@ -6,8 +6,13 @@ import postController from "../controllers/post-controller";
 
 const router = Router();
 
+// Courses
 router.get("/", authenticateToken, courseController.getCourses);
 router.get("/c/:id", authenticateToken, courseController.getCourse);
+router.post("/", authenticateToken, courseController.createCourse);
+router.put("/join/:id", authenticateToken, courseController.joinCourse);
+
+// People
 router.get(
   "/c/:id/people",
   authenticateToken,
@@ -18,18 +23,21 @@ router.get(
   authenticateToken,
   userController.getSearchedUser
 );
-router.get("/c/:id/post", authenticateToken, postController.getPosts);
+router.put("/c/:id/people/add", authenticateToken, courseController.addPeople);
 
-router.post("/", authenticateToken, courseController.createCourse);
+// Posts
+router.get("/c/:id/post", authenticateToken, postController.getPosts);
 router.post("/c/:id/post", authenticateToken, postController.createPost);
 router.post(
   "/c/p/:postId/delete",
   authenticateToken,
   postController.deletePost
 );
-
-router.put("/join/:id", authenticateToken, courseController.joinCourse);
-router.put("/c/:id/people/add", authenticateToken, courseController.addPeople);
+router.put(
+  "/c/p/:postId/comment/:commentId/delete",
+  authenticateToken,
+  postController.deleteComment
+);
 router.put(
   "/c/p/:postId/comment",
   authenticateToken,
