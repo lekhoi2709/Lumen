@@ -17,7 +17,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2Icon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { resetPassword } from "@/services/api";
 
 const formSchema = z
   .object({
@@ -47,22 +47,10 @@ function ResetPassword() {
   const { isValid, isDirty, isSubmitting } = form.formState;
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    await axios
-      .put(
-        `${process.env.API_URL}/auth/reset-password`,
-        {
-          email: sessionStorage.getItem("email"),
-          newPassword: data.newPassword,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-          },
-        }
-      )
+    await resetPassword(sessionStorage.getItem("email")!, data.newPassword)
       .then((res) => {
         toast({
-          title: res.data.message,
+          title: res.message,
           description: "You can now login with your new password.",
         });
         sessionStorage.removeItem("token");
@@ -73,7 +61,7 @@ function ResetPassword() {
         toast({
           variant: "destructive",
           title: "Uh oh! Something went wrong.",
-          description: err.response.data.message,
+          description: err.response.data.message || err.message,
         });
       });
   };

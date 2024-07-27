@@ -23,7 +23,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useState, useEffect } from "react";
 import { Loader2Icon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { verifyOTP, sendOTP } from "@/services/api";
 
 const formSchema = z.object({
   email: z.string().email().trim(),
@@ -58,16 +58,12 @@ function ForgotPassword() {
   const { isValid, isDirty, isSubmitting } = form.formState;
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    await axios
-      .post(`${process.env.API_URL}/auth/verify-otp`, {
-        email: data.email,
-        otp: data.otp,
-      })
+    await verifyOTP(data.email, data.otp)
       .then((res) => {
-        sessionStorage.setItem("token", res.data.token);
+        sessionStorage.setItem("token", res.token);
         sessionStorage.setItem("email", form.getValues("email"));
         toast({
-          title: res.data.message,
+          title: res.message,
           description: "You will be redirected to the next step..",
         });
         navigate("/reset-password");
@@ -76,21 +72,18 @@ function ForgotPassword() {
         toast({
           variant: "destructive",
           title: "Uh oh! Something went wrong.",
-          description: err.response.data.message,
+          description: err.response.data.message || err.message,
         });
       });
   };
 
   const handleSendOTP = async () => {
     setLoading(true);
-    await axios
-      .post(`${process.env.API_URL}/auth/send-otp`, {
-        email: form.getValues("email"),
-      })
+    await sendOTP(form.getValues("email"))
       .then((res) => {
         setLoading(false);
         toast({
-          title: res.data.message,
+          title: res.message,
           description: "Please check your e-mail for the OTP.",
         });
         setIsCounting(true);
@@ -100,7 +93,7 @@ function ForgotPassword() {
         toast({
           variant: "destructive",
           title: "Uh oh! Something went wrong.",
-          description: err.response.data.message,
+          description: err.response.data.message || err.message,
         });
       });
   };

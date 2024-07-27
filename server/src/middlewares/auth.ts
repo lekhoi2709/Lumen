@@ -1,10 +1,11 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
+import { UserType } from "../types/user";
 
 declare global {
   namespace Express {
     interface Request {
-      user?: JwtPayload;
+      user?: UserType | null;
     }
   }
 }
@@ -25,7 +26,7 @@ export const authenticateToken = async (
       return res.status(403).json({ message: "Invalid token" });
     }
 
-    req.user = user as JwtPayload;
+    req.user = user;
     next();
   });
 };

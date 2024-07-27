@@ -7,8 +7,9 @@ const saveUser = async (payload: any) => {
 
   const accessToken = jwt.sign(
     {
+      _id : user?._id,
       email: email,
-      role: "Student",
+      role: user?.role || "Student",
       avatarUrl: picture,
       firstName: given_name,
       lastName: family_name,
@@ -31,21 +32,24 @@ const saveUser = async (payload: any) => {
     });
 
     await newUser.save();
-    return;
+    return { accessToken, role: "Student" };
   }
 
   if (user && user.authProvider !== "google") {
+    user.firstName = given_name;
+    user.lastName = family_name;
     user.authProvider = "google";
     user.providerId = sub;
     user.accessToken = accessToken;
+    user.avatarUrl = picture;
 
     await user.save();
-    return;
+    return { accessToken, role: user.role };
   }
 
   user.accessToken = accessToken;
   await user.save();
-  return accessToken;
+  return { accessToken, role: user.role };
 };
 
 export default saveUser;

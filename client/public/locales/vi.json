@@ -6,7 +6,10 @@
     "login": "Đăng nhập",
     "register": "Đăng ký",
     "logout": "Đăng xuất",
-    "dashboard": "Bảng điều khiển"
+    "dashboard": "Bảng điều khiển",
+    "courses": "Khóa học",
+    "schedule": "Lịch học",
+    "gradebook": "Bảng điểm"
   },
   "footer": {
     "contact": "Liên hệ",
@@ -61,5 +64,37 @@
     "message": "Rất tiếc, trang bạn đang tìm kiếm không còn khả dụng. Có thể trang đã bị xóa, di chuyển hoặc URL đã thay đổi.",
     "back": "Quay lại trang chủ",
     "contact": "Liên hệ với chúng tôi"
+  },
+  "courses": {
+    "title": "Khóa học của tôi",
+    "dialog": {
+      "join": "Tham gia khóa học",
+      "description": "Bạn đang đăng nhập với tư cách",
+      "code": "Mã khóa học",
+      "code-des": "Hỏi giáo viên của bạn về mã lớp, sau đó nhập mã vào đây.",
+      "create": "Tạo khóa học",
+      "name": "Tên khóa học",
+      "name-des": "Nhập tên khóa học của bạn vào đây.",
+      "course-des": "Mô tả khóa học",
+      "course-des-placeholder": "Nhập mô tả ngắn gọn về khóa học.",
+      "join-btn": "Tham gia",
+      "create-btn": "Tạo",
+      "cancel": "Hủy"
+    },
+    "detail": {
+      "overview": "Tổng quan",
+      "assignments": "Bài tập",
+      "people": "Mọi người",
+      "grades": "Điểm"
+    },
+    "people": {
+      "students": "Học sinh",
+      "instructors": "Người hướng dẫn",
+      "add-student": "Mời học sinh",
+      "add-instructor": "Mời người hướng dẫn",
+      "no-result": "Không tìm thấy kết quả.",
+      "invite-input": "Nhập địa chỉ email",
+      "invite-btn": "Mời"
+    }
   }
 }

@@ -44,7 +44,7 @@ export default {
       });
 
       const payload = ticket.getPayload();
-      const accessToken = await saveUser(payload);
+      const { accessToken, role } = await saveUser(payload);
 
       const refreshToken = jwt.sign(
         {
@@ -60,7 +60,7 @@ export default {
       (req.session as any).userData = {
         user: {
           email: payload!.email,
-          role: "Student",
+          role: role,
           avatarUrl: payload!.picture,
           firstName: payload!.given_name,
           lastName: payload!.family_name,
@@ -85,7 +85,6 @@ export default {
 
     return res.status(200).json({
       message: "Login successful",
-      user: userData.user,
       token: userData.accessToken,
       refreshToken: userData.refreshToken,
     });

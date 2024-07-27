@@ -7,7 +7,7 @@ import { authenticateToken } from "../middlewares/auth";
 const router = Router();
 
 router.post("/login", userController.login);
-router.post("/logout", authenticateToken, userController.logout);
+router.post("/logout", userController.logout);
 router.post("/register", userController.register);
 
 router.get("/refresh", userController.refresh);

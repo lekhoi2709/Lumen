@@ -14,6 +14,11 @@ import Dashboard from "./routes/dashboard";
 import GoogleSuccess from "./routes/auth/google-success";
 import Loading from "./components/loading";
 import PageNotFound from "./routes/404";
+import CoursesPage from "./routes/courses";
+import CourseDetail from "./routes/courses/course-detail";
+import CoursePeople from "./routes/courses/people";
+import SchedulePage from "./routes/schedule";
+import GradeBookPage from "./routes/gradebook";
 
 function App() {
   const [showSplash, setShowSplash] = useState(
@@ -48,6 +53,18 @@ function App() {
             {/* private route */}
             <Route element={<PrivateRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
+              {/* course routes */}
+              <Route path="/courses" element={<CoursesPage />} />
+              <Route path="/courses/:id" element={<CourseDetail />} />
+              <Route
+                path="/courses/:id/assignments"
+                element={<CourseDetail />}
+              />
+              <Route path="/courses/:id/people" element={<CoursePeople />} />
+              <Route path="/courses/:id/grades" element={<CourseDetail />} />
+              {/* other routes */}
+              <Route path="/schedule" element={<SchedulePage />} />
+              <Route path="/gradebook" element={<GradeBookPage />} />
             </Route>
             {/* catch all route */}
             <Route path="*" element={<PageNotFound />} />

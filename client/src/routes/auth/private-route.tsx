@@ -2,26 +2,20 @@ import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/auth-context";
 import { useEffect, useState } from "react";
 import Loading from "@/components/loading";
-import axios from "axios";
+import { verifyRefreshToken } from "@/services/api";
 
 function PrivateRoute() {
   const { user, loginAct } = useAuth();
+  const [isLoading, setLoading] = useState<boolean>(true);
+  const token = sessionStorage.getItem("token");
   const location = useLocation();
-  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     let isMounted = true;
-    const refreshToken = window.localStorage.getItem("refreshToken");
-    const verifyRefreshToken = async () => {
-      await axios
-        .get(`${process.env.API_URL}/auth/refresh`, {
-          headers: {
-            Authorization: `Bearer ${refreshToken}`,
-          },
-          withCredentials: true,
-        })
+    const fetchUser = async () => {
+      await verifyRefreshToken()
         .then((res) => {
-          loginAct(res.data);
+          loginAct(res);
         })
         .catch((err) => {
           console.error(err);
@@ -34,7 +28,7 @@ function PrivateRoute() {
     };
 
     if (!user) {
-      verifyRefreshToken();
+      fetchUser();
     } else {
       setLoading(false);
     }
@@ -44,15 +38,15 @@ function PrivateRoute() {
     };
   }, []);
 
-  if (loading) {
+  if (!token) {
+    return <Navigate to="/login" state={{ from: location }} />;
+  }
+
+  if (isLoading) {
     return <Loading />;
   }
 
-  return user ? (
-    <Outlet />
-  ) : (
-    <Navigate to="/login" state={{ from: location }} replace />
-  );
+  return <Outlet />;
 }
 
 export default PrivateRoute;
