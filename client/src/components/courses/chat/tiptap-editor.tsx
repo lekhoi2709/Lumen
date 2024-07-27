@@ -13,6 +13,11 @@ function TipTapRichTextEditor({
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
+        paragraph: {
+          HTMLAttributes: {
+            class: "tiptap-paragraph",
+          },
+        },
         bulletList: {
           HTMLAttributes: {
             class: "list-disc list-outside pl-4",
@@ -38,7 +43,7 @@ function TipTapRichTextEditor({
   });
 
   return (
-    <div className="flex flex-col justify-stretch border border-border rounded-md w-full">
+    <div className="flex w-full flex-col justify-stretch rounded-md border border-border">
       <EditorContent editor={editor} />
       <RichTextToolbar editor={editor} />
     </div>

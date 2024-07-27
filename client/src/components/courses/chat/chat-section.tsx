@@ -2,7 +2,13 @@ import { usePosts } from "@/services/queries/post";
 import { useParams } from "react-router-dom";
 import Loading from "@/components/loading";
 import { TComment, TPost } from "@/types/post";
-import parse from "html-react-parser";
+import parse, {
+  attributesToProps,
+  DOMNode,
+  domToReact,
+  Element,
+  HTMLReactParserOptions,
+} from "html-react-parser";
 import DOMPurify from "dompurify";
 import { Separator } from "@/components/ui/separator";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
@@ -26,9 +32,28 @@ function ChatSection() {
     );
   }
 
+  const options: HTMLReactParserOptions = {
+    replace: (domNode) => {
+      const typedDomNode = domNode as Element;
+
+      if (!typedDomNode.attribs) return false;
+      if (typedDomNode.attribs.class === "tiptap-paragraph") {
+        return (
+          <p
+            {...attributesToProps(typedDomNode.attribs)}
+            className="text-wrap break-words"
+          >
+            {typedDomNode.children &&
+              domToReact(typedDomNode.children as DOMNode[], options)}
+          </p>
+        );
+      }
+    },
+  };
+
   const htmlFromString = (text: string) => {
     const clean = DOMPurify.sanitize(text);
-    return parse(clean);
+    return parse(clean, options);
   };
 
   const dateFormat = (date: Date) => {
@@ -53,7 +78,7 @@ function ChatSection() {
   };
 
   return (
-    <section className="flex w-full flex-col gap-4 md:gap-6">
+    <section className="flex w-full flex-col gap-4 xl:gap-6">
       {data?.map((post: TPost) => (
         <div
           key={post._id}
@@ -61,23 +86,28 @@ function ChatSection() {
         >
           <div className="flex w-full items-center justify-between px-6 pt-4">
             <div className="flex w-full items-center gap-4">
-              <img
-                src={post.user.avatarUrl}
-                alt="user-avatar"
-                className="h-10 w-10 rounded-full"
-              />
+              <Avatar className="h-8 w-8">
+                <AvatarImage
+                  src={post.user?.avatarUrl}
+                  alt={post.user?.email}
+                />
+                <AvatarFallback>{post.user?.firstName}</AvatarFallback>
+              </Avatar>
               <div className="flex flex-col truncate">
                 <p className="truncate font-bold">
-                  {post.user.firstName} {post.user.lastName}
+                  {post.user?.firstName} {post.user?.lastName}
                 </p>
                 <p className="truncate text-xs text-muted-foreground">
-                  {dateFormat(new Date(post.createdAt!))}
+                  {post.createdAt === post.updatedAt &&
+                    dateFormat(new Date(post.createdAt!))}
+                  {post.createdAt !== post.updatedAt &&
+                    `${dateFormat(new Date(post.updatedAt!))} (edited)`}
                 </p>
               </div>
             </div>
             <OptionPopover className="translate-x-2" postId={post._id!} />
           </div>
-          <div className="mt-2 flex flex-col gap-1 px-6">
+          <div className="mt-2 flex max-w-full flex-col gap-1 px-6">
             {post.text && htmlFromString(post.text)}
             {post.images && (
               <div className="flex gap-2">
@@ -105,7 +135,7 @@ function ChatSection() {
             )}
           </div>
           <Separator />
-          <div className="flex flex-col gap-2 px-6 pb-4">
+          <div className="flex w-full flex-col gap-2 px-6 pb-4">
             <CommentSection
               postId={post._id!}
               comments={post.comments!}
@@ -163,9 +193,9 @@ function CommentSection({
   if (comments.length === 1) {
     const comment = comments[0];
     return (
-      <section className="my-2 flex flex-col">
-        <div className="group flex items-start justify-between hover:cursor-pointer">
-          <div className="flex items-start gap-4">
+      <section className="my-2 w-full">
+        <div className="group flex w-full items-start justify-between">
+          <div className="flex w-full max-w-[60%] items-start gap-4 md:max-w-[80%]">
             <Avatar className="h-8 w-8">
               <AvatarImage
                 src={comment.user?.avatarUrl}
@@ -173,7 +203,7 @@ function CommentSection({
               />
               <AvatarFallback>{comment.user?.firstName}</AvatarFallback>
             </Avatar>
-            <div className="flex flex-col gap-2">
+            <div className="flex w-full flex-col gap-2">
               <p className="text-sm font-bold">
                 {comment.user.firstName} {comment.user.lastName}
               </p>
@@ -182,7 +212,7 @@ function CommentSection({
               </div>
             </div>
           </div>
-          <div className="relative flex items-center gap-2">
+          <div className="flex w-full max-w-[40%] items-center justify-end gap-2 md:max-w-[20%]">
             <OptionPopover
               postId={postId}
               commentId={comment._id!}
@@ -199,30 +229,33 @@ function CommentSection({
   }
 
   return (
-    <section>
+    <section className="w-full">
       {comments.length > 1 && (
         <Button
           variant="ghost"
           onClick={() => setShowAll(!showAll)}
-          className="my-2 h-fit w-fit self-start !p-0 text-sm text-orange-500 hover:bg-transparent hover:underline"
+          className="my-2 h-fit w-fit !p-0 text-sm text-orange-500 hover:bg-transparent hover:underline"
         >
           {showAll && t("courses.overview.comment-collapse")}
-          {!showAll &&
-            t("courses.overview.comment-expand") +
-              " " +
-              comments.length +
-              " " +
-              t("courses.overview.comments")}
+          {!showAll && (
+            <p className="w-full self-start truncate">
+              {t("courses.overview.comment-expand") +
+                " " +
+                comments.length +
+                " " +
+                t("courses.overview.comments")}
+            </p>
+          )}
         </Button>
       )}
-      <div className="my-2 flex flex-col gap-4">
+      <div className="my-2 flex w-full flex-col gap-4">
         {showAll &&
           comments.map((comment) => (
             <div
               key={comment._id}
-              className="group flex items-start justify-between hover:cursor-pointer"
+              className="group relative flex w-full items-start justify-between"
             >
-              <div className="flex items-start gap-4">
+              <div className="flex w-full max-w-[60%] items-start gap-4 md:max-w-[80%]">
                 <Avatar className="h-8 w-8">
                   <AvatarImage
                     src={comment.user?.avatarUrl}
@@ -230,7 +263,7 @@ function CommentSection({
                   />
                   <AvatarFallback>{comment.user?.firstName}</AvatarFallback>
                 </Avatar>
-                <div className="flex flex-col gap-2">
+                <div className="flex w-full flex-col gap-2">
                   <p className="text-sm font-bold">
                     {comment.user.firstName} {comment.user.lastName}
                   </p>
@@ -239,7 +272,7 @@ function CommentSection({
                   </div>
                 </div>
               </div>
-              <div className="relative flex items-center gap-2">
+              <div className="flex w-full max-w-[40%] items-center justify-end gap-2 md:max-w-[20%]">
                 <OptionPopover
                   postId={postId}
                   commentId={comment._id!}
@@ -256,9 +289,9 @@ function CommentSection({
           comments.slice(0, 1).map((comment) => (
             <div
               key={comment._id}
-              className="group flex items-start justify-between hover:cursor-pointer"
+              className="group flex w-full items-start justify-between"
             >
-              <div className="flex items-start gap-4">
+              <div className="flex w-full max-w-[60%] items-start gap-4 md:max-w-[80%]">
                 <Avatar className="h-8 w-8">
                   <AvatarImage
                     src={comment.user?.avatarUrl}
@@ -266,7 +299,7 @@ function CommentSection({
                   />
                   <AvatarFallback>{comment.user?.firstName}</AvatarFallback>
                 </Avatar>
-                <div className="flex flex-col gap-2">
+                <div className="flex w-full flex-col gap-2">
                   <p className="text-sm font-bold">
                     {comment.user.firstName} {comment.user.lastName}
                   </p>
@@ -275,7 +308,7 @@ function CommentSection({
                   </div>
                 </div>
               </div>
-              <div className="relative flex items-center gap-2">
+              <div className="flex w-full max-w-[40%] items-center justify-end gap-2 md:max-w-[20%]">
                 <OptionPopover
                   postId={postId}
                   commentId={comment._id!}
