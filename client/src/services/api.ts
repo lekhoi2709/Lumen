@@ -157,9 +157,19 @@ export const uploadFiles = async (files: File[], token: string) => {
     formData.append("files", file);
   });
 
-  const response = await axiosInstance.post("/uploads", formData, {
+  const response = await axiosInstance.post("/uploads/upload-file", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data;
+};
+
+export const deleteFile = async (userId: string, fileName: string, token: string) => {
+  const response = await axiosInstance.delete(`/uploads/file/${userId}/${fileName}`, {
+    headers: {
       Authorization: `Bearer ${token}`,
     },
   });

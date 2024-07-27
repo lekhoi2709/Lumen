@@ -7,8 +7,8 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Upload, Video } from "lucide-react";
-import { uploadFiles } from "@/services/api";
+import { Upload, Video, Trash2 } from "lucide-react"; // Added Trash2 icon
+import { uploadFiles, deleteFile } from "@/services/api"; // Added deleteFile import
 
 const UploadButton: React.FC = () => {
   const [files, setFiles] = useState<File[]>([]);
@@ -73,6 +73,27 @@ const UploadButton: React.FC = () => {
       console.error(error);
     } finally {
       setUploading(false);
+    }
+  };
+
+  const handleDeleteFile = async (fileName: string, fileUrl: string) => {
+    const token = sessionStorage.getItem("token");
+    if (!token) {
+      setError("Token not found. Please log in again.");
+      return;
+    }
+
+    const userId = fileUrl.split("/")[4]; // Adjust according to your URL structure
+    try {
+      await deleteFile(userId, fileName, token);
+      setUploadedFiles((prevFiles) =>
+        prevFiles.filter((file) => file.name !== fileName)
+      );
+    } catch (error: any) {
+      setError(
+        error.response?.data?.message || "An error occurred while deleting"
+      );
+      console.error(error);
     }
   };
 
@@ -278,6 +299,12 @@ const UploadButton: React.FC = () => {
                         {getFileNameAndExtension(file.name)}
                       </a>
                     </div>
+                    <button
+                      className="delete ml-auto focus:outline-none hover:bg-gray-300 p-1 rounded-md text-gray-800"
+                      onClick={() => handleDeleteFile(file.name, file.url)}
+                    >
+                      <Trash2 size={20} />
+                    </button>
                   </li>
                 ))}
               </ul>
