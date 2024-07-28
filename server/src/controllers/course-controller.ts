@@ -202,7 +202,7 @@ export default {
       const { id } = req.params;
       const course = await Course.findOneAndDelete({ _id: id });
 
-      if (course) {
+      if (course && course.createdUserEmail === req.user?.email) {
         await User.updateMany(
           { "courses.code": id },
           {
