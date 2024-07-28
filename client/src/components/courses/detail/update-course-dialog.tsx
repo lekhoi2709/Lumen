@@ -39,6 +39,7 @@ import { Input } from "@/components/ui/input";
 import { useCourse } from "@/services/queries/courses";
 import { CourseCode } from "./overview";
 import { useDeleteCourse, useUpdateCourse } from "@/services/mutations/courses";
+import { useAuth } from "@/contexts/auth-context";
 
 function UpdateCourseDialog({
   device = "desktop",
@@ -83,6 +84,7 @@ const formSchema = z.object({
 function UpdateCoursesForm() {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
+  const { user } = useAuth();
   const courseQuery = useCourse(id!);
   const updateCourseMutation = useUpdateCourse();
   const deleteCourseMutation = useDeleteCourse();
@@ -175,41 +177,43 @@ function UpdateCoursesForm() {
           code={courseQuery.data?._id!}
           t={t}
         />
-        <section className="flex w-full flex-col gap-6 self-center rounded-md border border-border p-6 px-8 md:max-w-[50%]">
-          <h1>{t("courses.overview.course-setting.delete")}</h1>
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button type="button" variant="destructive" className="w-fit">
-                {t("courses.overview.course-setting.delete-btn")}
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>
-                  {t("courses.overview.course-setting.delete-confirm")}
-                </AlertDialogTitle>
-                <AlertDialogDescription>
-                  {t("courses.overview.course-setting.delete-description")}
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>
-                  {t("courses.overview.course-setting.delete-cancel")}
-                </AlertDialogCancel>
-                <AlertDialogAction asChild>
-                  <Button
-                    variant="destructive"
-                    type="button"
-                    onClick={onDelete}
-                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                  >
-                    {t("courses.overview.course-setting.delete-btn")}
-                  </Button>
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </section>
+        {user?.email === courseQuery.data?.createdUserEmail && (
+          <section className="flex w-full flex-col gap-6 self-center rounded-md border border-border p-6 px-8 md:max-w-[50%]">
+            <h1>{t("courses.overview.course-setting.delete")}</h1>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button type="button" variant="destructive" className="w-fit">
+                  {t("courses.overview.course-setting.delete-btn")}
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    {t("courses.overview.course-setting.delete-confirm")}
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    {t("courses.overview.course-setting.delete-description")}
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>
+                    {t("courses.overview.course-setting.delete-cancel")}
+                  </AlertDialogCancel>
+                  <AlertDialogAction asChild>
+                    <Button
+                      variant="destructive"
+                      type="button"
+                      onClick={onDelete}
+                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    >
+                      {t("courses.overview.course-setting.delete-btn")}
+                    </Button>
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </section>
+        )}
         <div className="flex w-full justify-end self-center md:max-w-[50%]">
           <DialogClose asChild>
             <Button

@@ -23,6 +23,10 @@ const courseSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  createdUserEmail: {
+    type: String,
+    required: true,
+  },
 });
 
 const Course = mongoose.model("Course", courseSchema);

@@ -50,7 +50,6 @@ function CreateCourse({ user }: { user: User | null }) {
       instructor: {
         name: user!.firstName + " " + user!.lastName,
         email: user!.email,
-        avatarUrl: user!.avatarUrl,
       },
     };
     createCourseMutation.mutate(payload);

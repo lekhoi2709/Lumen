@@ -7,6 +7,7 @@ export type Course = {
   price?: number;
   image?: string;
   createdAt?: Date;
+  createdUserEmail?: string;
 };
 
 export type CoursePeople = {

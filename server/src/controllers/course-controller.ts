@@ -55,6 +55,7 @@ export default {
         title,
         description,
         image: imageUrl,
+        createdUserEmail: instructor.email,
       });
       await course.save().then(async (data) => {
         const user = await User.findOne({ email: instructor.email });
