@@ -101,7 +101,17 @@
       "delete-post": "Xóa",
       "delete-post-confirm": "Bạn có chắc chắn muốn xóa bài viết này?",
       "delete-comment-confirm": "Bạn có chắc chắn muốn xóa bình luận này?",
-      "edit-post": "Chỉnh sửa"
+      "edit-post": "Chỉnh sửa",
+      "course-setting": {
+        "title": "Cài đặt khóa học",
+        "details": "Chi tiết khóa học",
+        "save": "Lưu",
+        "delete": "Xóa khóa học",
+        "delete-confirm": "Bạn có chắc chắn muốn xóa khóa học này?",
+        "delete-description": "Hành động này sẽ không thể hoàn tác. Tất cả dữ liệu liên quan đến khóa học sẽ bị xóa khỏi máy chủ của chúng tôi.",
+        "delete-cancel": "Hủy",
+        "delete-btn": "Xóa"
+      }
     },
     "people": {
       "students": "Học sinh",
