@@ -19,11 +19,13 @@ import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import OptionPopover from "./option-popover";
+import { Course } from "@/types/course";
 
-function ChatSection() {
+function ChatSection({ course }: { course: Course }) {
   const { id } = useParams();
   const { data, isLoading } = usePosts(id!);
   const { user } = useAuth();
+  const { t } = useTranslation();
 
   if (isLoading) {
     return (
@@ -102,12 +104,17 @@ function ChatSection() {
                   {post.createdAt === post.updatedAt &&
                     dateFormat(new Date(post.createdAt!))}
                   {post.createdAt !== post.updatedAt &&
-                    `${dateFormat(new Date(post.updatedAt!))} (edited)`}
+                    `${dateFormat(new Date(post.updatedAt!))} (${t("courses.overview.edited")})`}
                 </p>
               </div>
             </div>
-            {user?.email === post.user?.email && (
-              <OptionPopover className="translate-x-2" postId={post._id!} />
+            {(user?.email === post.user?.email ||
+              course.createdUserEmail === user?.email) && (
+              <OptionPopover
+                className="translate-x-2"
+                isEditabel={user?.email === post.user?.email}
+                postId={post._id!}
+              />
             )}
           </div>
           <div className="mt-2 flex max-w-full flex-col gap-1 px-6">
@@ -140,6 +147,7 @@ function ChatSection() {
           <Separator />
           <div className="flex w-full flex-col gap-2 px-6 pb-4">
             <CommentSection
+              courseData={course}
               postId={post._id!}
               comments={post.comments!}
               dateFormat={dateFormat}
@@ -176,11 +184,13 @@ function CommentTrigger({ postId }: { postId: string }) {
 }
 
 function CommentSection({
+  courseData,
   postId,
   comments,
   dateFormat,
   htmlFromString,
 }: {
+  courseData: Course;
   postId: string;
   comments: TComment[];
   dateFormat: (date: Date) => string;
@@ -188,6 +198,7 @@ function CommentSection({
 }) {
   const [showAll, setShowAll] = useState(false);
   const { t } = useTranslation();
+  const { user } = useAuth();
 
   if (!comments.length) {
     return <section></section>;
@@ -216,7 +227,8 @@ function CommentSection({
             </div>
           </div>
           <div className="flex w-full max-w-[40%] items-center justify-end gap-2 md:max-w-[20%]">
-            {comment.user.email === comment.user.email && (
+            {(user?.email === comment.user.email ||
+              courseData.createdUserEmail === user?.email) && (
               <OptionPopover
                 postId={postId}
                 commentId={comment._id!}
@@ -278,7 +290,8 @@ function CommentSection({
                 </div>
               </div>
               <div className="flex w-full max-w-[40%] items-center justify-end gap-2 md:max-w-[20%]">
-                {comment.user.email === comment.user.email && (
+                {(user?.email === comment.user.email ||
+                  courseData.createdUserEmail === user?.email) && (
                   <OptionPopover
                     postId={postId}
                     commentId={comment._id!}
@@ -316,7 +329,8 @@ function CommentSection({
                 </div>
               </div>
               <div className="flex w-full max-w-[40%] items-center justify-end gap-2 md:max-w-[20%]">
-                {comment.user.email === comment.user.email && (
+                {(user?.email === comment.user.email ||
+                  courseData.createdUserEmail === user?.email) && (
                   <OptionPopover
                     postId={postId}
                     commentId={comment._id!}

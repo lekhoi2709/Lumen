@@ -41,7 +41,7 @@ function CourseOverview({ data }: { data: Course }) {
           )}
         >
           <ChatTrigger user={user} t={t} />
-          <ChatSection />
+          <ChatSection course={data} />
         </div>
       </div>
     </section>

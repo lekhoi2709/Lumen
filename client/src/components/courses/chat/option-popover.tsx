@@ -21,11 +21,13 @@ import UpdateChatForm from "./update-chat-form";
 
 function OptionPopover({
   type = "Post",
+  isEditabel = true,
   className,
   postId,
   commentId,
 }: {
   type?: "Post" | "Comment";
+  isEditabel?: boolean;
   className?: string;
   postId: string;
   commentId?: string;
@@ -40,7 +42,7 @@ function OptionPopover({
       </PopoverTrigger>
       <PopoverContent className="w-fit max-w-[12rem] p-2 px-4 text-sm">
         <div className="flex flex-col">
-          {type === "Post" && (
+          {type === "Post" && isEditabel && (
             <Dialog>
               <DialogTrigger asChild>
                 <Button
