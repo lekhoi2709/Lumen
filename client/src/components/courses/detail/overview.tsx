@@ -33,7 +33,13 @@ function CourseOverview({ data }: { data: Course }) {
       </div>
       <div className="relative flex w-full flex-col gap-4 xl:flex-row xl:gap-6">
         {user?.role === "Teacher" && <CourseCode code={data._id!} t={t} />}
-        <div className="flex w-full flex-col gap-4 xl:max-w-[calc(80%-1.5rem)] xl:gap-6">
+        <div
+          className={twMerge(
+            "flex w-full flex-col gap-4 xl:gap-6",
+            data.createdUserEmail === user?.email &&
+              "xl:max-w-[calc(80%-1.5rem)]",
+          )}
+        >
           <ChatTrigger user={user} t={t} />
           <ChatSection />
         </div>
