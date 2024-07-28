@@ -178,11 +178,13 @@ function UpdateCoursesForm() {
             )}
           />
         </section>
-        <CourseCode
-          className="w-full self-center rounded-md md:!max-w-[50%]"
-          code={courseQuery.data?._id!}
-          t={t}
-        />
+        {user?.email === courseQuery.data?.createdUserEmail && (
+          <CourseCode
+            className="w-full self-center rounded-md md:!max-w-[50%]"
+            code={courseQuery.data?._id!}
+            t={t}
+          />
+        )}
         {user?.email === courseQuery.data?.createdUserEmail && (
           <section className="flex w-full flex-col gap-6 self-center rounded-md border border-border p-6 px-8 md:max-w-[50%]">
             <h1>{t("courses.overview.course-setting.delete")}</h1>
