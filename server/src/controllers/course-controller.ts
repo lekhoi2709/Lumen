@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import Course from "../models/course";
 import User from "../models/user";
 import ShortUniqueId from "short-unique-id";
+import Post from "../models/post";
 
 function getRandomImageUrl() {
   const imageUrls = [
@@ -207,8 +208,26 @@ export default {
             $pull: { courses: { code: id } },
           }
         );
+        await Post.deleteMany({ courseId: id });
 
         return res.status(200).json({ message: "Course deleted" });
+      }
+      return res.status(400).json({ message: "Course not found" });
+    } catch (error) {
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  },
+
+  updateCourse: async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const course = req.body;
+      const updatedCourse = await Course.findOneAndUpdate({ _id: id }, course, {
+        new: true,
+      });
+
+      if (updatedCourse) {
+        return res.status(200).json({ message: "Course updated" });
       }
       return res.status(400).json({ message: "Course not found" });
     } catch (error) {

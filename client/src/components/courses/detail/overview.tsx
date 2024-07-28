@@ -15,6 +15,7 @@ import { TFunction } from "i18next";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import ChatDialog from "../chat/chat-dialog";
 import ChatSection from "../chat/chat-section";
+import { twMerge } from "tailwind-merge";
 
 function CourseOverview({ data }: { data: Course }) {
   const { user } = useAuth();
@@ -61,9 +62,11 @@ function Banner({
 function CourseCode({
   code,
   t,
+  className,
 }: {
   code: string;
   t: TFunction<"translation">;
+  className?: string;
 }) {
   const [isCopied, setIsCopied] = useState(false);
 
@@ -78,7 +81,12 @@ function CourseCode({
     return () => clearTimeout(timeoutId);
   };
   return (
-    <div className="z-0 flex max-h-[8rem] w-full items-center justify-between gap-6 rounded-lg border border-border p-3 px-6 pr-4 xl:max-w-[20%]">
+    <div
+      className={twMerge(
+        "z-0 flex max-h-[8rem] w-full items-center justify-between gap-6 rounded-lg border border-border p-3 px-6 pr-4 xl:max-w-[20%]",
+        className,
+      )}
+    >
       <div className="flex flex-col items-start gap-4">
         <h1 className="truncate">{t("courses.overview.course-code")}</h1>
         <p className="text-orange-500">{code}</p>
@@ -136,3 +144,4 @@ function ChatTrigger({
 }
 
 export default CourseOverview;
+export { CourseCode };

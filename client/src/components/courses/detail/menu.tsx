@@ -4,6 +4,7 @@ import { twMerge } from "tailwind-merge";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import UpdateCourseDialog from "./update-course-dialog";
 
 function CourseMenu() {
   const { t } = useTranslation();
@@ -48,19 +49,22 @@ function CourseMenu() {
             : "-translate-y-full bg-transparent md:translate-y-0 md:bg-background",
         )}
       >
-        <div className="z-10 flex flex-row justify-evenly border-b border-border bg-transparent px-4 text-base transition-colors duration-300 md:ml-[12rem] md:justify-start md:gap-0 md:bg-background md:pl-8 lg:ml-[14rem]">
-          <StyledNavLink path={`/courses/${id}`}>
-            {t("courses.detail.overview")}
-          </StyledNavLink>
-          <StyledNavLink path={`/courses/${id}/assignments`}>
-            {t("courses.detail.assignments")}
-          </StyledNavLink>
-          <StyledNavLink path={`/courses/${id}/people`}>
-            {t("courses.detail.people")}
-          </StyledNavLink>
-          <StyledNavLink path={`/courses/${id}/grades`}>
-            {t("courses.detail.grades")}
-          </StyledNavLink>
+        <div className="z-10 flex items-center justify-between border-b border-border bg-transparent px-4 text-base transition-colors duration-300 md:ml-[12rem] md:gap-0 md:bg-background md:pl-8 lg:ml-[14rem]">
+          <div className="flex w-full flex-row justify-evenly md:justify-start">
+            <StyledNavLink path={`/courses/${id}`}>
+              {t("courses.detail.overview")}
+            </StyledNavLink>
+            <StyledNavLink path={`/courses/${id}/assignments`}>
+              {t("courses.detail.assignments")}
+            </StyledNavLink>
+            <StyledNavLink path={`/courses/${id}/people`}>
+              {t("courses.detail.people")}
+            </StyledNavLink>
+            <StyledNavLink path={`/courses/${id}/grades`}>
+              {t("courses.detail.grades")}
+            </StyledNavLink>
+          </div>
+          <UpdateCourseDialog />
         </div>
       </div>
 

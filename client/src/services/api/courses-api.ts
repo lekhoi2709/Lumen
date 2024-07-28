@@ -81,3 +81,25 @@ export const addPeopleToCourse = async (data: AddCoursePeopleType) => {
   );
   return response.data;
 };
+
+export const updateCourse = async (course: Course) => {
+  const response = await axiosInstance.put(
+    `/courses/c/${course._id}/update`,
+    course,
+    {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    },
+  );
+  return response.data;
+};
+
+export const deleteCourse = async (id: string) => {
+  const response = await axiosInstance.delete(`/courses/c/${id}/delete`, {
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+    },
+  });
+  return response.data;
+};

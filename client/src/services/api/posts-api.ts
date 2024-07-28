@@ -28,15 +28,11 @@ export const createPost = async (data: {
 };
 
 export const deletePost = async (postId: string) => {
-  const response = await axiosInstance.post(
-    `/courses/c/p/${postId}/delete`,
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-      },
+  const response = await axiosInstance.delete(`/courses/c/p/${postId}/delete`, {
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem("token")}`,
     },
-  );
+  });
   return response.data;
 };
 
@@ -74,9 +70,8 @@ export const deleteComment = async (data: {
   postId: string;
   commentId: string;
 }) => {
-  const response = await axiosInstance.put(
+  const response = await axiosInstance.delete(
     `/courses/c/p/${data.postId}/comment/${data.commentId}/delete`,
-    null,
     {
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
