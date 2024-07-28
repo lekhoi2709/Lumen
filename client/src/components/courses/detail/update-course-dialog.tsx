@@ -140,6 +140,9 @@ function UpdateCoursesForm() {
                 </FormDescription>
                 <FormControl className="mt-0">
                   <Input
+                    disabled={
+                      user?.email !== courseQuery.data?.createdUserEmail
+                    }
                     placeholder={courseQuery.data?.title}
                     className="py-6 focus-visible:ring-0 focus-visible:ring-offset-0"
                     {...field}
@@ -162,6 +165,9 @@ function UpdateCoursesForm() {
                 </FormDescription>
                 <FormControl>
                   <Input
+                    disabled={
+                      user?.email !== courseQuery.data?.createdUserEmail
+                    }
                     placeholder={courseQuery.data?.description}
                     className="py-6 focus-visible:ring-0 focus-visible:ring-offset-0"
                     {...field}
