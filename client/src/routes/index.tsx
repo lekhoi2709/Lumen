@@ -7,23 +7,23 @@ import trendingImage3 from "../assets/home/trendingImage3.png";
 import trendingImage4 from "../assets/home/trendingImage4.png";
 import Layout from "@/layouts/layout";
 import { useAuth } from "@/contexts/auth-context";
-import { verifyRefreshToken } from "@/services/api";
+import { verifyRefreshToken } from "@/services/api/auth-api";
 import { useEffect, useState } from "react";
 import Loading from "@/components/loading";
 
 function HeroSection() {
   return (
-    <div className="flex items-center justify-between p-10 bg-orange-50">
+    <div className="flex items-center justify-between bg-orange-50 p-10">
       <div className="max-w-lg">
-        <h1 className="text-5xl font-bold text-gray-800 mb-4">
+        <h1 className="mb-4 text-5xl font-bold text-gray-800">
           Turn your ambition into a{" "}
           <span className="text-orange-500">success story</span>
         </h1>
-        <p className="text-gray-600 mb-8">
+        <p className="mb-8 text-gray-600">
           consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
           labore et dolore magna aliqua.
         </p>
-        <div className="flex items-center bg-white rounded-full shadow-lg overflow-hidden">
+        <div className="flex items-center overflow-hidden rounded-full bg-white shadow-lg">
           <input
             type="text"
             placeholder="Search your favourite course"
@@ -38,11 +38,11 @@ function HeroSection() {
         <img
           src={heroImage}
           alt="Hero"
-          className="rounded-lg shadow-lg overflow-hidden"
+          className="overflow-hidden rounded-lg shadow-lg"
           style={{ borderRadius: "50%" }}
         />
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-orange-500 rounded-full p-2">
-          <div className="w-0 h-0 border-l-8 border-t-4 border-b-4 border-white"></div>
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform rounded-full bg-orange-500 p-2">
+          <div className="h-0 w-0 border-b-4 border-l-8 border-t-4 border-white"></div>
         </div>
       </div>
     </div>
@@ -73,34 +73,34 @@ function TrendingSection() {
   ];
 
   return (
-    <div className="py-16 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-4xl font-extrabold text-foreground text-center mb-4">
+    <div className="bg-background py-16">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <h2 className="mb-4 text-center text-4xl font-extrabold text-foreground">
           <span className="text-orange-500">Top</span> Trending
         </h2>
-        <p className="text-muted-foreground text-center mb-12">
+        <p className="mb-12 text-center text-muted-foreground">
           Here are top trending categories across multiple platforms you can
           pick your field and start learning with the best match for you.
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {trendingCourses.map((course, index) => (
             <div
               key={index}
-              className="bg-muted shadow-lg rounded-lg overflow-hidden"
+              className="overflow-hidden rounded-lg bg-muted shadow-lg"
             >
               <img
                 src={course.image}
                 alt={course.title}
-                className="w-full h-48 object-cover"
+                className="h-48 w-full object-cover"
               />
               <div className="p-4">
                 <h3 className="text-xl font-bold text-foreground">
                   {course.title}
                 </h3>
-                <div className="flex items-center mt-2">
+                <div className="mt-2 flex items-center">
                   <StarIcon size={20} className="text-orange-500" />
-                  <span className="text-foreground ml-1">{course.rating}</span>
-                  <span className="text-muted-foreground ml-2">
+                  <span className="ml-1 text-foreground">{course.rating}</span>
+                  <span className="ml-2 text-muted-foreground">
                     ({course.reviews})
                   </span>
                 </div>
@@ -150,7 +150,7 @@ function Home() {
   }
 
   return (
-    <Layout sidebar={false} footer={true} className="pt-0 mt-[72px]">
+    <Layout sidebar={false} footer={true} className="mt-[72px] pt-0">
       <HeroSection />
       <TrendingSection />
     </Layout>

@@ -2,7 +2,7 @@ import { useAuth } from "@/contexts/auth-context";
 import { useEffect, useState } from "react";
 import Loading from "@/components/loading";
 import { Navigate, useLocation } from "react-router-dom";
-import { getGoogleUser } from "@/services/api";
+import { getGoogleUser } from "@/services/api/auth-api";
 
 function GoogleSuccess() {
   const { user, loginAct } = useAuth();

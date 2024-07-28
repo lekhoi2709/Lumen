@@ -1,6 +1,12 @@
 import { AddCoursePeopleType, Course } from "@/types/course";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addPeopleToCourse, createCourse, joinCourse } from "./api";
+import {
+  addPeopleToCourse,
+  createCourse,
+  deleteCourse,
+  joinCourse,
+  updateCourse,
+} from "../api/courses-api";
 import { toast } from "@/components/ui/use-toast";
 
 export function useCreateCourse() {
@@ -80,6 +86,60 @@ export function useAddPeopleToCourse() {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["course-people"] });
+    },
+  });
+}
+
+export function useUpdateCourse() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (course: Course) => updateCourse(course),
+    onMutate: () => {
+      console.log("mutate");
+    },
+    onError: (error: any) => {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.response.data.message,
+      });
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success",
+        description: "Course updated",
+      });
+    },
+    onSettled: (_data, _error, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["course", variables._id] });
+    },
+  });
+}
+
+export function useDeleteCourse() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (courseId: string) => deleteCourse(courseId),
+    onMutate: () => {
+      console.log("mutate");
+    },
+    onError: (error: any) => {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.response.data.message,
+      });
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success",
+        description: "Course deleted",
+      });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["courses"] });
     },
   });
 }

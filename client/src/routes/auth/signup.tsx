@@ -26,7 +26,7 @@ import { useTranslation } from "react-i18next";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2Icon } from "lucide-react";
-import { register } from "@/services/api";
+import { register } from "@/services/api/auth-api";
 import { User } from "@/types/user";
 
 enum RoleType {
@@ -50,7 +50,7 @@ const formSchema = z
     {
       message: "Passwords must match!",
       path: ["confirmPassword"],
-    }
+    },
   );
 
 function SignUp() {
@@ -103,15 +103,15 @@ function SignUp() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="bg-background dark:bg-background/80 transition-colors duration-500 backdrop-blur-md rounded-lg drop-shadow-xl shadow-xl min-w-2/3 min-h-1/2 w-2/3 lg:w-1/3 flex flex-col p-8 py-12 lg:p-14 lg:py-16 items-center font-sans gap-8 lg:gap-12"
+          className="min-w-2/3 min-h-1/2 flex w-2/3 flex-col items-center gap-8 rounded-lg bg-background p-8 py-12 font-sans shadow-xl drop-shadow-xl backdrop-blur-md transition-colors duration-500 dark:bg-background/80 lg:w-1/3 lg:gap-12 lg:p-14 lg:py-16"
         >
-          <h1 className="text-xl lg:text-2xl font-bold">
+          <h1 className="text-xl font-bold lg:text-2xl">
             {t("register.title")}
           </h1>
-          <section className="w-full flex flex-col gap-4 lg:gap-6">
-            <section className="w-full flex flex-col gap-3">
+          <section className="flex w-full flex-col gap-4 lg:gap-6">
+            <section className="flex w-full flex-col gap-3">
               <FormLabel>{t("register.fullName")}</FormLabel>
-              <div className="flex flex-col lg:flex-row gap-4">
+              <div className="flex flex-col gap-4 lg:flex-row">
                 <FormField
                   control={form.control}
                   name="firstName"
@@ -175,7 +175,7 @@ function SignUp() {
                     defaultValue={field.value}
                   >
                     <FormControl>
-                      <SelectTrigger className="bg-accent dark:bg-accent/40 placeholder:text-black">
+                      <SelectTrigger className="bg-accent placeholder:text-black dark:bg-accent/40">
                         <SelectValue
                           placeholder={t("register.role-placeholder")}
                         />
@@ -232,7 +232,7 @@ function SignUp() {
           <Button
             type="submit"
             disabled={!isDirty || !isValid || isSubmitting}
-            className="w-full py-6 transition-transform duration-500 hover:scale-[1.03] ease-in-out"
+            className="w-full py-6 transition-transform duration-500 ease-in-out hover:scale-[1.03]"
           >
             {isSubmitting ? (
               <Loader2Icon className="animate-spin" />

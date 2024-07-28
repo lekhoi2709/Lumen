@@ -87,6 +87,32 @@
       "people": "Mọi người",
       "grades": "Điểm"
     },
+    "overview": {
+      "course-code": "Mã khóa học",
+      "chat-placeholder": "Nhấn để thông báo điều gì đó...",
+      "chat-title": "Thông báo",
+      "chat-btn": "Đăng",
+      "chat-no-msg": "Chưa có thông báo nào.",
+      "comment-title": "Bình luận",
+      "comment-placeholder": "Nhập bình luận của bạn vào đây...",
+      "comment-expand": "Hiển thị tất cả",
+      "comment-collapse": "Thu gọn",
+      "comments": "bình luận",
+      "delete-post": "Xóa",
+      "delete-post-confirm": "Bạn có chắc chắn muốn xóa bài viết này?",
+      "delete-comment-confirm": "Bạn có chắc chắn muốn xóa bình luận này?",
+      "edit-post": "Chỉnh sửa",
+      "course-setting": {
+        "title": "Cài đặt khóa học",
+        "details": "Chi tiết khóa học",
+        "save": "Lưu",
+        "delete": "Xóa khóa học",
+        "delete-confirm": "Bạn có chắc chắn muốn xóa khóa học này?",
+        "delete-description": "Hành động này sẽ không thể hoàn tác. Tất cả dữ liệu liên quan đến khóa học sẽ bị xóa khỏi máy chủ của chúng tôi.",
+        "delete-cancel": "Hủy",
+        "delete-btn": "Xóa"
+      }
+    },
     "people": {
       "students": "Học sinh",
       "instructors": "Người hướng dẫn",

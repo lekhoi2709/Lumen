@@ -10,16 +10,19 @@ import NavDrawer from "./nav-drawer";
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 import CustomNavLink from "./nav-link";
 import { User } from "@/types/user";
+import UpdateCourseDialog from "../courses/detail/update-course-dialog";
+import { useLocation } from "react-router-dom";
 
 function Navbar({ className }: { className?: string }) {
   const { t } = useTranslation();
   const { user, logoutAct } = useAuth();
+  const location = useLocation();
 
   return (
     <nav
       className={twMerge(
-        "fixed w-full flex justify-between items-center p-4 backdrop-blur-md bg-background/80 font-custom z-50 transition-colors duration-500 font-nunito",
-        className
+        "font-custom fixed z-50 flex w-full items-center justify-between bg-background/80 p-4 font-nunito backdrop-blur-md transition-colors duration-500",
+        className,
       )}
     >
       <CustomNavLink user={user} />
@@ -32,7 +35,12 @@ function Navbar({ className }: { className?: string }) {
         <ModeToggle />
         <LanguageToggle />
       </div>
-      <NavDrawer user={user} t={t} />
+      <div className="flex items-center gap-4 md:hidden">
+        {location.pathname.includes("courses/") && (
+          <UpdateCourseDialog device="mobile" />
+        )}
+        <NavDrawer user={user} t={t} />
+      </div>
     </nav>
   );
 }
@@ -69,7 +77,7 @@ function LoginSection({ t }: { t: TFunction<"translation", undefined> }) {
         to="/login"
         className={({ isActive }) => (isActive ? "hidden" : "block")}
       >
-        <Button className="bg-orange-500 dark:text-white hover:bg-orange-700">
+        <Button className="bg-orange-500 hover:bg-orange-700 dark:text-white">
           {t("nav.login")}
         </Button>
       </NavLink>

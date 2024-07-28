@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import Course from "../models/course";
 import User from "../models/user";
 import ShortUniqueId from "short-unique-id";
+import Post from "../models/post";
 
 function getRandomImageUrl() {
   const imageUrls = [
@@ -168,6 +169,68 @@ export default {
           message: "These emails have already been added to this course.",
         });
       }
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  },
+
+  removePeople: async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const { users } = req.body;
+      const emails = users.map((user: any) => user.email);
+
+      const updateUsers = await User.updateMany(
+        { email: { $in: emails }, "courses.code": id },
+        {
+          $pull: { courses: { code: id } },
+        }
+      );
+
+      if (updateUsers) {
+        return res.status(200).json({ message: "Removed successfully" });
+      }
+
+      return res.status(400).json({ message: "Can not remove these email" });
+    } catch (error) {
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  },
+
+  deleteCourse: async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const course = await Course.findOneAndDelete({ _id: id });
+
+      if (course) {
+        await User.updateMany(
+          { "courses.code": id },
+          {
+            $pull: { courses: { code: id } },
+          }
+        );
+        await Post.deleteMany({ courseId: id });
+
+        return res.status(200).json({ message: "Course deleted" });
+      }
+      return res.status(400).json({ message: "Course not found" });
+    } catch (error) {
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  },
+
+  updateCourse: async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const course = req.body;
+      const updatedCourse = await Course.findOneAndUpdate({ _id: id }, course, {
+        new: true,
+      });
+
+      if (updatedCourse) {
+        return res.status(200).json({ message: "Course updated" });
+      }
+      return res.status(400).json({ message: "Course not found" });
+    } catch (error) {
       res.status(500).json({ message: "Internal Server Error" });
     }
   },

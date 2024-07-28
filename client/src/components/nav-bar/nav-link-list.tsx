@@ -15,17 +15,17 @@ function NavigateList({ data }: { data: DataProps[] }) {
   const { t } = useTranslation();
 
   return (
-    <ul className="flex flex-col items-start justify-start w-full gap-2">
+    <ul className="flex w-full flex-col items-start justify-start gap-2">
       {data.map((link) => (
         <li key={link.title} className="w-full">
           <NavLink
             to={link.path}
             className={({ isActive }) =>
               twMerge(
-                "w-full flex gap-4 items-center py-2 px-4 backdrop-blur-md rounded-r-full",
+                "flex w-full items-center gap-4 rounded-r-full px-4 py-2 backdrop-blur-md",
                 isActive
                   ? "bg-orange-500/20 text-orange-500"
-                  : "text-foreground"
+                  : "text-foreground",
               )
             }
             onClick={() => sessionStorage.setItem("history", link.path)}
@@ -43,19 +43,19 @@ function NavigateListDesktop({ data }: { data: DataProps[] }) {
   const { t } = useTranslation();
 
   return (
-    <div className="hidden md:inline-block w-[12rem] lg:w-[14rem] h-full bg-background border-r border-border fixed z-10">
-      <ScrollArea className="w-full h-full">
-        <ul className="md:flex md:flex-col md:items-center md:justify-start w-full h-full pt-4 pr-2">
+    <div className="fixed z-20 hidden h-full w-[12rem] border-r border-border bg-background md:inline-block lg:w-[14rem]">
+      <ScrollArea className="h-full w-full">
+        <ul className="h-full w-full pr-2 pt-4 md:flex md:flex-col md:items-center md:justify-start">
           {data.map((link) => (
             <li key={link.title + "-desktop"} className="w-full">
               <NavLink
                 to={link.path}
                 className={({ isActive }) =>
                   twMerge(
-                    "w-full flex gap-4 items-center py-3 px-4 backdrop-blur-md rounded-r-full",
+                    "flex w-full items-center gap-4 rounded-r-full px-4 py-3 backdrop-blur-md",
                     isActive
                       ? "bg-orange-500/20 text-orange-500 hover:bg-orange-500/30"
-                      : "text-foreground hover:bg-muted"
+                      : "text-foreground hover:bg-muted",
                   )
                 }
                 onClick={() => sessionStorage.setItem("history", link.path)}

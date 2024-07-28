@@ -21,7 +21,7 @@ import { useDebounceCallback } from "usehooks-ts";
 import { useState } from "react";
 import { SearchedUserData } from "@/types/user";
 import CustomSelect from "../custom-select";
-import { useAddPeopleToCourse } from "@/services/mutations";
+import { useAddPeopleToCourse } from "@/services/mutations/courses";
 import { useParams } from "react-router-dom";
 
 function AddPeopleDialog({ type }: { type: "ins" | "stu" }) {
@@ -52,40 +52,42 @@ function AddPeopleDialog({ type }: { type: "ins" | "stu" }) {
       }}
     >
       <IconTrigger type={type} t={t} />
-      <DialogContent className="max-w-[400px] rounded-lg font-nunito">
-        <DialogHeader>
-          <DialogTitle>
-            {type === "ins" && t("courses.people.add-instructor")}
-            {type === "stu" && t("courses.people.add-student")}
-          </DialogTitle>
-          <DialogDescription className="hidden">
-            Join a class by entering
-          </DialogDescription>
-        </DialogHeader>
-        <section className="rounded-md border border-border p-4 py-6 flex flex-col gap-4">
-          <CustomSelect
-            placeholder={t("courses.people.invite-input")}
-            debounced={debounced}
-            users={users}
-            setUsers={setUsers}
-            search={search}
-          />
-        </section>
-        <div className="flex w-full md:flex-row gap-2 justify-end">
-          <DialogClose asChild>
-            <Button variant="outline" className="hidden md:block">
-              {t("courses.dialog.cancel")}
-            </Button>
-          </DialogClose>
-          <DialogClose asChild>
-            <Button
-              type="submit"
-              className="w-full md:w-fit"
-              onClick={handleSubmit}
-            >
-              {t("courses.people.invite-btn")}
-            </Button>
-          </DialogClose>
+      <DialogContent className="rounded-lg border-none bg-transparent p-4 font-nunito">
+        <div className="flex h-full w-full flex-col gap-4 rounded-lg border border-border bg-background p-6">
+          <DialogHeader className="mb-2">
+            <DialogTitle>
+              {type === "ins" && t("courses.people.add-instructor")}
+              {type === "stu" && t("courses.people.add-student")}
+            </DialogTitle>
+            <DialogDescription className="hidden">
+              Join a class by entering
+            </DialogDescription>
+          </DialogHeader>
+          <section className="flex flex-col gap-4 rounded-md border border-border p-4 py-6">
+            <CustomSelect
+              placeholder={t("courses.people.invite-input")}
+              debounced={debounced}
+              users={users}
+              setUsers={setUsers}
+              search={search}
+            />
+          </section>
+          <div className="flex w-full justify-end gap-2 md:flex-row">
+            <DialogClose asChild>
+              <Button variant="outline" className="hidden md:block">
+                {t("courses.dialog.cancel")}
+              </Button>
+            </DialogClose>
+            <DialogClose asChild>
+              <Button
+                type="submit"
+                className="w-full md:w-fit"
+                onClick={handleSubmit}
+              >
+                {t("courses.people.invite-btn")}
+              </Button>
+            </DialogClose>
+          </div>
         </div>
       </DialogContent>
     </Dialog>
@@ -100,7 +102,7 @@ function IconTrigger({
   t: TFunction<"translation">;
 }) {
   return (
-    <DialogTrigger className="p-3 rounded-full pointer hover:bg-muted">
+    <DialogTrigger className="pointer rounded-full p-3 hover:bg-muted">
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild className="">

@@ -17,7 +17,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2Icon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { resetPassword } from "@/services/api";
+import { resetPassword } from "@/services/api/auth-api";
 
 const formSchema = z
   .object({
@@ -31,7 +31,7 @@ const formSchema = z
     {
       message: "Passwords must match!",
       path: ["confirmPassword"],
-    }
+    },
   );
 
 function ResetPassword() {
@@ -71,10 +71,10 @@ function ResetPassword() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="bg-background dark:bg-background/80 transition-colors duration-500 backdrop-blur-md rounded-lg drop-shadow-xl shadow-xl min-w-2/3 min-h-1/2 w-2/3 lg:w-1/3 flex flex-col p-8 py-12 lg:p-14 lg:py-16 items-center font-sans gap-8 lg:gap-12"
+          className="min-w-2/3 min-h-1/2 flex w-2/3 flex-col items-center gap-8 rounded-lg bg-background p-8 py-12 font-sans shadow-xl drop-shadow-xl backdrop-blur-md transition-colors duration-500 dark:bg-background/80 lg:w-1/3 lg:gap-12 lg:p-14 lg:py-16"
         >
-          <h1 className="text-xl lg:text-2xl font-bold">{t("forgot.title")}</h1>
-          <section className="w-full flex flex-col gap-4 lg:gap-6">
+          <h1 className="text-xl font-bold lg:text-2xl">{t("forgot.title")}</h1>
+          <section className="flex w-full flex-col gap-4 lg:gap-6">
             <FormField
               control={form.control}
               name="newPassword"
@@ -113,7 +113,7 @@ function ResetPassword() {
           <Button
             type="submit"
             disabled={!isValid || !isDirty || isSubmitting}
-            className="w-full py-6 transition-transform duration-500 hover:scale-[1.03] ease-in-out"
+            className="w-full py-6 transition-transform duration-500 ease-in-out hover:scale-[1.03]"
           >
             {isSubmitting ? (
               <Loader2Icon className="animate-spin" />
