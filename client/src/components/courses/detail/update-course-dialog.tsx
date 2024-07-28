@@ -220,17 +220,19 @@ function UpdateCoursesForm() {
             </AlertDialog>
           </section>
         )}
-        <div className="flex w-full justify-end self-center md:max-w-[50%]">
-          <DialogClose asChild>
-            <Button
-              type="submit"
-              className="w-fit"
-              disabled={!isDirty || !isValid || isSubmitting}
-            >
-              {t("courses.overview.course-setting.save")}
-            </Button>
-          </DialogClose>
-        </div>
+        {user?.email === courseQuery.data?.createdUserEmail && (
+          <div className="flex w-full justify-end self-center md:max-w-[50%]">
+            <DialogClose asChild>
+              <Button
+                type="submit"
+                className="w-fit"
+                disabled={!isDirty || !isValid || isSubmitting}
+              >
+                {t("courses.overview.course-setting.save")}
+              </Button>
+            </DialogClose>
+          </div>
+        )}
       </form>
     </Form>
   );
