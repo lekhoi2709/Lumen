@@ -23,6 +23,7 @@ import OptionPopover from "./option-popover";
 function ChatSection() {
   const { id } = useParams();
   const { data, isLoading } = usePosts(id!);
+  const { user } = useAuth();
 
   if (isLoading) {
     return (
@@ -105,7 +106,9 @@ function ChatSection() {
                 </p>
               </div>
             </div>
-            <OptionPopover className="translate-x-2" postId={post._id!} />
+            {user?.email === post.user?.email && (
+              <OptionPopover className="translate-x-2" postId={post._id!} />
+            )}
           </div>
           <div className="mt-2 flex max-w-full flex-col gap-1 px-6">
             {post.text && htmlFromString(post.text)}
@@ -213,12 +216,14 @@ function CommentSection({
             </div>
           </div>
           <div className="flex w-full max-w-[40%] items-center justify-end gap-2 md:max-w-[20%]">
-            <OptionPopover
-              postId={postId}
-              commentId={comment._id!}
-              type="Comment"
-              className="invisible group-hover:visible"
-            />
+            {comment.user.email === comment.user.email && (
+              <OptionPopover
+                postId={postId}
+                commentId={comment._id!}
+                type="Comment"
+                className="invisible group-hover:visible"
+              />
+            )}
             <p className="text-xs text-muted-foreground">
               {dateFormat(new Date(comment.createdAt!))}
             </p>
@@ -273,12 +278,14 @@ function CommentSection({
                 </div>
               </div>
               <div className="flex w-full max-w-[40%] items-center justify-end gap-2 md:max-w-[20%]">
-                <OptionPopover
-                  postId={postId}
-                  commentId={comment._id!}
-                  type="Comment"
-                  className="invisible group-hover:visible"
-                />
+                {comment.user.email === comment.user.email && (
+                  <OptionPopover
+                    postId={postId}
+                    commentId={comment._id!}
+                    type="Comment"
+                    className="invisible group-hover:visible"
+                  />
+                )}
                 <p className="text-xs text-muted-foreground">
                   {dateFormat(new Date(comment.createdAt!))}
                 </p>
@@ -309,12 +316,14 @@ function CommentSection({
                 </div>
               </div>
               <div className="flex w-full max-w-[40%] items-center justify-end gap-2 md:max-w-[20%]">
-                <OptionPopover
-                  postId={postId}
-                  commentId={comment._id!}
-                  type="Comment"
-                  className="invisible group-hover:visible"
-                />
+                {comment.user.email === comment.user.email && (
+                  <OptionPopover
+                    postId={postId}
+                    commentId={comment._id!}
+                    type="Comment"
+                    className="invisible group-hover:visible"
+                  />
+                )}
                 <p className="text-xs text-muted-foreground">
                   {dateFormat(new Date(comment.createdAt!))}
                 </p>
