@@ -62,6 +62,9 @@ importers:
       '@tauri-apps/api':
         specifier: ^1
         version: 1.5.6
+      '@tiptap/extension-link':
+        specifier: ^2.5.7
+        version: 2.5.7(@tiptap/core@2.5.5(@tiptap/pm@2.5.5))(@tiptap/pm@2.5.5)
       '@tiptap/extension-underline':
         specifier: ^2.5.5
         version: 2.5.5(@tiptap/core@2.5.5(@tiptap/pm@2.5.5))
@@ -1500,6 +1503,12 @@ packages:
     peerDependencies:
       '@tiptap/core': ^2.5.5
 
+  '@tiptap/extension-link@2.5.7':
+    resolution: {integrity: sha512-rxvcdV8H/TiRhR2SZfLHp7hUp5hwBAhkc6PsXEWj8lekG4/5lXGwPSPxLtHMBRtOyeJpXTv9DY6nsCGZuz9x6A==}
+    peerDependencies:
+      '@tiptap/core': ^2.5.7
+      '@tiptap/pm': ^2.5.7
+
   '@tiptap/extension-list-item@2.5.5':
     resolution: {integrity: sha512-CfNVCP8Pqqgr7fAQAuRvZikzXT9vCEogcW7/C16cyGykbUJBqBmpsyHcAlj7XwsBFUuJ5MCeULtk/0frUI5fMQ==}
     peerDependencies:
@@ -2005,6 +2014,9 @@ packages:
 
   linkify-it@5.0.0:
     resolution: {integrity: sha512-5aHCbzQRADcdP+ATqnDuhhJ/MRIqDkZX5pyjFHRRysS8vZ5AbqGEoFIb6pYHPZ+L/OC2Lc+xT8uHVVR5CAK/wQ==}
+
+  linkifyjs@4.1.3:
+    resolution: {integrity: sha512-auMesunaJ8yfkHvK4gfg1K0SaKX/6Wn9g2Aac/NwX+l5VdmFZzo/hdPGxEOETj+ryRa4/fiOPjeeKURSAJx1sg==}
 
   lodash.debounce@4.0.8:
     resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
@@ -3908,6 +3920,12 @@ snapshots:
     dependencies:
       '@tiptap/core': 2.5.5(@tiptap/pm@2.5.5)
 
+  '@tiptap/extension-link@2.5.7(@tiptap/core@2.5.5(@tiptap/pm@2.5.5))(@tiptap/pm@2.5.5)':
+    dependencies:
+      '@tiptap/core': 2.5.5(@tiptap/pm@2.5.5)
+      '@tiptap/pm': 2.5.5
+      linkifyjs: 4.1.3
+
   '@tiptap/extension-list-item@2.5.5(@tiptap/core@2.5.5(@tiptap/pm@2.5.5))':
     dependencies:
       '@tiptap/core': 2.5.5(@tiptap/pm@2.5.5)
@@ -4448,6 +4466,8 @@ snapshots:
   linkify-it@5.0.0:
     dependencies:
       uc.micro: 2.1.0
+
+  linkifyjs@4.1.3: {}
 
   lodash.debounce@4.0.8: {}
 

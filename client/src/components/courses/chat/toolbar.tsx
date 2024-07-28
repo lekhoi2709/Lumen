@@ -1,11 +1,35 @@
-import { Bold, Italic, Underline, List } from "lucide-react";
+import { Bold, Italic, Underline, List, Link } from "lucide-react";
 import { type Editor } from "@tiptap/react";
 import { Toggle } from "@/components/ui/toggle";
+import { useCallback } from "react";
 
 function RichTextToolbar({ editor }: { editor: Editor | null }) {
   if (!editor) {
     return null;
   }
+
+  const setLink = useCallback(() => {
+    const prevUrl = editor.getAttributes("link").href;
+    const url = window.prompt("Enter the URL", prevUrl);
+    // cancelled
+    if (url === null) {
+      return;
+    }
+
+    // empty
+    if (url === "") {
+      editor.chain().focus().extendMarkRange("link").unsetLink().run();
+      return;
+    }
+
+    // update link
+    editor
+      .chain()
+      .focus()
+      .extendMarkRange("link")
+      .setLink({ href: url, target: "_blank" })
+      .run();
+  }, [editor]);
 
   return (
     <div className="p-1">
@@ -39,6 +63,13 @@ function RichTextToolbar({ editor }: { editor: Editor | null }) {
         onPressedChange={() => editor.chain().focus().toggleBulletList().run()}
       >
         <List className="h-4 w-4" />
+      </Toggle>
+      <Toggle
+        aria-label="Toggle Link"
+        pressed={editor.isActive("link")}
+        onPressedChange={setLink}
+      >
+        <Link className="h-4 w-4" />
       </Toggle>
     </div>
   );

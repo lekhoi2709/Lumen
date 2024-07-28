@@ -52,7 +52,7 @@ function ChatSection() {
   };
 
   const htmlFromString = (text: string) => {
-    const clean = DOMPurify.sanitize(text);
+    const clean = DOMPurify.sanitize(text, { ADD_ATTR: ["target"] });
     return parse(clean, options);
   };
 

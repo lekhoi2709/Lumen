@@ -2,6 +2,7 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import RichTextToolbar from "./toolbar";
 import Underline from "@tiptap/extension-underline";
+import Link from "@tiptap/extension-link";
 
 function TipTapRichTextEditor({
   data,
@@ -28,6 +29,16 @@ function TipTapRichTextEditor({
         HTMLAttributes: {
           class: "underline underline-offset-2",
         },
+      }),
+      Link.configure({
+        autolink: true,
+        defaultProtocol: "https",
+        HTMLAttributes: {
+          class: "text-blue-500 underline underline-offset-2",
+          target: "_blank",
+        },
+      }).extend({
+        inclusive: false,
       }),
     ],
     content: data,
