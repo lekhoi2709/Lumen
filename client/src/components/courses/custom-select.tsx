@@ -1,7 +1,7 @@
 import { Button } from "../ui/button";
 import { twMerge } from "tailwind-merge";
 import { ScrollArea } from "../ui/scroll-area";
-import { useSearchedPeople } from "@/services/queries";
+import { useSearchedPeople } from "@/services/queries/courses";
 import { useParams } from "react-router-dom";
 import { Loader2Icon } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
@@ -37,8 +37,8 @@ function CustomSelect(props: CustomSelectProps) {
     <section className="h-full">
       <div
         className={twMerge(
-          "w-full bg-accent dark:bg-accent/40 rounded-md p-2 border border-border",
-          props.users.length > 0 && "flex items-center flex-wrap gap-1 p-4"
+          "w-full rounded-md border border-border bg-accent p-2 dark:bg-accent/40",
+          props.users.length > 0 && "flex flex-wrap items-center gap-1 p-4",
         )}
       >
         {props.users && (
@@ -46,12 +46,12 @@ function CustomSelect(props: CustomSelectProps) {
             {props.users.map((user: SearchedUserData) => (
               <li
                 key={user.email}
-                className="bg-orange-500/20 rounded-full p-1 px-3 pr-8 flex items-center gap-2 relative z-50 w-fit max-w-[300px]"
+                className="relative z-50 flex w-fit max-w-[300px] items-center gap-2 rounded-full bg-orange-500/20 p-1 px-3 pr-8"
               >
-                <span className="text-orange-500 truncate">{user.email}</span>
+                <span className="truncate text-orange-500">{user.email}</span>
                 <Button
                   variant="ghost"
-                  className="text-muted-foreground hover:text-orange-500 w-fit absolute right-0 z-[100] py-0 hover:bg-transparent rounded-full"
+                  className="absolute right-0 z-[100] w-fit rounded-full py-0 text-muted-foreground hover:bg-transparent hover:text-orange-500"
                   onClick={() => handleRemoveUser(user)}
                 >
                   &times;
@@ -63,7 +63,7 @@ function CustomSelect(props: CustomSelectProps) {
         <input
           type="text"
           placeholder={props.placeholder}
-          className="w-full py-1 px-3 bg-transparent focus:outline-none text-muted-foreground placeholder:text-muted-foreground/40"
+          className="w-full bg-transparent px-3 py-1 text-muted-foreground placeholder:text-muted-foreground/40 focus:outline-none"
           onChange={(e) => {
             setInputValue(e.target.value);
             if (e.target.value && e.target.value.length > 3) {
@@ -92,33 +92,33 @@ function OptionDisplay(props: OptionDisplayProps) {
 
   if (isLoading) {
     return (
-      <div className="border border-border rounded-md mt-4 w-full flex flex-col items-center justify-center relative h-[10rem]">
-        <Loader2Icon className="animate-spin w-8 h-8 mx-auto" />
+      <div className="relative mt-4 flex h-[10rem] w-full flex-col items-center justify-center rounded-md border border-border">
+        <Loader2Icon className="mx-auto h-8 w-8 animate-spin" />
       </div>
     );
   }
 
   if (!data) {
     return (
-      <div className="border border-border rounded-md mt-4 w-full flex flex-col items-center justify-center relative h-[10rem]">
+      <div className="relative mt-4 flex h-[10rem] w-full flex-col items-center justify-center rounded-md border border-border">
         <p>Nothing here.</p>
       </div>
     );
   }
 
   return (
-    <ScrollArea className="border border-border rounded-md mt-4 w-full flex flex-col relative h-[10rem]">
+    <ScrollArea className="relative mt-4 flex h-[10rem] w-full flex-col rounded-md border border-border">
       <ul className="h-full p-4">
         {data.users.map((user) => (
           <li
             key={user.email}
-            className="flex items-center gap-4 p-2 hover:bg-muted cursor-pointer rounded-sm transition-all ease-linear duration-200"
+            className="flex cursor-pointer items-center gap-4 rounded-sm p-2 transition-all duration-200 ease-linear hover:bg-muted"
             onClick={() => props.handleChangeOptions(user as SearchedUserData)}
           >
             <img
               src={user.avatarUrl}
               alt={user.email}
-              className="w-8 h-8 rounded-full"
+              className="h-8 w-8 rounded-full"
             />
             <span className="truncate">{user.email}</span>
           </li>

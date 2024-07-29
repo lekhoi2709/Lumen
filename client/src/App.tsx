@@ -19,10 +19,11 @@ import CourseDetail from "./routes/courses/course-detail";
 import CoursePeople from "./routes/courses/people";
 import SchedulePage from "./routes/schedule";
 import GradeBookPage from "./routes/gradebook";
+import AssignmentPage from "./routes/courses/assignment";
 
 function App() {
   const [showSplash, setShowSplash] = useState(
-    () => !JSON.parse(sessionStorage.getItem("show-splash") || "false")
+    () => !JSON.parse(sessionStorage.getItem("show-splash") || "false"),
   );
 
   useEffect(() => {
@@ -58,7 +59,7 @@ function App() {
               <Route path="/courses/:id" element={<CourseDetail />} />
               <Route
                 path="/courses/:id/assignments"
-                element={<CourseDetail />}
+                element={<AssignmentPage />}
               />
               <Route path="/courses/:id/people" element={<CoursePeople />} />
               <Route path="/courses/:id/grades" element={<CourseDetail />} />

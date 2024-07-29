@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useCourse } from "@/services/queries";
+import { useCourse } from "@/services/queries/courses";
 import CourseLayout from "@/layouts/course-layout";
 import Loading from "@/components/loading";
 import CourseOverview from "@/components/courses/detail/overview";
@@ -10,7 +10,7 @@ function CourseDetail() {
 
   if (isLoading) {
     return (
-      <div className="absolute top-0 left-0">
+      <div className="absolute left-0 top-0">
         <Loading />
       </div>
     );

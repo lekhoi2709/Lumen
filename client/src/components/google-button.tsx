@@ -2,7 +2,7 @@ import { Button } from "./ui/button";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { Loader2Icon } from "lucide-react";
-import { googleAuth } from "@/services/api";
+import { googleAuth } from "@/services/api/auth-api";
 
 function GoogleButton() {
   const { t } = useTranslation();
@@ -22,7 +22,7 @@ function GoogleButton() {
 
   return (
     <Button
-      className="w-full flex items-center justify-center gap-4 py-6 transition-transform duration-500 hover:scale-[1.03] ease-in-out"
+      className="flex w-full items-center justify-center gap-4 py-6 transition-transform duration-500 ease-in-out hover:scale-[1.03]"
       type="button"
       onClick={() => openGoogleAuth()}
     >

@@ -21,7 +21,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2Icon } from "lucide-react";
 import GoogleButton from "@/components/google-button";
-import { login } from "@/services/api";
+import { login } from "@/services/api/auth-api";
 
 const formSchema = z.object({
   email: z.string().email().trim(),
@@ -64,12 +64,12 @@ function SignIn() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="bg-background dark:bg-background/80 transition-colors duration-500 backdrop-blur-md rounded-lg drop-shadow-xl shadow-xl min-w-2/3 min-h-1/2 w-2/3 lg:w-1/3 flex flex-col p-8 py-12 lg:p-14 lg:py-16 items-center font-sans gap-8 lg:gap-12"
+          className="min-w-2/3 min-h-1/2 flex w-2/3 flex-col items-center gap-8 rounded-lg bg-background p-8 py-12 font-sans shadow-xl drop-shadow-xl backdrop-blur-md transition-colors duration-500 dark:bg-background/80 lg:w-1/3 lg:gap-12 lg:p-14 lg:py-16"
         >
-          <h1 className="text-xl lg:text-2xl font-bold text-center">
+          <h1 className="text-center text-xl font-bold lg:text-2xl">
             {t("login.title")}
           </h1>
-          <section className="w-full flex flex-col gap-4 lg:gap-6">
+          <section className="flex w-full flex-col gap-4 lg:gap-6">
             <FormField
               control={form.control}
               name="email"
@@ -113,11 +113,11 @@ function SignIn() {
               )}
             />
           </section>
-          <div className="w-full flex flex-col gap-4 md:gap-6 justify-between items-center">
+          <div className="flex w-full flex-col items-center justify-between gap-4 md:gap-6">
             <Button
               type="submit"
               disabled={!isDirty || !isValid || isSubmitting}
-              className="w-full py-6 transition-transform duration-500 hover:scale-[1.03] ease-in-out text-xs md:text-base"
+              className="w-full py-6 text-xs transition-transform duration-500 ease-in-out hover:scale-[1.03] md:text-base"
             >
               {isSubmitting ? (
                 <Loader2Icon className="animate-spin" />

@@ -23,7 +23,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useState, useEffect } from "react";
 import { Loader2Icon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { verifyOTP, sendOTP } from "@/services/api";
+import { verifyOTP, sendOTP } from "@/services/api/auth-api";
 
 const formSchema = z.object({
   email: z.string().email().trim(),
@@ -33,22 +33,56 @@ const formSchema = z.object({
 function ForgotPassword() {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const [loading, setLoading] = useState(false);
-  const [countdown, setCountdown] = useState(60 * 5);
-  const [isCounting, setIsCounting] = useState(false);
+
+  const calculateTimeLeft = (endTime: number) => {
+    const now = Date.now();
+    const diff = endTime - now;
+    return diff > 0 ? Math.floor(diff / 1000) : 0;
+  };
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const [countdown, setCountdown] = useState<number>(() => {
+    const savedTime = localStorage.getItem("otp-end-time");
+    if (savedTime) {
+      return calculateTimeLeft(parseInt(savedTime, 10));
+    }
+    return 0;
+  });
+  const [isCounting, setIsCounting] = useState<boolean>(() => {
+    const savedEndTime = localStorage.getItem("otp-end-time");
+    if (savedEndTime) {
+      return calculateTimeLeft(parseInt(savedEndTime, 10)) > 0;
+    }
+    return false;
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
+    let timer: NodeJS.Timeout;
     if (isCounting) {
-      const interval = setInterval(() => {
-        setCountdown((prev: any) => prev - 1);
+      timer = setInterval(() => {
+        const savedEndTime = localStorage.getItem("otp-end-time");
+        if (savedEndTime) {
+          const timeLeft = calculateTimeLeft(parseInt(savedEndTime, 10));
+          setCountdown(timeLeft);
+          if (timeLeft <= 0) {
+            setIsCounting(false);
+            localStorage.removeItem("otp-end-time");
+            clearInterval(timer);
+          }
+        }
       }, 1000);
-
-      return () => {
-        clearInterval(interval);
-      };
     }
+
+    return () => clearInterval(timer);
   }, [isCounting]);
+
+  const startCountdown = () => {
+    const endTime = Date.now() + 300000; // 300 seconds
+    localStorage.setItem("otp-end-time", endTime.toString());
+    setCountdown(calculateTimeLeft(endTime));
+    setIsCounting(true);
+  };
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -86,7 +120,7 @@ function ForgotPassword() {
           title: res.message,
           description: "Please check your e-mail for the OTP.",
         });
-        setIsCounting(true);
+        !isCounting && startCountdown();
       })
       .catch((err) => {
         setLoading(false);
@@ -103,10 +137,10 @@ function ForgotPassword() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="bg-background dark:bg-background/80 transition-colors duration-500 backdrop-blur-md rounded-lg drop-shadow-xl shadow-xl min-w-2/3 min-h-1/2 w-2/3 lg:w-1/3 flex flex-col p-8 py-12 lg:p-14 lg:py-16 items-center font-sans gap-8 lg:gap-12"
+          className="min-w-2/3 min-h-1/2 flex w-2/3 flex-col items-center gap-8 rounded-lg bg-background p-8 py-12 font-sans shadow-xl drop-shadow-xl backdrop-blur-md transition-colors duration-500 dark:bg-background/80 lg:w-1/3 lg:gap-12 lg:p-14 lg:py-16"
         >
-          <h1 className="text-xl lg:text-2xl font-bold">{t("forgot.title")}</h1>
-          <section className="w-full flex flex-col gap-4 lg:gap-6">
+          <h1 className="text-xl font-bold lg:text-2xl">{t("forgot.title")}</h1>
+          <section className="flex w-full flex-col gap-4 lg:gap-6">
             <FormField
               control={form.control}
               name="email"
@@ -128,9 +162,9 @@ function ForgotPassword() {
               control={form.control}
               name="otp"
               render={({ field }) => (
-                <FormItem className="w-full flex flex-col gap-1 items-center">
+                <FormItem className="flex w-full flex-col items-center gap-1">
                   <FormLabel className="self-start">OTP</FormLabel>
-                  <div className="flex flex-col gap-4 md:gap-2 md:self-end md:flex-row">
+                  <div className="flex flex-col gap-4 md:flex-row md:gap-2 md:self-end">
                     <FormControl>
                       <InputOTP {...field} maxLength={6}>
                         <InputOTPGroup>
@@ -138,7 +172,7 @@ function ForgotPassword() {
                             <InputOTPSlot
                               key={index}
                               index={index}
-                              className="bg-accent dark:bg-accent/40 h-9 w-9 md:h-10 md:w-10"
+                              className="h-9 w-9 bg-accent dark:bg-accent/40 md:h-10 md:w-10"
                             />
                           ))}
                         </InputOTPGroup>
@@ -150,13 +184,8 @@ function ForgotPassword() {
                       type="button"
                       onClick={() => handleSendOTP()}
                     >
-                      {loading ? (
-                        <Loader2Icon className="animate-spin" />
-                      ) : isCounting ? (
-                        countdown
-                      ) : (
-                        t("forgot.send")
-                      )}
+                      {loading && <Loader2Icon className="animate-spin" />}
+                      {!loading && (isCounting ? countdown : t("forgot.send"))}
                     </Button>
                   </div>
                   <FormMessage />
@@ -167,7 +196,7 @@ function ForgotPassword() {
           <Button
             type="submit"
             disabled={!isValid || !isDirty || isSubmitting}
-            className="w-full py-6 transition-transform duration-500 hover:scale-[1.03] ease-in-out"
+            className="w-full py-6 transition-transform duration-500 ease-in-out hover:scale-[1.03]"
           >
             {isSubmitting ? (
               <Loader2Icon className="animate-spin" />
