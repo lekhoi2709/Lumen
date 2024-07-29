@@ -17,8 +17,8 @@ function ChatDialog({
 }) {
   const { t } = useTranslation();
   return (
-    <DialogContent className="rounded-lg border-none bg-transparent p-4 font-nunito md:max-w-[40rem] lg:max-w-[50rem]">
-      <div className="flex h-full w-full flex-col gap-4 rounded-lg border border-border bg-background p-6">
+    <DialogContent className="rounded-lg border-none bg-transparent p-4 font-nunito lg:max-w-[50rem]">
+      <div className="flex h-full w-full max-w-[calc(100vw-2rem)] flex-col gap-4 rounded-lg border border-border bg-background p-6">
         <DialogHeader>
           <DialogTitle>
             {type === "announce" && t("courses.overview.chat-title")}
