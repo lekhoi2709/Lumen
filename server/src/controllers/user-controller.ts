@@ -27,6 +27,7 @@ export default {
         if (result) {
           const accessToken = jwt.sign(
             {
+              _id: user._id,
               email: user.email,
               role: user.role,
               avatarUrl: user.avatarUrl,
@@ -36,7 +37,7 @@ export default {
             process.env.JWT_SECRET || "",
             {
               expiresIn: "2h",
-            },
+            }
           );
           user.accessToken = accessToken;
           user.save();
@@ -102,6 +103,7 @@ export default {
 
       const token = jwt.sign(
         {
+          _id: user._id,
           email: user.email,
           role: user.role,
           avatarUrl: user.avatarUrl,
@@ -111,7 +113,7 @@ export default {
         process.env.JWT_SECRET || "",
         {
           expiresIn: "2h",
-        },
+        }
       );
       user.accessToken = token;
       user.save();

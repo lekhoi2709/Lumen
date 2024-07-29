@@ -1,5 +1,5 @@
 import Layout from "@/layouts/layout";
-
+import UploadButton from "@/components/upload";
 function Dashboard() {
   return (
     <Layout>
@@ -7,6 +7,7 @@ function Dashboard() {
         <h1 className="text-xl w-fit h-12 content-center font-bold">
           Dashboard
         </h1>
+        <UploadButton />
       </div>
     </Layout>
   );
