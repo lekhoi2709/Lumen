@@ -82,30 +82,7 @@ export const addPeopleToCourse = async (data: AddCoursePeopleType) => {
   return response.data;
 };
 
-export const uploadFiles = async (files: File[], token: string) => {
-  const formData = new FormData();
-  files.forEach((file) => {
-    formData.append("files", file);
-  });
 
-  const response = await axiosInstance.post("/uploads/upload-file", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  return response.data;
-};
-
-export const deleteFile = async (userId: string, fileName: string, token: string) => {
-  const response = await axiosInstance.delete(`/uploads/file/${userId}/${fileName}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  return response.data;
-}
 export const updateCourse = async (course: Course) => {
   const response = await axiosInstance.put(
     `/courses/c/${course._id}/update`,

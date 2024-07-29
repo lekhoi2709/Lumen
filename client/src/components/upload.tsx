@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Upload, Video, Trash2 } from "lucide-react"; // Added Trash2 icon
-import { uploadFiles, deleteFile } from "@/services/api"; // Added deleteFile import
+import { uploadFiles, deleteFile } from "@/services/api/posts-api"; // Added deleteFile import
 
 const UploadButton: React.FC = () => {
   const [files, setFiles] = useState<File[]>([]);
