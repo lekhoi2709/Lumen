@@ -44,18 +44,6 @@ export default {
 
           const refreshToken = generateRefreshToken(user.email);
 
-          (req.session as any).userData = {
-            user: {
-              email: user.email,
-              role: user.role,
-              avatarUrl: user.avatarUrl,
-              firstName: user.firstName,
-              lastName: user.lastName,
-            },
-            token: accessToken,
-            refreshToken: refreshToken,
-          };
-
           return res.status(200).json({
             message: "Login successful",
             token: accessToken,
