@@ -4,34 +4,23 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import FormLayout from "./chatform-layout";
 import { useUpdatePost } from "@/services/mutations/posts";
 import { PostType } from "@/types/post";
+import { Dispatch } from "react";
 
 const formSchema = z.object({
   text: z.string().min(1),
-  images: z
-    .array(
-      z.object({
-        src: z.string(),
-        alt: z.string(),
-      }),
-    )
-    .optional(),
-  videos: z
-    .array(
-      z.object({
-        src: z.string(),
-        thumbnail: z.string(),
-      }),
-    )
-    .optional(),
 });
 
-function UpdateChatForm({ postId }: { postId: string }) {
+function UpdateChatForm({
+  postId,
+  setIsOpen,
+}: {
+  postId: string;
+  setIsOpen: Dispatch<boolean>;
+}) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       text: "",
-      images: [],
-      videos: [],
     },
     mode: "onBlur",
   });
@@ -40,22 +29,6 @@ function UpdateChatForm({ postId }: { postId: string }) {
   async function onSubmit(data: z.infer<typeof formSchema>) {
     let type = PostType.Text;
 
-    if (
-      (data.images?.length && data.videos?.length) ||
-      (data.images?.length && data.text) ||
-      (data.videos?.length && data.text)
-    ) {
-      type = PostType.Mixed;
-    }
-
-    if (data.images?.length) {
-      type = PostType.Image;
-    }
-
-    if (data.videos?.length) {
-      type = PostType.Video;
-    }
-
     await updatePostMutation.mutate({
       postId,
       postData: {
@@ -63,9 +36,10 @@ function UpdateChatForm({ postId }: { postId: string }) {
         type,
       },
     });
+    setIsOpen(false);
   }
 
-  return <FormLayout form={form} onSubmit={onSubmit} />;
+  return <FormLayout formType="comment" form={form} onSubmit={onSubmit} />;
 }
 
 export default UpdateChatForm;
