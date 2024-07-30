@@ -16,6 +16,7 @@ export enum PostType {
   Text = "Text",
   Image = "Image",
   Video = "Video",
+  Document = "Document",
   Mixed = "Mixed",
 }
 
@@ -29,6 +30,10 @@ export type TPost = {
   videos?: {
     src: string;
     thumbnail: string;
+  }[];
+  docs?: {
+    src: string;
+    title: string;
   }[];
   type: PostType;
   createdAt?: string;
