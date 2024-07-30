@@ -81,27 +81,38 @@ export const deleteComment = async (data: {
   return response.data;
 };
 
-export const uploadFiles = async (files: File[], token: string) => {
+export const uploadFiles = async (data: {
+  courseId: string;
+  files: File[];
+}) => {
   const formData = new FormData();
-  files.forEach((file) => {
+  data.files.forEach((file) => {
     formData.append("files", file);
   });
 
-  const response = await axiosInstance.post("/uploads/upload-file", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-      Authorization: `Bearer ${token}`,
+  const response = await axiosInstance.post(
+    `/uploads/upload-file/${data.courseId}`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
     },
-  });
+  );
 
   return response.data;
 };
 
-export const deleteFile = async (userId: string, fileName: string, token: string) => {
-  const response = await axiosInstance.delete(`/uploads/file/${userId}/${fileName}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
+export const deleteFiles = async (fileNames: string[]) => {
+  const response = await axiosInstance.post(
+    "/uploads/files/delete",
+    fileNames,
+    {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
     },
-  });
+  );
   return response.data;
-}
+};

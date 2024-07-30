@@ -25,15 +25,15 @@ export type TPost = {
   text?: string;
   images?: {
     src: string;
-    alt: string;
+    name: string;
   }[];
   videos?: {
     src: string;
-    thumbnail: string;
+    name: string;
   }[];
-  docs?: {
+  documents?: {
     src: string;
-    title: string;
+    name: string;
   }[];
   type: PostType;
   createdAt?: string;
