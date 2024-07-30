@@ -1,35 +1,37 @@
 import multer from "multer";
+import { Request } from "express";
+
+const allowedMimeTypes = [
+  "image/jpeg",
+  "image/png",
+  "image/gif",
+  "video/mp4",
+  "video/mpeg",
+  "video/quicktime",
+  "video/x-matroska",
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+];
 
 const storage = multer.memoryStorage();
 
 const fileFilter = (
-  req: any,
+  req: Request,
   file: Express.Multer.File,
   cb: multer.FileFilterCallback
 ) => {
-  console.log("Received file:", file);
-  const filetypes = /jpeg|jpg|png|gif|mp4|avi|mkv|mov|video\/x-matroska/;
-  const mimetype = filetypes.test(file.mimetype);
-  const extname = filetypes.test(
-    (file.originalname.split(".").pop() || "").toLowerCase()
-  );
-
-  console.log("File mimetype:", file.mimetype);
-  console.log("File originalname:", file.originalname);
-  console.log("File extname:", extname);
-
-  if (mimetype && extname) {
-    return cb(null, true);
+  if (allowedMimeTypes.includes(file.mimetype)) {
+    cb(null, true);
   } else {
-    const error = new Error("Only image and video files are allowed!");
-    console.error("File filter error:", error.message);
-    cb(error);
+    cb(new Error("Invalid file type"));
   }
 };
 
 const upload = multer({
-  storage: storage,
-  fileFilter: fileFilter,
+  storage,
+  fileFilter,
+  limits: { fileSize: 5 * 1024 * 1024 },
 });
 
 export default upload;
