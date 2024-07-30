@@ -7,11 +7,16 @@ import {
 import { useTranslation } from "react-i18next";
 import ChatForm from "./chat-form";
 import CommentForm from "./comment-form";
+import { Dispatch } from "react";
 
 function ChatDialog({
+  setIsOpen,
+  setIsCommentOpen,
   type = "announce",
   postId,
 }: {
+  setIsOpen?: Dispatch<boolean>;
+  setIsCommentOpen?: Dispatch<boolean>;
   type?: "announce" | "comment";
   postId?: string;
 }) {
@@ -29,8 +34,10 @@ function ChatDialog({
           </DialogDescription>
         </DialogHeader>
         <section>
-          {type === "announce" && <ChatForm />}
-          {type === "comment" && postId && <CommentForm postId={postId} />}
+          {type === "announce" && <ChatForm setIsOpen={setIsOpen!} />}
+          {type === "comment" && postId && (
+            <CommentForm setIsCommentOpen={setIsCommentOpen!} postId={postId} />
+          )}
         </section>
       </div>
     </DialogContent>

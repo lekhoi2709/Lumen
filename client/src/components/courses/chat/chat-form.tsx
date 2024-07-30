@@ -6,6 +6,9 @@ import { PostType } from "@/types/post";
 import { useAuth } from "@/contexts/auth-context";
 import { useCreatePost } from "@/services/mutations/posts";
 import FormLayout from "./chatform-layout";
+import { Dispatch, useState } from "react";
+import { uploadFiles } from "@/services/api/posts-api";
+import { isDocumentFile, isImageFile, isVideoFile } from "@/lib/utils";
 
 const formSchema = z.object({
   text: z.string().min(1),
@@ -13,7 +16,7 @@ const formSchema = z.object({
     .array(
       z.object({
         src: z.string(),
-        alt: z.string(),
+        name: z.string(),
       }),
     )
     .optional(),
@@ -21,46 +24,69 @@ const formSchema = z.object({
     .array(
       z.object({
         src: z.string(),
-        thumbnail: z.string(),
+        name: z.string(),
       }),
     )
     .optional(),
+  documents: z.array(
+    z.object({
+      src: z.string(),
+      name: z.string(),
+    }),
+  ),
 });
 
-function ChatForm() {
+function ChatForm({ setIsOpen }: { setIsOpen: Dispatch<boolean> }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       text: "",
       images: [],
       videos: [],
+      documents: [],
     },
     mode: "onBlur",
   });
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
+  const [files, setFiles] = useState<File[]>([]);
   const createPostMutation = useCreatePost();
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    let type = PostType.Text;
+    let type = PostType.Mixed;
 
-    if (
-      (data.images?.length && data.videos?.length) ||
-      (data.images?.length && data.text) ||
-      (data.videos?.length && data.text)
-    ) {
-      type = PostType.Mixed;
+    const response = await uploadFiles({ courseId: id!, files });
+    if (response.urls && response.urls.length > 0) {
+      const fileNames = response.urls.map((url: string) => {
+        const name = url.split("/").pop();
+        return { name, src: url };
+      });
+
+      const images: { name: string; src: string }[] = fileNames.filter(
+        (file: { name: string; src: string }) => isImageFile(file.name),
+      );
+      const videos: { name: string; src: string }[] = fileNames.filter(
+        (file: { name: string; src: string }) => isVideoFile(file.name),
+      );
+
+      const documents: { name: string; src: string }[] = fileNames.filter(
+        (file: { name: string; src: string }) => isDocumentFile(file.name),
+      );
+
+      if (images) {
+        data.images = images;
+      }
+
+      if (videos) {
+        data.videos = videos;
+      }
+
+      if (documents) {
+        data.documents = documents;
+      }
     }
 
-    if (data.images?.length) {
-      type = PostType.Image;
-    }
-
-    if (data.videos?.length) {
-      type = PostType.Video;
-    }
-
-    await createPostMutation.mutate({
+    createPostMutation.mutate({
       courseId: id!,
       postData: {
         ...data,
@@ -73,9 +99,19 @@ function ChatForm() {
         },
       },
     });
+
+    setIsOpen(false);
   }
 
-  return <FormLayout form={form} onSubmit={onSubmit} />;
+  return (
+    <FormLayout
+      formType="announce"
+      files={files}
+      setFiles={setFiles}
+      form={form}
+      onSubmit={onSubmit}
+    />
+  );
 }
 
 export default ChatForm;
