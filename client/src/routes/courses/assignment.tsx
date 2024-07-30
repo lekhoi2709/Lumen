@@ -1,8 +1,10 @@
+import CourseLayout from "@/layouts/course-layout";
+
 function AssignmentPage() {
   return (
-    <div>
+    <CourseLayout>
       <h1>Assignment Page</h1>
-    </div>
+    </CourseLayout>
   );
 }
 
