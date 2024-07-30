@@ -1,16 +1,17 @@
 import { Router } from "express";
-import {
-  uploadFiles,
-  listFiles,
-  getFile,
-  deleteFile,
-} from "../controllers/upload-controller";
+import uploadController from "../controllers/upload-controller";
 import { authenticateToken } from "../middlewares/auth";
+import upload from "../config/multer-config";
 
 const router = Router();
 
-router.post("/upload-file", authenticateToken, uploadFiles);
-router.get("/files/:userId", authenticateToken, listFiles);
-router.get("/file/:userId/:fileName", authenticateToken, getFile);
-router.delete("/file/:userId/:fileName", authenticateToken, deleteFile);
+router.post(
+  "/upload-file/:courseId",
+  authenticateToken,
+  upload.array("files", 10),
+  uploadController.uploadFiles
+);
+
+router.post("/files/delete", authenticateToken, uploadController.deleteFiles);
+
 export default router;

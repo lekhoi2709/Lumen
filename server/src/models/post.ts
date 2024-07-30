@@ -34,19 +34,19 @@ const postSchema = new mongoose.Schema({
   images: [
     {
       src: String,
-      alt: String,
+      name: String,
     },
   ],
   videos: [
     {
       src: String,
-      alt: String,
+      name: String,
     },
   ],
-  docs: [
+  documents: [
     {
       src: String,
-      title: String,
+      name: String,
     },
   ],
   createdAt: {
