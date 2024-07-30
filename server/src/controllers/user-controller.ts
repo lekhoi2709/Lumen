@@ -33,6 +33,7 @@ export default {
               avatarUrl: user.avatarUrl,
               firstName: user.firstName,
               lastName: user.lastName,
+              courses: user.courses,
             },
             process.env.JWT_SECRET || "",
             {
@@ -97,6 +98,7 @@ export default {
           avatarUrl: user.avatarUrl,
           firstName: user.firstName,
           lastName: user.lastName,
+          courses: user.courses,
         },
         process.env.JWT_SECRET || "",
         {
@@ -114,6 +116,7 @@ export default {
           avatarUrl: user.avatarUrl,
           firstName: user.firstName,
           lastName: user.lastName,
+          courses: user.courses,
         },
         token,
       });
