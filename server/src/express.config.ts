@@ -3,11 +3,13 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import path from "path";
 import session from "express-session";
+import MongoStore from "connect-mongo";
 
 const ExpressConfig = (): Application => {
   const app = express();
   var dbUrl: string = process.env.DB_URL!;
 
+  app.set("trust proxy", 1);
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use("/", express.static(path.join(__dirname, "public")));
