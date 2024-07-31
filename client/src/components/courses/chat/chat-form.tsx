@@ -12,23 +12,7 @@ import { isDocumentFile, isImageFile, isVideoFile } from "@/lib/utils";
 
 const formSchema = z.object({
   text: z.string().min(1),
-  images: z
-    .array(
-      z.object({
-        src: z.string(),
-        name: z.string(),
-      }),
-    )
-    .optional(),
-  videos: z
-    .array(
-      z.object({
-        src: z.string(),
-        name: z.string(),
-      }),
-    )
-    .optional(),
-  documents: z.array(
+  files: z.array(
     z.object({
       src: z.string(),
       name: z.string(),
@@ -41,9 +25,7 @@ function ChatForm({ setIsOpen }: { setIsOpen: Dispatch<boolean> }) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       text: "",
-      images: [],
-      videos: [],
-      documents: [],
+      files: [],
     },
     mode: "onBlur",
   });
@@ -73,18 +55,10 @@ function ChatForm({ setIsOpen }: { setIsOpen: Dispatch<boolean> }) {
         (file: { name: string; src: string }) => isDocumentFile(file.name),
       );
 
-      if (images) {
-        data.images = images;
-      }
-
-      if (videos) {
-        data.videos = videos;
-      }
-
-      if (documents) {
-        data.documents = documents;
-      }
+      data.files.push(...images, ...videos, ...documents);
     }
+
+    console.log(data.files);
 
     createPostMutation.mutate({
       courseId: id!,

@@ -23,15 +23,7 @@ export enum PostType {
 export type TPost = {
   _id?: string;
   text?: string;
-  images?: {
-    src: string;
-    name: string;
-  }[];
-  videos?: {
-    src: string;
-    name: string;
-  }[];
-  documents?: {
+  files?: {
     src: string;
     name: string;
   }[];

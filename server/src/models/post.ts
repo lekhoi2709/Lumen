@@ -31,19 +31,7 @@ const postSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
-  images: [
-    {
-      src: String,
-      name: String,
-    },
-  ],
-  videos: [
-    {
-      src: String,
-      name: String,
-    },
-  ],
-  documents: [
+  files: [
     {
       src: String,
       name: String,

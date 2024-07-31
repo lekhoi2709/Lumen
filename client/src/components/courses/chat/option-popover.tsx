@@ -27,6 +27,7 @@ import { Dispatch, useState } from "react";
 import { TPost } from "@/types/post";
 import { useParams } from "react-router-dom";
 import { deleteFiles } from "@/services/api/posts-api";
+import { toast } from "@/components/ui/use-toast";
 
 function OptionPopover({
   type = "Post",
@@ -114,21 +115,16 @@ function DeleteDialog({
   const deleteComment = useDeleteComment();
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const getAllFileNames = (post: TPost) => {
-    const images = post.images!.map((image) => id + "/" + image.name);
-    const videos = post.videos!.map((video) => id + "/" + video.name);
-    const documents = post.documents!.map(
-      (document) => id + "/" + document.name,
-    );
-    return [...images, ...videos, ...documents];
+  const getModifiedFileNames = (post: TPost) => {
+    const fileNames = post.files?.map((file) => id + "/" + file.name);
+    return fileNames;
   };
 
   const handlePostDelete = async () => {
     setIsDeleting(true);
-    const fileNames = getAllFileNames(postData!);
-    await deleteFiles(fileNames)
-      .then((res) => {
-        console.log(res.message);
+    const fileNames = getModifiedFileNames(postData!);
+    await deleteFiles(fileNames!)
+      .then((_res) => {
         deletePost.mutate(postId);
       })
       .finally(() => {
@@ -136,7 +132,11 @@ function DeleteDialog({
         onOpenChange(false);
       })
       .catch((err) => {
-        console.log(err);
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: err.response.data.message,
+        });
       });
   };
 

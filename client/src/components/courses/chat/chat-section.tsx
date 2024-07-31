@@ -20,6 +20,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import OptionPopover from "./option-popover";
 import { Course } from "@/types/course";
+import { isDocumentFile, isImageFile, isVideoFile } from "@/lib/utils";
 
 function ChatSection({ course }: { course: Course }) {
   const { id } = useParams();
@@ -118,50 +119,54 @@ function ChatSection({ course }: { course: Course }) {
               />
             )}
           </div>
-          <div className="my-2 flex max-w-full flex-col gap-1 px-6">
+          <div className="my-2 flex max-w-full flex-col gap-3 px-6">
             {post.text && htmlFromString(post.text)}
-            {post.documents && post.documents.length > 0 && (
-              <div className="mt-2 flex flex-wrap gap-2">
-                {post.documents.map((doc) => (
-                  <a
-                    key={doc.src}
-                    href={doc.src}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="h-auto w-fit rounded-lg object-cover"
-                  >
-                    <p className="truncate text-sm text-blue-500 hover:underline">
-                      {doc.name.split("-").pop()}
-                    </p>
-                  </a>
-                ))}
-              </div>
-            )}
-            {post.images && post.images.length > 0 && (
-              <div className="mt-2 flex flex-wrap gap-2">
-                {post.images.map((img) => (
-                  <img
-                    key={img.src}
-                    src={img.src}
-                    alt={img.name}
-                    className="h-auto w-28 rounded-lg object-cover"
-                  />
-                ))}
-              </div>
-            )}
-            {post.videos && post.videos.length > 0 && (
-              <div className="mt-2 flex flex-wrap gap-2">
-                {post.videos.map((video) => (
-                  <video
-                    preload="metadata"
-                    key={video.src}
-                    src={video.src}
-                    controls
-                    className="h-auto w-48 rounded-lg object-cover"
-                  />
-                ))}
-              </div>
-            )}
+            {post.files &&
+              post.files.length > 0 &&
+              post.files.map((file) => {
+                if (isDocumentFile(file.name)) {
+                  return (
+                    <div key={file.src} className="w-full truncate">
+                      <a
+                        href={file.src}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        className="truncate rounded-lg object-cover text-sm text-blue-500 hover:underline"
+                      >
+                        {file.name.split("-").pop()}
+                      </a>
+                    </div>
+                  );
+                }
+              })}
+            <div className="flex w-full flex-wrap gap-3">
+              {post.files &&
+                post.files.length > 0 &&
+                post.files.map((file) => {
+                  if (isVideoFile(file.name)) {
+                    return (
+                      <video
+                        preload="metadata"
+                        key={file.src}
+                        src={file.src}
+                        controls
+                        className="h-auto w-48 grow-0 rounded-lg object-cover"
+                      />
+                    );
+                  }
+                  if (isImageFile(file.name)) {
+                    return (
+                      <img
+                        key={file.src}
+                        src={file.src}
+                        alt={file.name}
+                        className="h-auto w-28 grow-0 rounded-lg object-cover"
+                      />
+                    );
+                  }
+                  return <div key={file.name} className="hidden"></div>;
+                })}
+            </div>
           </div>
           <Separator />
           <div className="flex w-full flex-col gap-2 px-6 pb-4">
@@ -187,7 +192,7 @@ function CommentTrigger({ postId }: { postId: string }) {
 
   return (
     <Dialog open={showComment} onOpenChange={setShowComment}>
-      <DialogTrigger className="mt-1 flex h-8 w-full items-center gap-4">
+      <DialogTrigger className="flex h-8 w-full items-center gap-4">
         <Avatar className="h-8 w-8">
           <AvatarImage src={user?.avatarUrl} alt={user?.email} />
           <AvatarFallback>{user?.firstName}</AvatarFallback>
