@@ -136,7 +136,7 @@ function ChatSection({ course }: { course: Course }) {
                     className={twMerge(
                       "w-fit",
                       isDocumentFile(file.name!) &&
-                        "order-first w-full truncate",
+                        "order-first h-fit w-full truncate",
                     )}
                   >
                     {isDocumentFile(file.name) && (
@@ -145,7 +145,7 @@ function ChatSection({ course }: { course: Course }) {
                         href={file.src}
                         target="_blank"
                         rel="noreferrer noopener"
-                        className="w-full truncate rounded-lg object-cover text-sm text-blue-500 hover:underline"
+                        className="h-fit w-full truncate rounded-lg object-cover text-sm text-blue-500 hover:underline"
                       >
                         {file.name.split("-").pop()}
                       </a>
@@ -155,14 +155,14 @@ function ChatSection({ course }: { course: Course }) {
                         preload="metadata"
                         src={file.src}
                         controls
-                        className="h-auto w-48 grow-0 rounded-lg object-cover"
+                        className="mt-2 h-auto w-48 grow-0 rounded-lg object-cover"
                       />
                     )}
                     {isImageFile(file.name) && (
                       <img
                         src={file.src}
                         alt={file.name}
-                        className="h-auto w-28 grow-0 rounded-lg object-cover"
+                        className="mt-2 h-auto w-28 grow-0 rounded-lg object-cover"
                       />
                     )}
                   </div>
