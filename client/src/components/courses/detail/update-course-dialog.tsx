@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/dialog";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -19,7 +18,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { SettingsIcon } from "lucide-react";
+import { Loader2Icon, SettingsIcon } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -40,6 +39,8 @@ import { useCourse } from "@/services/queries/courses";
 import { CourseCode } from "./overview";
 import { useDeleteCourse, useUpdateCourse } from "@/services/mutations/courses";
 import { useAuth } from "@/contexts/auth-context";
+import { deleteAllFilesInCourse } from "@/services/api/courses-api";
+import { useState } from "react";
 
 function UpdateCourseDialog({
   device = "desktop",
@@ -89,6 +90,8 @@ function UpdateCoursesForm() {
   const updateCourseMutation = useUpdateCourse();
   const deleteCourseMutation = useDeleteCourse();
   const navigate = useNavigate();
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -112,8 +115,12 @@ function UpdateCoursesForm() {
   }
 
   async function onDelete() {
+    setIsDeleting(true);
+    await deleteAllFilesInCourse(courseQuery.data?._id!);
     deleteCourseMutation.mutate(courseQuery.data?._id!);
     localStorage.setItem("history", "/courses");
+    setIsDeleting(false);
+    setIsDeleteDialogOpen(false);
     navigate("/courses");
   }
 
@@ -188,7 +195,10 @@ function UpdateCoursesForm() {
         {user?.email === courseQuery.data?.createdUserEmail && (
           <section className="flex w-full flex-col gap-6 self-center rounded-md border border-border p-6 px-8 md:max-w-[50%]">
             <h1>{t("courses.overview.course-setting.delete")}</h1>
-            <AlertDialog>
+            <AlertDialog
+              open={isDeleteDialogOpen}
+              onOpenChange={setIsDeleteDialogOpen}
+            >
               <AlertDialogTrigger asChild>
                 <Button type="button" variant="destructive" className="w-fit">
                   {t("courses.overview.course-setting.delete-btn")}
@@ -207,16 +217,15 @@ function UpdateCoursesForm() {
                   <AlertDialogCancel>
                     {t("courses.overview.course-setting.delete-cancel")}
                   </AlertDialogCancel>
-                  <AlertDialogAction asChild>
-                    <Button
-                      variant="destructive"
-                      type="button"
-                      onClick={onDelete}
-                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                    >
-                      {t("courses.overview.course-setting.delete-btn")}
-                    </Button>
-                  </AlertDialogAction>
+                  <Button
+                    variant="destructive"
+                    type="button"
+                    onClick={onDelete}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    {isDeleting && <Loader2Icon className="animate-spin" />}
+                    {!isDeleting && t("courses.overview.course-setting.delete")}
+                  </Button>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
