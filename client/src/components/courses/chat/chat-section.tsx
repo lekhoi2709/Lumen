@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import OptionPopover from "./option-popover";
 import { Course } from "@/types/course";
 import { isDocumentFile, isImageFile, isVideoFile } from "@/lib/utils";
+import { twMerge } from "tailwind-merge";
 
 function ChatSection({ course }: { course: Course }) {
   const { id } = useParams();
@@ -121,52 +122,52 @@ function ChatSection({ course }: { course: Course }) {
           </div>
           <div className="my-2 flex max-w-full flex-col gap-3 px-6">
             {post.text && htmlFromString(post.text)}
-            {post.files &&
-              post.files.length > 0 &&
-              post.files.map((file) => {
-                if (isDocumentFile(file.name)) {
-                  return (
-                    <div key={file.src} className="w-full truncate">
+            <span
+              className={twMerge(
+                "flex flex-wrap gap-2",
+                (!post.files || post.files?.length <= 0) && "hidden",
+              )}
+            >
+              {post.files &&
+                post.files.length > 0 &&
+                post.files.map((file) => (
+                  <div
+                    key={file.src}
+                    className={twMerge(
+                      "w-fit",
+                      isDocumentFile(file.name!) &&
+                        "order-first w-full truncate",
+                    )}
+                  >
+                    {isDocumentFile(file.name) && (
                       <a
+                        key={file.src}
                         href={file.src}
                         target="_blank"
                         rel="noreferrer noopener"
-                        className="truncate rounded-lg object-cover text-sm text-blue-500 hover:underline"
+                        className="w-full truncate rounded-lg object-cover text-sm text-blue-500 hover:underline"
                       >
                         {file.name.split("-").pop()}
                       </a>
-                    </div>
-                  );
-                }
-              })}
-            <div className="flex w-full flex-wrap gap-3">
-              {post.files &&
-                post.files.length > 0 &&
-                post.files.map((file) => {
-                  if (isVideoFile(file.name)) {
-                    return (
+                    )}
+                    {isVideoFile(file.name) && (
                       <video
                         preload="metadata"
-                        key={file.src}
                         src={file.src}
                         controls
                         className="h-auto w-48 grow-0 rounded-lg object-cover"
                       />
-                    );
-                  }
-                  if (isImageFile(file.name)) {
-                    return (
+                    )}
+                    {isImageFile(file.name) && (
                       <img
-                        key={file.src}
                         src={file.src}
                         alt={file.name}
                         className="h-auto w-28 grow-0 rounded-lg object-cover"
                       />
-                    );
-                  }
-                  return <div key={file.name} className="hidden"></div>;
-                })}
-            </div>
+                    )}
+                  </div>
+                ))}
+            </span>
           </div>
           <Separator />
           <div className="flex w-full flex-col gap-2 px-6 pb-4">
