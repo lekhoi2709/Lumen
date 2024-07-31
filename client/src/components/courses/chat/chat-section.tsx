@@ -20,6 +20,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import OptionPopover from "./option-popover";
 import { Course } from "@/types/course";
+import { isDocumentFile, isImageFile, isVideoFile } from "@/lib/utils";
 
 function ChatSection({ course }: { course: Course }) {
   const { id } = useParams();
@@ -114,35 +115,58 @@ function ChatSection({ course }: { course: Course }) {
                 className="translate-x-2"
                 isEditabel={user?.email === post.user?.email}
                 postId={post._id!}
+                postData={post}
               />
             )}
           </div>
-          <div className="mt-2 flex max-w-full flex-col gap-1 px-6">
+          <div className="my-2 flex max-w-full flex-col gap-3 px-6">
             {post.text && htmlFromString(post.text)}
-            {post.images && (
-              <div className="flex gap-2">
-                {post.images.map((img) => (
-                  <img
-                    key={img.src}
-                    src={img.src}
-                    alt={img.alt}
-                    className="h-20 w-20 rounded-lg object-cover"
-                  />
-                ))}
-              </div>
-            )}
-            {post.videos && (
-              <div className="flex gap-2">
-                {post.videos.map((video) => (
-                  <video
-                    key={video.src}
-                    src={video.src}
-                    controls
-                    className="h-20 w-20 rounded-lg object-cover"
-                  />
-                ))}
-              </div>
-            )}
+            {post.files &&
+              post.files.length > 0 &&
+              post.files.map((file) => {
+                if (isDocumentFile(file.name)) {
+                  return (
+                    <div key={file.src} className="w-full truncate">
+                      <a
+                        href={file.src}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        className="truncate rounded-lg object-cover text-sm text-blue-500 hover:underline"
+                      >
+                        {file.name.split("-").pop()}
+                      </a>
+                    </div>
+                  );
+                }
+              })}
+            <div className="flex w-full flex-wrap gap-3">
+              {post.files &&
+                post.files.length > 0 &&
+                post.files.map((file) => {
+                  if (isVideoFile(file.name)) {
+                    return (
+                      <video
+                        preload="metadata"
+                        key={file.src}
+                        src={file.src}
+                        controls
+                        className="h-auto w-48 grow-0 rounded-lg object-cover"
+                      />
+                    );
+                  }
+                  if (isImageFile(file.name)) {
+                    return (
+                      <img
+                        key={file.src}
+                        src={file.src}
+                        alt={file.name}
+                        className="h-auto w-28 grow-0 rounded-lg object-cover"
+                      />
+                    );
+                  }
+                  return <div key={file.name} className="hidden"></div>;
+                })}
+            </div>
           </div>
           <Separator />
           <div className="flex w-full flex-col gap-2 px-6 pb-4">
@@ -164,10 +188,11 @@ function ChatSection({ course }: { course: Course }) {
 function CommentTrigger({ postId }: { postId: string }) {
   const { user } = useAuth();
   const { t } = useTranslation();
+  const [showComment, setShowComment] = useState(false);
 
   return (
-    <Dialog>
-      <DialogTrigger className="mt-1 flex h-8 w-full items-center gap-4">
+    <Dialog open={showComment} onOpenChange={setShowComment}>
+      <DialogTrigger className="flex h-8 w-full items-center gap-4">
         <Avatar className="h-8 w-8">
           <AvatarImage src={user?.avatarUrl} alt={user?.email} />
           <AvatarFallback>{user?.firstName}</AvatarFallback>
@@ -178,7 +203,11 @@ function CommentTrigger({ postId }: { postId: string }) {
           </p>
         </div>
       </DialogTrigger>
-      <ChatDialog type="comment" postId={postId} />
+      <ChatDialog
+        setIsCommentOpen={setShowComment}
+        type="comment"
+        postId={postId}
+      />
     </Dialog>
   );
 }

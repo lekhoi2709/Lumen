@@ -7,18 +7,23 @@ import {
 import { useTranslation } from "react-i18next";
 import ChatForm from "./chat-form";
 import CommentForm from "./comment-form";
+import { Dispatch } from "react";
 
 function ChatDialog({
+  setIsOpen,
+  setIsCommentOpen,
   type = "announce",
   postId,
 }: {
+  setIsOpen?: Dispatch<boolean>;
+  setIsCommentOpen?: Dispatch<boolean>;
   type?: "announce" | "comment";
   postId?: string;
 }) {
   const { t } = useTranslation();
   return (
-    <DialogContent className="rounded-lg border-none bg-transparent p-4 font-nunito md:max-w-[40rem] lg:max-w-[50rem]">
-      <div className="flex h-full w-full flex-col gap-4 rounded-lg border border-border bg-background p-6">
+    <DialogContent className="rounded-lg border-none bg-transparent p-4 font-nunito lg:max-w-[50rem]">
+      <div className="flex h-full w-full max-w-[calc(100vw-2rem)] flex-col gap-4 rounded-lg border border-border bg-background p-6">
         <DialogHeader>
           <DialogTitle>
             {type === "announce" && t("courses.overview.chat-title")}
@@ -29,8 +34,10 @@ function ChatDialog({
           </DialogDescription>
         </DialogHeader>
         <section>
-          {type === "announce" && <ChatForm />}
-          {type === "comment" && postId && <CommentForm postId={postId} />}
+          {type === "announce" && <ChatForm setIsOpen={setIsOpen!} />}
+          {type === "comment" && postId && (
+            <CommentForm setIsCommentOpen={setIsCommentOpen!} postId={postId} />
+          )}
         </section>
       </div>
     </DialogContent>

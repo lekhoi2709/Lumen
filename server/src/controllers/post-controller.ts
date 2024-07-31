@@ -15,8 +15,7 @@ export default {
         courseId,
         type: postData.type,
         text: postData.text,
-        images: postData.images,
-        videos: postData.videos,
+        files: postData.files,
       });
       await post.save();
       res.status(201).json({ message: "Post created" });
@@ -57,8 +56,6 @@ export default {
         {
           type: postData.type,
           text: postData.text,
-          images: postData.images,
-          videos: postData.videos,
           updatedAt: Date.now(),
         }
       );

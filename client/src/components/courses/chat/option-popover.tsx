@@ -4,7 +4,12 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { EllipsisVerticalIcon, PencilIcon, TrashIcon } from "lucide-react";
+import {
+  EllipsisVerticalIcon,
+  Loader2Icon,
+  PencilIcon,
+  TrashIcon,
+} from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import {
   Dialog,
@@ -18,21 +23,31 @@ import {
 import { useTranslation } from "react-i18next";
 import { useDeleteComment, useDeletePost } from "@/services/mutations/posts";
 import UpdateChatForm from "./update-chat-form";
+import { Dispatch, useState } from "react";
+import { TPost } from "@/types/post";
+import { useParams } from "react-router-dom";
+import { deleteFiles } from "@/services/api/posts-api";
+import { toast } from "@/components/ui/use-toast";
 
 function OptionPopover({
   type = "Post",
   isEditabel = true,
   className,
   postId,
+  postData,
   commentId,
 }: {
   type?: "Post" | "Comment";
   isEditabel?: boolean;
   className?: string;
   postId: string;
+  postData?: TPost;
   commentId?: string;
 }) {
   const { t } = useTranslation();
+  const [isOpen, setIsOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -43,7 +58,7 @@ function OptionPopover({
       <PopoverContent className="w-fit max-w-[12rem] p-2 px-4 text-sm">
         <div className="flex flex-col">
           {type === "Post" && isEditabel && (
-            <Dialog>
+            <Dialog open={isOpen} onOpenChange={setIsOpen}>
               <DialogTrigger asChild>
                 <Button
                   variant="ghost"
@@ -55,10 +70,10 @@ function OptionPopover({
                   </span>
                 </Button>
               </DialogTrigger>
-              <EditDialog postId={postId} />
+              <EditDialog setIsOpen={setIsOpen} postId={postId} />
             </Dialog>
           )}
-          <Dialog>
+          <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
             <DialogTrigger asChild>
               <Button
                 variant="ghost"
@@ -70,7 +85,12 @@ function OptionPopover({
                 </span>
               </Button>
             </DialogTrigger>
-            <DeleteDialog postId={postId} commentId={commentId} />
+            <DeleteDialog
+              onOpenChange={setIsDeleteOpen}
+              postId={postId}
+              postData={postData}
+              commentId={commentId}
+            />
           </Dialog>
         </div>
       </PopoverContent>
@@ -80,17 +100,44 @@ function OptionPopover({
 
 function DeleteDialog({
   postId,
+  onOpenChange,
+  postData,
   commentId,
 }: {
   postId: string;
+  onOpenChange: Dispatch<boolean>;
+  postData?: TPost;
   commentId?: string;
 }) {
   const { t } = useTranslation();
+  const { id } = useParams<{ id: string }>();
   const deletePost = useDeletePost();
   const deleteComment = useDeleteComment();
+  const [isDeleting, setIsDeleting] = useState(false);
 
-  const handlePostDelete = () => {
-    deletePost.mutate(postId);
+  const getModifiedFileNames = (post: TPost) => {
+    const fileNames = post.files?.map((file) => id + "/" + file.name);
+    return fileNames;
+  };
+
+  const handlePostDelete = async () => {
+    setIsDeleting(true);
+    const fileNames = getModifiedFileNames(postData!);
+    await deleteFiles(fileNames!)
+      .then((_res) => {
+        deletePost.mutate(postId);
+      })
+      .finally(() => {
+        setIsDeleting(false);
+        onOpenChange(false);
+      })
+      .catch((err) => {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: err.response.data.message,
+        });
+      });
   };
 
   const handleCommentDelete = () => {
@@ -117,23 +164,29 @@ function DeleteDialog({
               {t("courses.dialog.cancel")}
             </Button>
           </DialogClose>
-          <DialogClose asChild>
-            <Button
-              onClick={commentId ? handleCommentDelete : handlePostDelete}
-              variant="destructive"
-              className="w-full"
-            >
-              {t("courses.overview.delete-post")}
-            </Button>
-          </DialogClose>
+          <Button
+            onClick={commentId ? handleCommentDelete : handlePostDelete}
+            variant="destructive"
+            className="w-full"
+          >
+            {isDeleting && <Loader2Icon className="animate-spin" />}
+            {!isDeleting && t("courses.overview.delete-post")}
+          </Button>
         </div>
       </div>
     </DialogContent>
   );
 }
 
-function EditDialog({ postId }: { postId: string }) {
+function EditDialog({
+  postId,
+  setIsOpen,
+}: {
+  postId: string;
+  setIsOpen: Dispatch<boolean>;
+}) {
   const { t } = useTranslation();
+
   return (
     <DialogContent className="rounded-lg border-none bg-transparent p-4 font-nunito md:max-w-[40rem] lg:max-w-[50rem]">
       <div className="flex h-full w-full flex-col gap-4 rounded-lg border border-border bg-background p-6">
@@ -144,7 +197,7 @@ function EditDialog({ postId }: { postId: string }) {
           </DialogDescription>
         </DialogHeader>
         <section>
-          <UpdateChatForm postId={postId} />
+          <UpdateChatForm setIsOpen={setIsOpen} postId={postId} />
         </section>
       </div>
     </DialogContent>

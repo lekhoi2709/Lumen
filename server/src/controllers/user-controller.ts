@@ -27,33 +27,23 @@ export default {
         if (result) {
           const accessToken = jwt.sign(
             {
+              _id: user._id,
               email: user.email,
               role: user.role,
               avatarUrl: user.avatarUrl,
               firstName: user.firstName,
               lastName: user.lastName,
+              courses: user.courses,
             },
             process.env.JWT_SECRET || "",
             {
               expiresIn: "2h",
-            },
+            }
           );
           user.accessToken = accessToken;
           user.save();
 
           const refreshToken = generateRefreshToken(user.email);
-
-          (req.session as any).userData = {
-            user: {
-              email: user.email,
-              role: user.role,
-              avatarUrl: user.avatarUrl,
-              firstName: user.firstName,
-              lastName: user.lastName,
-            },
-            token: accessToken,
-            refreshToken: refreshToken,
-          };
 
           return res.status(200).json({
             message: "Login successful",
@@ -102,16 +92,18 @@ export default {
 
       const token = jwt.sign(
         {
+          _id: user._id,
           email: user.email,
           role: user.role,
           avatarUrl: user.avatarUrl,
           firstName: user.firstName,
           lastName: user.lastName,
+          courses: user.courses,
         },
         process.env.JWT_SECRET || "",
         {
           expiresIn: "2h",
-        },
+        }
       );
       user.accessToken = token;
       user.save();
@@ -124,6 +116,7 @@ export default {
           avatarUrl: user.avatarUrl,
           firstName: user.firstName,
           lastName: user.lastName,
+          courses: user.courses,
         },
         token,
       });

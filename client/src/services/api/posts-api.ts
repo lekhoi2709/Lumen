@@ -80,3 +80,39 @@ export const deleteComment = async (data: {
   );
   return response.data;
 };
+
+export const uploadFiles = async (data: {
+  courseId: string;
+  files: File[];
+}) => {
+  const formData = new FormData();
+  data.files.forEach((file) => {
+    formData.append("files", file);
+  });
+
+  const response = await axiosInstance.post(
+    `/uploads/upload-file/${data.courseId}`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    },
+  );
+
+  return response.data;
+};
+
+export const deleteFiles = async (fileNames: string[]) => {
+  const response = await axiosInstance.post(
+    "/uploads/files/delete",
+    fileNames,
+    {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    },
+  );
+  return response.data;
+};

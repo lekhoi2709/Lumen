@@ -4,6 +4,7 @@ enum PostType {
   Text,
   Image,
   Video,
+  Document,
   Mixed,
 }
 
@@ -30,16 +31,10 @@ const postSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
-  images: [
+  files: [
     {
       src: String,
-      alt: String,
-    },
-  ],
-  videos: [
-    {
-      src: String,
-      thumbnail: String,
+      name: String,
     },
   ],
   createdAt: {

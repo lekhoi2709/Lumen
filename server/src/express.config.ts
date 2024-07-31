@@ -3,7 +3,6 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import path from "path";
 import session from "express-session";
-import MongoStore from "connect-mongo";
 
 const ExpressConfig = (): Application => {
   const app = express();
@@ -26,10 +25,6 @@ const ExpressConfig = (): Application => {
         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
         sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       },
-      store: MongoStore.create({
-        mongoUrl: dbUrl,
-        autoRemove: "native",
-      }),
     })
   );
   app.use(

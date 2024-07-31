@@ -4,12 +4,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import FormLayout from "./chatform-layout";
 import { useCommentPost } from "@/services/mutations/posts";
 import { useAuth } from "@/contexts/auth-context";
+import { Dispatch } from "react";
 
 const formSchema = z.object({
   text: z.string().min(1),
 });
 
-function CommentForm({ postId }: { postId: string }) {
+function CommentForm({
+  postId,
+  setIsCommentOpen,
+}: {
+  postId: string;
+  setIsCommentOpen: Dispatch<boolean>;
+}) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -32,9 +39,10 @@ function CommentForm({ postId }: { postId: string }) {
       text: data.text,
     });
     form.reset();
+    setIsCommentOpen(false);
   };
 
-  return <FormLayout form={form} onSubmit={onSubmit} />;
+  return <FormLayout formType="comment" form={form} onSubmit={onSubmit} />;
 }
 
 export default CommentForm;

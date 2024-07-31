@@ -131,8 +131,9 @@ function ChatTrigger({
   user: User | null;
   t: TFunction<"translation">;
 }) {
+  const [isOpen, setIsOpen] = useState(false);
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger className="h-[4rem] w-full cursor-pointer truncate rounded-lg border border-border transition-shadow duration-300 ease-in-out hover:shadow-md dark:shadow-white/20">
         <div className="flex h-full w-full items-center gap-4 pl-4 md:gap-6 md:pl-6">
           <Avatar>
@@ -144,7 +145,7 @@ function ChatTrigger({
           </p>
         </div>
       </DialogTrigger>
-      <ChatDialog />
+      <ChatDialog setIsOpen={setIsOpen} />
     </Dialog>
   );
 }

@@ -7,11 +7,13 @@ const saveUser = async (payload: any) => {
 
   const accessToken = jwt.sign(
     {
+      _id: user?._id,
       email: email,
       role: user?.role || "Student",
       avatarUrl: picture,
       firstName: given_name,
       lastName: family_name,
+      courses: user?.courses,
     },
     process.env.JWT_SECRET || "",
     {
