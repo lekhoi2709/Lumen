@@ -17,6 +17,11 @@ router.delete(
   authenticateToken,
   courseController.deleteCourse
 );
+router.post(
+  "/c/:courseId/files/delete",
+  authenticateToken,
+  courseController.deleteAllFilesInCourse
+);
 
 // People
 router.get(

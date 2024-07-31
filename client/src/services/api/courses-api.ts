@@ -82,7 +82,6 @@ export const addPeopleToCourse = async (data: AddCoursePeopleType) => {
   return response.data;
 };
 
-
 export const updateCourse = async (course: Course) => {
   const response = await axiosInstance.put(
     `/courses/c/${course._id}/update`,
@@ -102,5 +101,18 @@ export const deleteCourse = async (id: string) => {
       Authorization: `Bearer ${sessionStorage.getItem("token")}`,
     },
   });
+  return response.data;
+};
+
+export const deleteAllFilesInCourse = async (courseId: string) => {
+  const response = await axiosInstance.post(
+    `/courses/c/${courseId}/files/delete`,
+    null,
+    {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    },
+  );
   return response.data;
 };

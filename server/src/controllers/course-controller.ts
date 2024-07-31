@@ -3,6 +3,7 @@ import Course from "../models/course";
 import User from "../models/user";
 import ShortUniqueId from "short-unique-id";
 import Post from "../models/post";
+import supabase from "../supabaseClient";
 
 function getRandomImageUrl() {
   const imageUrls = [
@@ -231,6 +232,34 @@ export default {
         return res.status(200).json({ message: "Course updated" });
       }
       return res.status(400).json({ message: "Course not found" });
+    } catch (error) {
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  },
+
+  deleteAllFilesInCourse: async (req: Request, res: Response) => {
+    try {
+      const { courseId } = req.params;
+      const { data: list, error } = await supabase.storage
+        .from("uploads")
+        .list(courseId);
+
+      if (error) {
+        return res.status(400).json({ message: "Failed to delete files" });
+      }
+
+      if (list) {
+        const filesToDelete = list.map((file) => courseId + "/" + file.name);
+        const { data, error } = await supabase.storage
+          .from("uploads")
+          .remove(filesToDelete);
+
+        if (error) {
+          return res.status(400).json({ message: "Failed to delete files" });
+        }
+
+        return res.status(200).json({ message: "Files deleted" });
+      }
     } catch (error) {
       res.status(500).json({ message: "Internal Server Error" });
     }
