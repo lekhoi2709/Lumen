@@ -21,11 +21,15 @@ const fileFilter = (
   file: Express.Multer.File,
   cb: multer.FileFilterCallback
 ) => {
-  if (allowedMimeTypes.includes(file.mimetype)) {
-    cb(null, true);
-  } else {
+  if (!allowedMimeTypes.includes(file.mimetype)) {
     cb(new Error("Invalid file type"));
   }
+
+  if (file.size > 5 * 1024 * 1024) {
+    cb(new Error("File size exceeds 5MB"));
+  }
+
+  cb(null, true);
 };
 
 const upload = multer({

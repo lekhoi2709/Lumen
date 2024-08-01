@@ -9,6 +9,7 @@ import FormLayout from "./chatform-layout";
 import { Dispatch, useState } from "react";
 import { uploadFiles } from "@/services/api/posts-api";
 import { isDocumentFile, isImageFile, isVideoFile } from "@/lib/utils";
+import { toast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
   text: z.string().min(1),
@@ -35,45 +36,54 @@ function ChatForm({ setIsOpen }: { setIsOpen: Dispatch<boolean> }) {
   const createPostMutation = useCreatePost();
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    let type = PostType.Mixed;
-    if (files && files.length > 0) {
-      const response = await uploadFiles({ courseId: id!, files });
-      if (response.urls && response.urls.length > 0) {
-        const fileNames = response.urls.map((url: string) => {
-          const name = url.split("/").pop();
-          return { name, src: url };
-        });
+    try {
+      let type = PostType.Mixed;
+      if (files && files.length > 0) {
+        const response = await uploadFiles({ courseId: id!, files });
+        if (response.urls && response.urls.length > 0) {
+          const fileNames = response.urls.map((url: string) => {
+            const name = url.split("/").pop();
+            return { name, src: url };
+          });
 
-        const images: { name: string; src: string }[] = fileNames.filter(
-          (file: { name: string; src: string }) => isImageFile(file.name),
-        );
-        const videos: { name: string; src: string }[] = fileNames.filter(
-          (file: { name: string; src: string }) => isVideoFile(file.name),
-        );
+          const images: { name: string; src: string }[] = fileNames.filter(
+            (file: { name: string; src: string }) => isImageFile(file.name),
+          );
+          const videos: { name: string; src: string }[] = fileNames.filter(
+            (file: { name: string; src: string }) => isVideoFile(file.name),
+          );
 
-        const documents: { name: string; src: string }[] = fileNames.filter(
-          (file: { name: string; src: string }) => isDocumentFile(file.name),
-        );
+          const documents: { name: string; src: string }[] = fileNames.filter(
+            (file: { name: string; src: string }) => isDocumentFile(file.name),
+          );
 
-        data.files.push(...images, ...videos, ...documents);
+          data.files.push(...images, ...videos, ...documents);
+        }
       }
-    }
 
-    createPostMutation.mutate({
-      courseId: id!,
-      postData: {
-        ...data,
-        type,
-        user: {
-          email: user?.email!,
-          firstName: user?.firstName!,
-          lastName: user?.lastName!,
-          avatarUrl: user?.avatarUrl!,
+      createPostMutation.mutate({
+        courseId: id!,
+        postData: {
+          ...data,
+          type,
+          user: {
+            email: user?.email!,
+            firstName: user?.firstName!,
+            lastName: user?.lastName!,
+            avatarUrl: user?.avatarUrl!,
+          },
         },
-      },
-    });
+      });
 
-    setIsOpen(false);
+      setIsOpen(false);
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.response.data.message,
+      });
+      console.error(error);
+    }
   }
 
   return (

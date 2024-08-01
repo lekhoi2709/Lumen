@@ -2,6 +2,7 @@ import mime from "mime-types";
 import { Request, Response } from "express";
 import supabase from "../supabaseClient";
 import ShortUniqueId from "short-unique-id";
+import upload from "../config/multer-config";
 
 interface UserType {
   _id: string;
@@ -16,53 +17,63 @@ const handleErrorResponse = (res: Response, error: Error, statusCode = 500) => {
   res.status(statusCode).json({ message: error.message });
 };
 
+const uploadCallback = upload.array("files", 10);
+
 export default {
   uploadFiles: async (req: Request, res: Response) => {
-    try {
-      if (!req.user || typeof req.user === "string") {
-        return res
-          .status(403)
-          .json({ message: "User information is missing or invalid" });
+    uploadCallback(req, res, async (err: any) => {
+      if (err) {
+        return res.status(400).json({ message: err.message });
       }
 
-      const user = req.user as UserType;
-      if (!checkUserRole(user)) {
-        return res.status(403).json({ message: "Access denied" });
-      }
-
-      const { courseId } = req.params;
-      const files = req.files as Express.Multer.File[];
-      if (!files || files.length === 0) {
-        return res.status(400).json({ message: "No files uploaded" });
-      }
-      const urls = [];
-
-      for (const file of files) {
-        const mimeType = mime.lookup(file.originalname);
-        if (!mimeType) {
-          return res.status(400).json({ message: "Invalid file type" });
+      try {
+        if (!req.user || typeof req.user === "string") {
+          return res
+            .status(403)
+            .json({ message: "User information is missing or invalid" });
         }
-        const { randomUUID } = new ShortUniqueId();
-        const sanitizedFileName = file.originalname.replace(
-          /[^a-zA-Z0-9.]/g,
-          "_"
-        );
-        const filePath = `${courseId}/${randomUUID()}-${sanitizedFileName}`;
-        const { data, error } = await supabase.storage
-          .from("uploads")
-          .upload(filePath, file.buffer, { contentType: mimeType.toString() });
-        if (error) return handleErrorResponse(res, error);
 
-        const publicUrlResponse = supabase.storage
-          .from("uploads")
-          .getPublicUrl(data.path);
-        urls.push(publicUrlResponse.data.publicUrl);
+        const user = req.user as UserType;
+        if (!checkUserRole(user)) {
+          return res.status(403).json({ message: "Access denied" });
+        }
+
+        const { courseId } = req.params;
+        const files = req.files as Express.Multer.File[];
+        if (!files || files.length === 0) {
+          return res.status(400).json({ message: "No files uploaded" });
+        }
+        const urls = [];
+
+        for (const file of files) {
+          const mimeType = mime.lookup(file.originalname);
+          if (!mimeType) {
+            return res.status(400).json({ message: "Invalid file type" });
+          }
+          const { randomUUID } = new ShortUniqueId();
+          const sanitizedFileName = file.originalname.replace(
+            /[^a-zA-Z0-9.]/g,
+            "_"
+          );
+          const filePath = `${courseId}/${randomUUID()}-${sanitizedFileName}`;
+          const { data, error } = await supabase.storage
+            .from("uploads")
+            .upload(filePath, file.buffer, {
+              contentType: mimeType.toString(),
+            });
+          if (error) return handleErrorResponse(res, error);
+
+          const publicUrlResponse = supabase.storage
+            .from("uploads")
+            .getPublicUrl(data.path);
+          urls.push(publicUrlResponse.data.publicUrl);
+        }
+
+        res.status(200).json({ urls });
+      } catch (error) {
+        handleErrorResponse(res, error as Error);
       }
-
-      res.status(200).json({ urls });
-    } catch (error) {
-      handleErrorResponse(res, error as Error);
-    }
+    });
   },
 
   deleteFiles: async (req: Request, res: Response) => {
