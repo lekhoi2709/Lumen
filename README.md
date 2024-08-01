@@ -1,7 +1,17 @@
-# React + Typescript
+# Lumen: A Learning Management System
+## Overview
+Lumen is a web-based Learning Management System (LMS) built with React, TypeScript, ExpressJS, MongoDB, and Supabase. It provides a platform for educators to create and manage courses, and for students to access and complete course materials.
 
-This template should help get you started developing with React and Typescript in Vite.
-
-## Recommended IDE Setup
-
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+## Features
+- Course Management: Create, edit, and manage courses with multiple sections and modules.
+- Content Creation: Upload various types of content (text, images, videos, documents) and organize them into lessons.
+- Student Enrollment: Manage student enrollment and track progress.
+- Assignments and Quizzes: Create assignments and quizzes with different question types.
+- Gradebook: Track student performance and generate reports.
+- Communication: Facilitates communication between instructors and students through announcements and messaging.
+  
+## Technologies Used
+- Frontend: React, TypeScript, TailwindCSS, Shadcn/UI
+- Backend: ExpressJS
+- Database: MongoDB
+- File Storage: Supabase
