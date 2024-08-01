@@ -6,7 +6,7 @@ Lumen is a web-based Learning Management System (LMS) built with React, TypeScri
 - Course Management: Create, edit, and manage courses with multiple sections and modules.
 - Content Creation: Upload various types of content (text, images, videos, documents) and organize them into lessons.
 - Student Enrollment: Manage student enrollment and track progress.
-- Assignments and Quizzes: Create assignments and quizzes with different question types.
+- Assignments: Create assignments with different question types.
 - Gradebook: Track student performance and generate reports.
 - Communication: Facilitates communication between instructors and students through announcements and messaging.
   
