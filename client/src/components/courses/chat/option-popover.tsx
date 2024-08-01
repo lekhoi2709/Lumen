@@ -123,21 +123,27 @@ function DeleteDialog({
   const handlePostDelete = async () => {
     setIsDeleting(true);
     const fileNames = getModifiedFileNames(postData!);
-    await deleteFiles(fileNames!)
-      .then((_res) => {
-        deletePost.mutate(postId);
-      })
-      .finally(() => {
-        setIsDeleting(false);
-        onOpenChange(false);
-      })
-      .catch((err) => {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: err.response.data.message,
+    if (postData?.files && postData.files.length > 0) {
+      await deleteFiles(fileNames!)
+        .then((_res) => {
+          deletePost.mutate(postId);
+        })
+        .finally(() => {
+          setIsDeleting(false);
+          onOpenChange(false);
+        })
+        .catch((err) => {
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: err.response.data.message,
+          });
         });
-      });
+    } else {
+      deletePost.mutate(postId);
+      setIsDeleting(false);
+      onOpenChange(false);
+    }
   };
 
   const handleCommentDelete = () => {
