@@ -226,7 +226,7 @@ export default {
       const course = req.body;
       const updatedCourse = await Course.findOneAndUpdate(
         { _id: { $eq: id } },
-        course,
+        course as typeof Course,
         {
           new: true,
         }
