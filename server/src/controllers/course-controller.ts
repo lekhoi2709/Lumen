@@ -223,10 +223,17 @@ export default {
   updateCourse: async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
-      const course = req.body;
+      const { title, description } = req.body;
+      if (typeof title !== "string" || typeof description !== "string") {
+        return res.status(400).json({ message: "Invalid input" });
+      }
+
       const updatedCourse = await Course.findOneAndUpdate(
         { _id: { $eq: id } },
-        course as typeof Course,
+        {
+          title: title,
+          description: description,
+        },
         {
           new: true,
         }
