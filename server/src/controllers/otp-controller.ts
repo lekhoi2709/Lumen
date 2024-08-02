@@ -9,7 +9,7 @@ export default {
     try {
       const { email } = req.body;
 
-      const checkUserExisted = await User.findOne({ email });
+      const checkUserExisted = await User.findOne({ email: { $eq: email } });
 
       if (!checkUserExisted) {
         return res.status(404).json({ message: "User not found" });
@@ -45,7 +45,7 @@ export default {
     try {
       const { email, otp } = req.body;
 
-      const checkOTP = await OTP.find({ email: email })
+      const checkOTP = await OTP.find({ email: { $eq: email } })
         .sort({ createAt: -1 })
         .limit(1);
 

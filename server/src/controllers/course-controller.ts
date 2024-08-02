@@ -59,7 +59,7 @@ export default {
         createdUserEmail: instructor.email,
       });
       await course.save().then(async (data) => {
-        const user = await User.findOne({ email: instructor.email });
+        const user = await User.findOne({ email: { $eq: instructor.email } });
         if (user) {
           user.courses.push({ code: data._id, role: "Teacher" });
           await user.save();
@@ -83,7 +83,7 @@ export default {
 
         if (course) {
           const user = await User.findOneAndUpdate(
-            { email, "courses.code": { $ne: id } },
+            { email: { $eq: email }, "courses.code": { $ne: id } },
             {
               $push: { courses: { code: id, role: "Student" } },
             }
@@ -224,9 +224,13 @@ export default {
     try {
       const { id } = req.params;
       const course = req.body;
-      const updatedCourse = await Course.findOneAndUpdate({ _id: id }, course, {
-        new: true,
-      });
+      const updatedCourse = await Course.findOneAndUpdate(
+        { _id: { $eq: id } },
+        course,
+        {
+          new: true,
+        }
+      );
 
       if (updatedCourse) {
         return res.status(200).json({ message: "Course updated" });

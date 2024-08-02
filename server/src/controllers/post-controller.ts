@@ -52,7 +52,7 @@ export default {
       const { postId } = req.params;
       const { postData } = req.body;
       await Post.updateOne(
-        { _id: postId },
+        { _id: { $eq: postId } },
         {
           type: postData.type,
           text: postData.text,
