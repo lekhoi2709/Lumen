@@ -6,15 +6,21 @@ import ApiRoute from "./routes/api";
 if (process.env.NODE_ENV != "production") {
   dotenv.config();
 }
+import { rateLimit } from "express-rate-limit";
 
 const port = process.env.PORT || 5000;
 var dbUrl: string = process.env.DB_URL!;
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  limit: 100, // limit each IP to 100 requests per windowMs
+});
 
 async function main() {
   try {
     const dbConnection = MongooseConnection.getInstance();
     dbConnection.connect(dbUrl).then(() => {
       const app = ExpressConfig();
+      app.use(limiter);
       app.use("/api", ApiRoute);
 
       app.get("/", (req: Request, res: Response) => {

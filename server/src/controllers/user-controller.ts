@@ -9,7 +9,7 @@ export default {
     const { email, password } = req.body;
 
     try {
-      const user = await User.findOne({ email }).exec();
+      const user = await User.findOne({ email: { $eq: email } }).exec();
 
       if (!user) {
         return res.status(404).json({
@@ -180,7 +180,7 @@ export default {
     const { email, newPassword } = req.body;
 
     try {
-      const user = await User.findOne({ email });
+      const user = await User.findOne({ email: { $eq: email } });
 
       if (!user) {
         return res.status(404).json({

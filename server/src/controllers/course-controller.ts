@@ -59,7 +59,7 @@ export default {
         createdUserEmail: instructor.email,
       });
       await course.save().then(async (data) => {
-        const user = await User.findOne({ email: instructor.email });
+        const user = await User.findOne({ email: { $eq: instructor.email } });
         if (user) {
           user.courses.push({ code: data._id, role: "Teacher" });
           await user.save();
@@ -83,7 +83,7 @@ export default {
 
         if (course) {
           const user = await User.findOneAndUpdate(
-            { email, "courses.code": { $ne: id } },
+            { email: { $eq: email }, "courses.code": { $ne: id } },
             {
               $push: { courses: { code: id, role: "Student" } },
             }
@@ -223,10 +223,21 @@ export default {
   updateCourse: async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
-      const course = req.body;
-      const updatedCourse = await Course.findOneAndUpdate({ _id: id }, course, {
-        new: true,
-      });
+      const { title, description } = req.body;
+      if (typeof title !== "string" || typeof description !== "string") {
+        return res.status(400).json({ message: "Invalid input" });
+      }
+
+      const updatedCourse = await Course.findOneAndUpdate(
+        { _id: { $eq: id } },
+        {
+          title: title,
+          description: description,
+        },
+        {
+          new: true,
+        }
+      );
 
       if (updatedCourse) {
         return res.status(200).json({ message: "Course updated" });
