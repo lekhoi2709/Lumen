@@ -3,7 +3,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import path from "path";
 import session from "express-session";
-import MongoStore from "connect-mongo";
+import lusca from "lusca";
 
 const ExpressConfig = (): Application => {
   const app = express();
@@ -45,6 +45,14 @@ const ExpressConfig = (): Application => {
         "Access-Control-Request-Headers",
       ],
       exposedHeaders: ["Content-Type"],
+    })
+  );
+  app.use(
+    lusca({
+      xframe: "SAMEORIGIN",
+      xssProtection: true,
+      nosniff: true,
+      referrerPolicy: "same-origin",
     })
   );
 
