@@ -37,7 +37,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { useCourse } from "@/services/queries/courses";
 import { CourseCode } from "./overview";
-import { useDeleteCourse, useUpdateCourse } from "@/services/mutations/courses";
+import {
+  useDeleteCourse,
+  useLeaveCourse,
+  useUpdateCourse,
+} from "@/services/mutations/courses";
 import { useAuth } from "@/contexts/auth-context";
 import { deleteAllFilesInCourse } from "@/services/api/courses-api";
 import { useState } from "react";
@@ -89,6 +93,7 @@ function UpdateCoursesForm() {
   const courseQuery = useCourse(id!);
   const updateCourseMutation = useUpdateCourse();
   const deleteCourseMutation = useDeleteCourse();
+  const leaveCourseMutation = useLeaveCourse();
   const navigate = useNavigate();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -116,11 +121,28 @@ function UpdateCoursesForm() {
 
   async function onDelete() {
     setIsDeleting(true);
-    await deleteAllFilesInCourse(courseQuery.data?._id!);
-    deleteCourseMutation.mutate(courseQuery.data?._id!);
+    await deleteAllFilesInCourse(courseQuery.data?._id!)
+      .then(() => {})
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        deleteCourseMutation.mutate(courseQuery.data?._id!);
+        localStorage.setItem("history", "/courses");
+        setIsDeleting(false);
+        setIsDeleteDialogOpen(false);
+        localStorage.setItem("history", "/courses");
+        navigate("/courses");
+      });
+  }
+
+  async function onLeave() {
+    setIsDeleting(true);
+    leaveCourseMutation.mutate(courseQuery.data?._id!);
     localStorage.setItem("history", "/courses");
     setIsDeleting(false);
     setIsDeleteDialogOpen(false);
+    localStorage.setItem("history", "/courses");
     navigate("/courses");
   }
 
@@ -225,6 +247,45 @@ function UpdateCoursesForm() {
                   >
                     {isDeleting && <Loader2Icon className="animate-spin" />}
                     {!isDeleting && t("courses.overview.course-setting.delete")}
+                  </Button>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </section>
+        )}
+        {user?.email !== courseQuery.data?.createdUserEmail && (
+          <section className="flex w-full flex-col gap-6 self-center rounded-md border border-border p-6 px-8 md:max-w-[50%]">
+            <h1>{t("courses.overview.course-setting.leave")}</h1>
+            <AlertDialog
+              open={isDeleteDialogOpen}
+              onOpenChange={setIsDeleteDialogOpen}
+            >
+              <AlertDialogTrigger asChild>
+                <Button type="button" variant="destructive" className="w-fit">
+                  {t("courses.overview.course-setting.leave-btn")}
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    {t("courses.overview.course-setting.leave-confirm")}
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    {t("courses.overview.course-setting.leave-description")}
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>
+                    {t("courses.overview.course-setting.leave-cancel")}
+                  </AlertDialogCancel>
+                  <Button
+                    variant="destructive"
+                    type="button"
+                    onClick={onLeave}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    {isDeleting && <Loader2Icon className="animate-spin" />}
+                    {!isDeleting && t("courses.overview.course-setting.leave")}
                   </Button>
                 </AlertDialogFooter>
               </AlertDialogContent>

@@ -10,7 +10,7 @@ import NavDrawer from "./nav-drawer";
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 import CustomNavLink from "./nav-link";
 import { User } from "@/types/user";
-import UpdateCourseDialog from "../courses/detail/update-course-dialog";
+import UpdateCourseDialog from "../courses/detail/course-setting";
 import { useLocation } from "react-router-dom";
 
 function Navbar({ className }: { className?: string }) {
