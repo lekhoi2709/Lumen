@@ -111,7 +111,12 @@
         "delete-confirm": "Bạn có chắc chắn muốn xóa khóa học này?",
         "delete-description": "Hành động này sẽ không thể hoàn tác. Tất cả dữ liệu liên quan đến khóa học sẽ bị xóa khỏi máy chủ của chúng tôi.",
         "delete-cancel": "Hủy",
-        "delete-btn": "Xóa"
+        "delete-btn": "Xóa",
+        "leave": "Rời khóa học",
+        "leave-confirm": "Bạn có chắc chắn muốn rời khóa học này?",
+        "leave-description": "Bạn sẽ không thể truy cập vào khóa học này nữa. Tuy nhiên bạn vẫn có thể tham gia lại bất cứ lúc nào.",
+        "leave-cancel": "Hủy",
+        "leave-btn": "Rời"
       }
     },
     "people": {
