@@ -12,6 +12,7 @@ router.get("/c/:id", authenticateToken, courseController.getCourse);
 router.post("/", authenticateToken, courseController.createCourse);
 router.put("/join/:id", authenticateToken, courseController.joinCourse);
 router.put("/c/:id/update", authenticateToken, courseController.updateCourse);
+router.put("/c/:id/leave", authenticateToken, courseController.leaveCourse);
 router.delete(
   "/c/:id/delete",
   authenticateToken,

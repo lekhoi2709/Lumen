@@ -201,9 +201,15 @@ export default {
   deleteCourse: async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
+      const user = req.user;
       const course = await Course.findOneAndDelete({ _id: id });
+      const isCourseOwner = course?.createdUserEmail === user?.email;
 
-      if (course && course.createdUserEmail === req.user?.email) {
+      if (
+        isCourseOwner &&
+        course &&
+        course.createdUserEmail === req.user?.email
+      ) {
         await User.updateMany(
           { "courses.code": id },
           {
@@ -213,6 +219,31 @@ export default {
         await Post.deleteMany({ courseId: id });
 
         return res.status(200).json({ message: "Course deleted" });
+      }
+      return res.status(400).json({ message: "Course not found" });
+    } catch (error) {
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  },
+
+  leaveCourse: async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const user =
+        req.user &&
+        (await User.findOneAndUpdate(
+          {
+            email: { $eq: req.user.email },
+            "courses.code": { $eq: id },
+            "courses.role": "Student",
+          },
+          {
+            $pull: { courses: { code: id } },
+          }
+        ));
+
+      if (user) {
+        return res.status(200).json({ message: "Course left" });
       }
       return res.status(400).json({ message: "Course not found" });
     } catch (error) {

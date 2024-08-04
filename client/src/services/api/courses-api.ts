@@ -95,6 +95,15 @@ export const updateCourse = async (course: Course) => {
   return response.data;
 };
 
+export const leaveCourse = async (id: string) => {
+  const response = await axiosInstance.put(`/courses/c/${id}/leave`, null, {
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+    },
+  });
+  return response.data;
+};
+
 export const deleteCourse = async (id: string) => {
   const response = await axiosInstance.delete(`/courses/c/${id}/delete`, {
     headers: {
