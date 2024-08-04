@@ -111,7 +111,12 @@
         "delete-confirm": "Are you sure you want to delete this course?",
         "delete-description": "This action cannot be undone. This will permanently remove your course data from our server.",
         "delete-cancel": "Cancel",
-        "delete-btn": "Delete"
+        "delete-btn": "Delete",
+        "leave": "Leave Course",
+        "leave-confirm": "Are you sure you want to leave this course?",
+        "leave-description": "You will no longer have access to this course. You can rejoin the course if you have the course code.",
+        "leave-cancel": "Cancel",
+        "leave-btn": "Leave"
       }
     },
     "people": {

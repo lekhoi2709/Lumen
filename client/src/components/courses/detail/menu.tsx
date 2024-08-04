@@ -4,7 +4,7 @@ import { twMerge } from "tailwind-merge";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import UpdateCourseDialog from "./update-course-dialog";
+import UpdateCourseDialog from "./course-setting";
 
 function CourseMenu() {
   const { t } = useTranslation();

@@ -6,6 +6,7 @@ import {
   deleteCourse,
   joinCourse,
   updateCourse,
+  leaveCourse,
 } from "../api/courses-api";
 import { toast } from "@/components/ui/use-toast";
 
@@ -136,6 +137,33 @@ export function useDeleteCourse() {
       toast({
         title: "Success",
         description: "Course deleted",
+      });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["courses"] });
+    },
+  });
+}
+
+export function useLeaveCourse() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (courseId: string) => leaveCourse(courseId),
+    onMutate: () => {
+      console.log("mutate");
+    },
+    onError: (error: any) => {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.response.data.message,
+      });
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success",
+        description: "Course left",
       });
     },
     onSettled: () => {
