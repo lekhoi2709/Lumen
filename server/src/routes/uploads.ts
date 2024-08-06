@@ -10,6 +10,10 @@ router.post(
   uploadController.uploadFiles
 );
 
-router.post("/files/delete", authenticateToken, uploadController.deleteFiles);
+router.post(
+  "/:courseId/files/delete",
+  authenticateToken,
+  uploadController.deleteFiles
+);
 
 export default router;

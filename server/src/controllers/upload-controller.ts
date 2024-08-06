@@ -11,8 +11,13 @@ interface UserType {
   courses: { code: string; role: string }[];
 }
 
-const checkUserRole = (user: UserType) =>
-  user.role === "Teacher" || user.role === "Admin";
+const checkUserRole = (user: UserType, courseId: string) => {
+  const isAdmin = user.role === "Admin";
+  const roleInCourse = user.courses.find((c) => c.code === courseId)?.role;
+  const isInstructor =
+    roleInCourse === "Teacher" || roleInCourse === "Assistant";
+  return isAdmin || isInstructor;
+};
 
 const handleErrorResponse = (res: Response, error: Error, statusCode = 500) => {
   res.status(statusCode).json({ message: error.message });
@@ -35,18 +40,8 @@ export default {
         }
 
         const user = req.user as UserType;
-        if (!checkUserRole(user)) {
-          return res.status(403).json({ message: "Access denied" });
-        }
-
         const { courseId } = req.params;
-        const roleInCourse = user.courses.find(
-          (c) => c.code === courseId
-        )?.role;
-        const isInstructor =
-          roleInCourse === "Teacher" || roleInCourse === "Assistant";
-
-        if (!isInstructor) {
+        if (!checkUserRole(user, courseId)) {
           return res.status(403).json({ message: "Access denied" });
         }
 
@@ -96,7 +91,8 @@ export default {
       }
 
       const user = req.user as UserType;
-      if (!checkUserRole(user)) {
+      const { courseId } = req.params;
+      if (!checkUserRole(user, courseId)) {
         return res.status(403).json({ message: "Access denied" });
       }
 
