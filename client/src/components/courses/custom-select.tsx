@@ -7,6 +7,7 @@ import { Loader2Icon } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
 import { DebouncedState } from "usehooks-ts";
 import { SearchedUserData } from "@/types/user";
+import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 
 type CustomSelectProps = {
   placeholder: string;
@@ -115,11 +116,14 @@ function OptionDisplay(props: OptionDisplayProps) {
             className="flex cursor-pointer items-center gap-4 rounded-sm p-2 transition-all duration-200 ease-linear hover:bg-muted"
             onClick={() => props.handleChangeOptions(user as SearchedUserData)}
           >
-            <img
-              src={user.avatarUrl}
-              alt={user.email}
-              className="h-8 w-8 rounded-full"
-            />
+            <Avatar>
+              <AvatarImage
+                src={user.avatarUrl}
+                alt={user.email}
+                className="h-8 w-8 rounded-full border border-border"
+              />
+              <AvatarFallback>{user.email.at(0)?.toUpperCase()}</AvatarFallback>
+            </Avatar>
             <span className="truncate">{user.email}</span>
           </li>
         ))}
