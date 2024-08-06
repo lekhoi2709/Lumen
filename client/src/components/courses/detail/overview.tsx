@@ -138,7 +138,7 @@ function ChatTrigger({
         <div className="flex h-full w-full items-center gap-4 pl-4 md:gap-6 md:pl-6">
           <Avatar>
             <AvatarImage src={user?.avatarUrl} alt={user?.email} />
-            <AvatarFallback>{user?.email}</AvatarFallback>
+            <AvatarFallback>{user?.firstName.at(0)}</AvatarFallback>
           </Avatar>
           <p className="truncate text-sm text-muted-foreground">
             {t("courses.overview.chat-placeholder")}

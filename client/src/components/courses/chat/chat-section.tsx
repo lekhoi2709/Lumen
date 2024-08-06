@@ -96,7 +96,7 @@ function ChatSection({ course }: { course: Course }) {
                   src={post.user?.avatarUrl}
                   alt={post.user?.email}
                 />
-                <AvatarFallback>{post.user?.firstName}</AvatarFallback>
+                <AvatarFallback>{post.user?.firstName.at(0)}</AvatarFallback>
               </Avatar>
               <div className="flex flex-col truncate">
                 <p className="truncate font-bold">
@@ -196,7 +196,7 @@ function CommentTrigger({ postId }: { postId: string }) {
       <DialogTrigger className="flex h-8 w-full items-center gap-4">
         <Avatar className="h-8 w-8">
           <AvatarImage src={user?.avatarUrl} alt={user?.email} />
-          <AvatarFallback>{user?.firstName}</AvatarFallback>
+          <AvatarFallback>{user?.firstName.at(0)}</AvatarFallback>
         </Avatar>
         <div className="h-fit w-full cursor-pointer truncate rounded-lg border border-border p-2 px-4 text-left md:px-6">
           <p className="truncate text-sm text-muted-foreground">
@@ -245,7 +245,7 @@ function CommentSection({
                 src={comment.user?.avatarUrl}
                 alt={comment.user?.email}
               />
-              <AvatarFallback>{comment.user?.firstName}</AvatarFallback>
+              <AvatarFallback>{comment.user?.firstName.at(0)}</AvatarFallback>
             </Avatar>
             <div className="flex w-full flex-col gap-2">
               <p className="text-sm font-bold">
@@ -308,7 +308,9 @@ function CommentSection({
                     src={comment.user?.avatarUrl}
                     alt={comment.user?.email}
                   />
-                  <AvatarFallback>{comment.user?.firstName}</AvatarFallback>
+                  <AvatarFallback>
+                    {comment.user?.firstName.at(0)}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="flex w-full flex-col gap-2">
                   <p className="text-sm font-bold">
@@ -347,7 +349,9 @@ function CommentSection({
                     src={comment.user?.avatarUrl}
                     alt={comment.user?.email}
                   />
-                  <AvatarFallback>{comment.user?.firstName}</AvatarFallback>
+                  <AvatarFallback>
+                    {comment.user?.firstName.at(0)}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="flex w-full flex-col gap-2">
                   <p className="text-sm font-bold">
