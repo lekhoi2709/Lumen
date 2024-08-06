@@ -53,8 +53,6 @@ function PeopleList({
     });
   }, [people, user]);
 
-  console.log(checked);
-
   return (
     <div className="px-2 md:p-0">
       {isTeacher && sortedPeople && sortedPeople.length > 1 && (
