@@ -36,6 +36,11 @@ router.get(
   userController.getSearchedUser
 );
 router.put("/c/:id/people/add", authenticateToken, courseController.addPeople);
+router.put(
+  "/c/:id/people/remove",
+  authenticateToken,
+  courseController.removePeople
+);
 
 // Posts
 router.get("/c/:id/post", authenticateToken, postController.getPosts);
