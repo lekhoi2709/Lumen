@@ -50,6 +50,12 @@ export default {
       const { title, description, instructor } = req.body;
       const { randomUUID } = new ShortUniqueId();
       const imageUrl = getRandomImageUrl();
+      const isTeacher = req.user?.role === "Teacher";
+      const isAdmin = req.user?.role === "Admin";
+
+      if (!isTeacher && !isAdmin) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
 
       const course = new Course({
         _id: randomUUID(),
@@ -140,7 +146,14 @@ export default {
     try {
       const { id } = req.params;
       const { users, type } = req.body;
+      const isAdmin = req.user?.role === "Admin";
+      const isTeacher =
+        req.user?.courses?.find((c) => c.code === id)?.role === "Teacher";
       const emails = users.map((user: any) => user.email);
+
+      if (!isTeacher && !isAdmin) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
 
       const checkExist = await User.find({
         email: { $in: emails },
@@ -184,6 +197,13 @@ export default {
     try {
       const { id } = req.params;
       const { emails } = req.body;
+      const isAdmin = req.user?.role === "Admin";
+      const isTeacher =
+        req.user?.courses?.find((c) => c.code === id)?.role === "Teacher";
+
+      if (!isTeacher && !isAdmin) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
 
       const updateUsers = await User.updateMany(
         { email: { $in: emails }, "courses.code": id },
@@ -208,6 +228,11 @@ export default {
       const user = req.user;
       const course = await Course.findOneAndDelete({ _id: id });
       const isCourseOwner = course?.createdUserEmail === user?.email;
+      const isAdmin = user?.role === "Admin";
+
+      if (!isCourseOwner && !isAdmin) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
 
       if (
         isCourseOwner &&
