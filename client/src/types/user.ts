@@ -7,7 +7,7 @@ export type User = {
   lastName: string;
   courses?: {
     code: string;
-    role: string;
+    role: "Student" | "Teacher" | "Assistant";
   }[];
 };
 

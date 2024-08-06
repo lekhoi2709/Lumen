@@ -107,7 +107,9 @@ export default {
     try {
       const { id } = req.params;
       const instructors = await User.find({
-        courses: { $elemMatch: { code: id, role: "Teacher" } },
+        courses: {
+          $elemMatch: { code: id, role: { $in: ["Teacher", "Assistant"] } },
+        },
       }).select("email firstName lastName avatarUrl");
 
       const students = await User.find({
@@ -155,7 +157,10 @@ export default {
         { email: { $in: emails }, "courses.code": { $ne: id } },
         {
           $push: {
-            courses: { code: id, role: type === "stu" ? "Student" : "Teacher" },
+            courses: {
+              code: id,
+              role: type === "stu" ? "Student" : "Assistant",
+            },
           },
         }
       );
@@ -178,8 +183,7 @@ export default {
   removePeople: async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
-      const { users } = req.body;
-      const emails = users.map((user: any) => user.email);
+      const { emails } = req.body;
 
       const updateUsers = await User.updateMany(
         { email: { $in: emails }, "courses.code": id },
