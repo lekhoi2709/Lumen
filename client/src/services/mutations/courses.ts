@@ -7,6 +7,7 @@ import {
   joinCourse,
   updateCourse,
   leaveCourse,
+  removePeopleFromCourse,
 } from "../api/courses-api";
 import { toast } from "@/components/ui/use-toast";
 
@@ -168,6 +169,36 @@ export function useLeaveCourse() {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["courses"] });
+    },
+  });
+}
+
+export function useRemovePeopleFromCourse() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: { id: string; emails: string[] }) =>
+      removePeopleFromCourse(data),
+    onMutate: () => {
+      console.log("mutate");
+    },
+    onError: (error: any) => {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.response.data.message,
+      });
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success",
+        description: "People removed from course",
+      });
+    },
+    onSettled: (_data, _error, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["course-people", variables.id],
+      });
     },
   });
 }

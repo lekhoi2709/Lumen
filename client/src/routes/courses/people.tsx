@@ -24,18 +24,28 @@ function CoursePeople() {
       <section className="flex w-full max-w-[50rem] flex-col gap-8 md:gap-16">
         <div className="flex w-full flex-col gap-2 p-2 md:gap-4">
           <div className="flex items-center justify-between">
-            <h1 className="pl-2 text-xl font-bold md:p-0 md:text-2xl">
-              {t("courses.people.instructors")}
-            </h1>
+            <span className="flex items-center gap-4">
+              <h1 className="pl-2 text-xl font-bold md:p-0 md:text-2xl">
+                {t("courses.people.instructors")}
+              </h1>
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-muted-foreground pt-[2px] text-sm text-background">
+                {data?.instructors.length}
+              </span>
+            </span>
             <AddPeopleDialog type="ins" />
           </div>
-          <PeopleList people={data?.instructors} />
+          <PeopleList isInstructorSection={true} people={data?.instructors} />
         </div>
         <div className="flex w-full flex-col gap-2 p-2 md:gap-4">
           <div className="flex items-center justify-between">
-            <h1 className="pl-2 text-xl font-bold md:p-0 md:text-2xl">
-              {t("courses.people.students")}
-            </h1>
+            <span className="flex items-center gap-4">
+              <h1 className="pl-2 text-xl font-bold md:p-0 md:text-2xl">
+                {t("courses.people.students")}
+              </h1>
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-muted-foreground pt-[2px] text-sm text-background">
+                {data?.students.length}
+              </span>
+            </span>
             <AddPeopleDialog type="stu" />
           </div>
           <PeopleList people={data?.students} />
