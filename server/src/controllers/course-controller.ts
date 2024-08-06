@@ -311,6 +311,14 @@ export default {
   deleteAllFilesInCourse: async (req: Request, res: Response) => {
     try {
       const { courseId } = req.params;
+      const isAdmin = req.user?.role === "Admin";
+      const isTeacher =
+        req.user?.courses?.find((c) => c.code === courseId)?.role === "Teacher";
+
+      if (!isTeacher && !isAdmin) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
       const { data: list, error } = await supabase.storage
         .from("uploads")
         .list(courseId);

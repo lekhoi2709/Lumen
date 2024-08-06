@@ -104,9 +104,9 @@ export const uploadFiles = async (data: {
   return response.data;
 };
 
-export const deleteFiles = async (fileNames: string[]) => {
+export const deleteFiles = async (fileNames: string[], courseId: string) => {
   const response = await axiosInstance.post(
-    "/uploads/files/delete",
+    `/uploads/${courseId}/files/delete`,
     fileNames,
     {
       headers: {

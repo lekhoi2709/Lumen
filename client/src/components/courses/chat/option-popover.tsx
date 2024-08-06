@@ -124,7 +124,7 @@ function DeleteDialog({
     setIsDeleting(true);
     const fileNames = getModifiedFileNames(postData!);
     if (postData?.files && postData.files.length > 0) {
-      await deleteFiles(fileNames!)
+      await deleteFiles(fileNames!, id!)
         .then((_res) => {
           deletePost.mutate(postId);
         })
