@@ -34,10 +34,11 @@ function FormLayout({
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
   const { isValid, isSubmitting, isDirty } = form.formState;
-
+  const userInCourseRole = user?.courses?.find(
+    (course) => course.code === id,
+  )?.role;
   const isTeacher =
-    user!.courses?.find((course) => course.code === id)?.role === "Teacher" ||
-    "Assistant";
+    userInCourseRole === "Teacher" || userInCourseRole === "Assistant";
 
   return (
     <Form {...form}>
