@@ -104,6 +104,22 @@ export const leaveCourse = async (id: string) => {
   return response.data;
 };
 
+export const removePeopleFromCourse = async (data: {
+  id: string;
+  emails: string[];
+}) => {
+  const response = await axiosInstance.put(
+    `/courses/c/${data.id}/people/remove`,
+    { emails: data.emails },
+    {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    },
+  );
+  return response.data;
+};
+
 export const deleteCourse = async (id: string) => {
   const response = await axiosInstance.delete(`/courses/c/${id}/delete`, {
     headers: {

@@ -126,7 +126,11 @@
       "add-instructor": "Mời người hướng dẫn",
       "no-result": "Không tìm thấy kết quả.",
       "invite-input": "Nhập địa chỉ email",
-      "invite-btn": "Mời"
+      "invite-btn": "Mời",
+      "remove-btn": "Xóa",
+      "remove-confirm": "Bạn có chắc chắn muốn xóa người dùng này?",
+      "remove-description": "Hành động này sẽ không thể hoàn tác. Những người dùng dưới đây sẽ bị xóa khỏi khóa học.",
+      "remove-cancel": "Hủy"
     }
   }
 }

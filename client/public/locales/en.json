@@ -126,7 +126,11 @@
       "add-instructor": "Invite Instructor",
       "no-result": "No results found.",
       "invite-input": "Enter the email address",
-      "invite-btn": "Invite"
+      "invite-btn": "Invite",
+      "remove-btn": "Remove",
+      "remove-confirm": "Are you sure you want to remove these users?",
+      "remove-description": "This action cannot be undone. This will permanently remove the users below from this course.",
+      "remove-cancel": "Cancel"
     }
   }
 }

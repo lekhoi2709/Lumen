@@ -36,7 +36,8 @@ function FormLayout({
   const { isValid, isSubmitting, isDirty } = form.formState;
 
   const isTeacher =
-    user!.courses?.find((course) => course.code === id)?.role === "Teacher";
+    user!.courses?.find((course) => course.code === id)?.role === "Teacher" ||
+    "Assistant";
 
   return (
     <Form {...form}>

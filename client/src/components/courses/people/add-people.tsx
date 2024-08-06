@@ -23,12 +23,16 @@ import { SearchedUserData } from "@/types/user";
 import CustomSelect from "../custom-select";
 import { useAddPeopleToCourse } from "@/services/mutations/courses";
 import { useParams } from "react-router-dom";
+import { useAuth } from "@/contexts/auth-context";
 
 function AddPeopleDialog({ type }: { type: "ins" | "stu" }) {
   const { t } = useTranslation();
   const { id } = useParams();
+  const { user } = useAuth();
   const [search, setSearch] = useState<string>("");
   const [users, setUsers] = useState<SearchedUserData[]>([]);
+  const isTeacher =
+    user?.courses?.find((c) => c.code === id)?.role === "Teacher";
 
   const debounced = useDebounceCallback(setSearch, 1000);
   const addPeopleToCourseMutation = useAddPeopleToCourse();
@@ -51,7 +55,7 @@ function AddPeopleDialog({ type }: { type: "ins" | "stu" }) {
         }
       }}
     >
-      <IconTrigger type={type} t={t} />
+      {isTeacher && <IconTrigger type={type} t={t} />}
       <DialogContent className="rounded-lg border-none bg-transparent p-4 font-nunito">
         <div className="flex h-full w-full flex-col gap-4 rounded-lg border border-border bg-background p-6">
           <DialogHeader className="mb-2">
