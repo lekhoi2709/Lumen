@@ -8,6 +8,7 @@ interface UserType {
   _id: string;
   role: string;
   email: string;
+  courses: { code: string; role: string }[];
 }
 
 const checkUserRole = (user: UserType) =>
@@ -39,6 +40,16 @@ export default {
         }
 
         const { courseId } = req.params;
+        const roleInCourse = user.courses.find(
+          (c) => c.code === courseId
+        )?.role;
+        const isInstructor =
+          roleInCourse === "Teacher" || roleInCourse === "Assistant";
+
+        if (!isInstructor) {
+          return res.status(403).json({ message: "Access denied" });
+        }
+
         const files = req.files as Express.Multer.File[];
         if (!files || files.length === 0) {
           return res.status(400).json({ message: "No files uploaded" });
