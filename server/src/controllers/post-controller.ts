@@ -14,8 +14,10 @@ export default {
         },
         courseId,
         type: postData.type,
+        title: postData.title,
         text: postData.text,
         files: postData.files,
+        dueDate: postData.dueDate,
       });
       await post.save();
       res.status(201).json({ message: "Post created" });
@@ -54,9 +56,11 @@ export default {
       await Post.updateOne(
         { _id: { $eq: postId } },
         {
+          title: postData.title,
           type: postData.type,
           text: postData.text,
           updatedAt: Date.now(),
+          dueDate: postData.dueDate,
         }
       );
       res.status(200).json({ message: "Post updated" });

@@ -1,11 +1,8 @@
 import mongoose from "mongoose";
 
 enum PostType {
-  Text,
-  Image,
-  Video,
-  Document,
-  Mixed,
+  Post,
+  Assignment,
 }
 
 const postSchema = new mongoose.Schema({
@@ -25,8 +22,9 @@ const postSchema = new mongoose.Schema({
   type: {
     type: String,
     enum: PostType,
-    default: "Text",
+    default: "Post",
   },
+  title: String,
   text: {
     type: String,
     default: "",
@@ -44,6 +42,9 @@ const postSchema = new mongoose.Schema({
   updatedAt: {
     type: Date,
     default: Date.now,
+  },
+  dueDate: {
+    type: String,
   },
   comments: [
     {

@@ -55,7 +55,7 @@ function PeopleList({
 
   return (
     <div className="px-2 md:p-0">
-      {isTeacher && sortedPeople && sortedPeople.length > 1 && (
+      {isTeacher && sortedPeople && sortedPeople.length >= 1 && (
         <div className="mb-4 flex items-center gap-4 md:mb-5">
           <Checkbox
             checked={
@@ -77,7 +77,7 @@ function PeopleList({
           <RemovePeopleAlertDialog checked={checked} t={t} />
         </div>
       )}
-      <ul className="flex flex-col gap-4">
+      <ul className="mt-2 flex flex-col gap-4 md:mt-0">
         {sortedPeople &&
           sortedPeople.map((person) => (
             <li key={person.email}>
@@ -95,7 +95,7 @@ function PeopleList({
                     className="h-5 w-5 border-orange-500 text-orange-500 hover:bg-orange-500/30 data-[state=checked]:bg-orange-500/20 data-[state=checked]:text-orange-500"
                   />
                 )}
-                <Avatar className="h-8 w-8 md:h-10 md:w-10">
+                <Avatar className="h-10 w-10">
                   <AvatarImage
                     src={person.avatarUrl}
                     alt={person.email}
@@ -103,7 +103,7 @@ function PeopleList({
                   />
                   <AvatarFallback>{person.firstName.at(0)}</AvatarFallback>
                 </Avatar>
-                <p className="text-sm md:text-base">
+                <p>
                   {person.firstName} {person.lastName}
                 </p>
               </span>

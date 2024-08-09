@@ -28,7 +28,7 @@ function CoursePeople() {
               <h1 className="pl-2 text-xl font-bold md:p-0 md:text-2xl">
                 {t("courses.people.instructors")}
               </h1>
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-muted-foreground pt-[2px] text-sm text-background">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-muted-foreground pt-[1px] text-sm text-background">
                 {data?.instructors.length}
               </span>
             </span>
@@ -42,7 +42,7 @@ function CoursePeople() {
               <h1 className="pl-2 text-xl font-bold md:p-0 md:text-2xl">
                 {t("courses.people.students")}
               </h1>
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-muted-foreground pt-[2px] text-sm text-background">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-muted-foreground pt-[1px] text-sm text-background">
                 {data?.students.length}
               </span>
             </span>

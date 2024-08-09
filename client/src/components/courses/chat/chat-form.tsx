@@ -37,7 +37,7 @@ function ChatForm({ setIsOpen }: { setIsOpen: Dispatch<boolean> }) {
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     try {
-      let type = PostType.Mixed;
+      let type = PostType.Post;
       if (files && files.length > 0) {
         const response = await uploadFiles({ courseId: id!, files });
         if (response.urls && response.urls.length > 0) {

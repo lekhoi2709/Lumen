@@ -48,6 +48,7 @@ const formSchema = z.object({
       name: z.string(),
     }),
   ),
+  dueDate: z.date().optional(),
 });
 
 function CreateAssignmentForm({
@@ -55,11 +56,13 @@ function CreateAssignmentForm({
 }: {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }) {
+  const { t } = useTranslation();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       text: "",
       files: [],
+      dueDate: undefined,
     },
     mode: "onBlur",
   });
@@ -97,6 +100,9 @@ function CreateAssignmentForm({
       createPostMutation.mutate({
         courseId: id!,
         postData: {
+          dueDate: data.dueDate
+            ? data.dueDate.toISOString()
+            : t("courses.assignments.no-due-date"),
           ...data,
           type,
           user: {

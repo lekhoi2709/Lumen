@@ -22,12 +22,15 @@ import OptionPopover from "./option-popover";
 import { Course } from "@/types/course";
 import { isDocumentFile, isImageFile, isVideoFile } from "@/lib/utils";
 import { twMerge } from "tailwind-merge";
+import { NotebookPenIcon } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function ChatSection({ course }: { course: Course }) {
   const { id } = useParams();
   const { data, isLoading } = usePosts(id!);
   const { user } = useAuth();
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   if (isLoading) {
     return (
@@ -87,40 +90,92 @@ function ChatSection({ course }: { course: Course }) {
       {data?.map((post: TPost) => (
         <div
           key={post._id}
-          className="flex min-h-[4rem] w-full flex-col gap-2 rounded-lg border border-border"
+          className={twMerge(
+            "flex min-h-[4rem] w-full flex-col gap-2 rounded-lg border border-border",
+            post.type === "Assignment" &&
+              "transition-colors duration-300 ease-in-out hover:border-orange-500",
+          )}
         >
-          <div className="flex w-full items-center justify-between px-6 pt-4">
-            <div className="flex w-full items-center gap-4">
-              <Avatar className="h-8 w-8">
-                <AvatarImage
-                  src={post.user?.avatarUrl}
-                  alt={post.user?.email}
-                />
-                <AvatarFallback>{post.user?.firstName.at(0)}</AvatarFallback>
-              </Avatar>
-              <div className="flex flex-col truncate">
-                <p className="truncate font-bold">
-                  {post.user?.firstName} {post.user?.lastName}
-                </p>
-                <p className="truncate text-xs text-muted-foreground">
-                  {post.createdAt === post.updatedAt &&
-                    dateFormat(new Date(post.createdAt!))}
-                  {post.createdAt !== post.updatedAt &&
-                    `${dateFormat(new Date(post.updatedAt!))} (${t("courses.overview.edited")})`}
-                </p>
+          <div
+            className={twMerge(
+              "flex w-full items-center justify-between px-6 pt-4",
+              post.type === "Assignment" &&
+                "cursor-pointer pb-4 transition-colors duration-300 ease-in-out hover:bg-orange-500/10",
+            )}
+          >
+            {post.type === "Post" && (
+              <div className="flex w-full items-center gap-4">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage
+                    src={post.user?.avatarUrl}
+                    alt={post.user?.email}
+                  />
+                  <AvatarFallback>{post.user?.firstName.at(0)}</AvatarFallback>
+                </Avatar>
+                <div className="flex flex-col truncate">
+                  <p className="truncate font-bold">
+                    {post.user?.firstName} {post.user?.lastName}
+                  </p>
+                  <p className="truncate text-xs text-muted-foreground">
+                    {post.createdAt === post.updatedAt &&
+                      dateFormat(new Date(post.createdAt!))}
+                    {post.createdAt !== post.updatedAt &&
+                      `${dateFormat(new Date(post.updatedAt!))} (${t("courses.overview.edited")})`}
+                  </p>
+                </div>
               </div>
-            </div>
+            )}
+            {post.type === "Assignment" && (
+              <div
+                className="flex w-full items-center gap-4"
+                onClick={() =>
+                  post.type === "Assignment" &&
+                  navigate(`/courses/${id}/assignments/${post._id}`)
+                }
+              >
+                <div className="flex w-full items-center gap-4">
+                  <span className="h-10 w-10 rounded-full border border-orange-500 bg-orange-500/20 p-2">
+                    <NotebookPenIcon
+                      size={22}
+                      className="font-thin text-orange-500"
+                      strokeWidth={1.5}
+                    />
+                  </span>
+                  <div className="flex flex-col truncate">
+                    <p className="truncate">
+                      <strong>
+                        {post.user?.firstName} {post.user?.lastName}
+                      </strong>{" "}
+                      {t("courses.assignments.assignment-announce")}{" "}
+                      {post.title}
+                    </p>
+                    <p className="truncate text-xs text-muted-foreground">
+                      {post.createdAt === post.updatedAt &&
+                        dateFormat(new Date(post.createdAt!))}
+                      {post.createdAt !== post.updatedAt &&
+                        `${dateFormat(new Date(post.updatedAt!))} (${t("courses.overview.edited")})`}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
             {(user?.email === post.user?.email ||
               course.createdUserEmail === user?.email) && (
               <OptionPopover
                 className="translate-x-2"
                 isEditabel={user?.email === post.user?.email}
                 postId={post._id!}
+                type={post.type}
                 postData={post}
               />
             )}
           </div>
-          <div className="my-2 flex max-w-full flex-col gap-3 px-6">
+          <div
+            className={twMerge(
+              "my-2 flex max-w-full flex-col gap-3 px-6",
+              post.type === "Assignment" && "hidden",
+            )}
+          >
             {post.text && htmlFromString(post.text)}
             <span
               className={twMerge(
@@ -169,17 +224,21 @@ function ChatSection({ course }: { course: Course }) {
                 ))}
             </span>
           </div>
-          <Separator />
-          <div className="flex w-full flex-col gap-2 px-6 pb-4">
-            <CommentSection
-              courseData={course}
-              postId={post._id!}
-              comments={post.comments!}
-              dateFormat={dateFormat}
-              htmlFromString={htmlFromString}
-            />
-            <CommentTrigger postId={post._id!} />
-          </div>
+          {post.type !== "Assignment" && (
+            <div className="flex w-full flex-col gap-2">
+              <Separator />
+              <div className="flex w-full flex-col gap-2 px-6 pb-4">
+                <CommentSection
+                  courseData={course}
+                  postId={post._id!}
+                  comments={post.comments!}
+                  dateFormat={dateFormat}
+                  htmlFromString={htmlFromString}
+                />
+                <CommentTrigger postId={post._id!} />
+              </div>
+            </div>
+          )}
         </div>
       ))}
     </section>

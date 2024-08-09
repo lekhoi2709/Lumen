@@ -16,6 +16,8 @@ import { useAuth } from "@/contexts/auth-context";
 import { Dispatch, SetStateAction } from "react";
 import { Loader2Icon } from "lucide-react";
 import { isDocumentFile, isImageFile, isVideoFile } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
+import { DateTimePicker } from "@/components/datetime-picker";
 
 function FormLayout({
   formType,
@@ -24,7 +26,7 @@ function FormLayout({
   form,
   onSubmit,
 }: {
-  formType: "announce" | "comment";
+  formType: "announce" | "comment" | "assignment";
   files?: File[];
   setFiles?: Dispatch<SetStateAction<File[]>>;
   form: UseFormReturn<any>;
@@ -39,13 +41,37 @@ function FormLayout({
   )?.role;
   const isTeacher =
     userInCourseRole === "Teacher" || userInCourseRole === "Assistant";
+  const editorPlaceholder =
+    (formType === "comment" && t("courses.overview.comment-placeholder")) ||
+    (formType === "assignment" &&
+      t("courses.assignments.description-placeholder")) ||
+    t("courses.overview.chat-placeholder");
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex h-full max-h-[80vh] w-full flex-col items-center justify-center gap-4 md:h-fit md:max-h-[60vh] md:gap-6"
+        className="flex h-full max-h-[80vh] w-full flex-col items-center justify-center gap-2 md:h-fit md:max-h-[60vh] md:gap-4"
       >
+        {formType === "assignment" && (
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem className="w-full max-w-[50rem]">
+                <FormLabel className="hidden">Title</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="text"
+                    placeholder={t("courses.assignments.name-placeholder")}
+                    className="h-full max-h-12 overflow-y-auto rounded-t-md border-b border-border bg-accent p-2 py-4 font-nunito text-muted-foreground dark:bg-accent/40"
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+        )}
         <FormField
           control={form.control}
           name="text"
@@ -56,20 +82,40 @@ function FormLayout({
                 <TipTapRichTextEditor
                   data={field.value || ""}
                   onChange={field.onChange}
+                  placeholder={editorPlaceholder}
                 />
               </FormControl>
             </FormItem>
           )}
         />
-        {formType === "announce" && files && files.length > 0 && (
-          <ul className="flex max-h-[50%] w-full flex-wrap overflow-y-auto">
-            <FilesList files={files} setFiles={setFiles!} />
-          </ul>
+        {formType === "assignment" && (
+          <FormField
+            control={form.control}
+            name="dueDate"
+            render={({ field }) => (
+              <FormItem className="w-full max-w-[50rem]">
+                <FormLabel className="hidden">Due Date</FormLabel>
+                <FormControl>
+                  <DateTimePicker
+                    placeholder={t("courses.assignments.due-date-des")}
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
         )}
-        <div className="flex w-full flex-col items-center justify-between gap-4 md:flex-row">
-          {formType === "announce" && isTeacher && (
-            <UploadButton files={files!} setFiles={setFiles!} />
+        {(formType === "announce" || formType === "assignment") &&
+          files &&
+          files.length > 0 && (
+            <ul className="flex max-h-[50%] w-full flex-wrap overflow-y-auto">
+              <FilesList files={files} setFiles={setFiles!} />
+            </ul>
           )}
+        <div className="mt-2 flex w-full flex-col items-center justify-between gap-4 md:flex-row">
+          {(formType === "announce" || formType === "assignment") &&
+            isTeacher && <UploadButton files={files!} setFiles={setFiles!} />}
           <div className="flex w-full justify-end gap-2 md:flex-row">
             <DialogClose asChild>
               <Button variant="outline" className="hidden md:block">

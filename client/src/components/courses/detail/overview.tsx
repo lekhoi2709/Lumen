@@ -89,7 +89,7 @@ function CourseCode({
   return (
     <div
       className={twMerge(
-        "z-0 flex max-h-[8rem] w-full items-center justify-between gap-6 rounded-lg border border-border p-3 px-6 pr-4 xl:max-w-[20%]",
+        "z-0 flex h-full max-h-[10rem] w-full items-center justify-between gap-6 rounded-lg border border-border p-3 px-6 pr-4 xl:max-w-[20%]",
         className,
       )}
     >
