@@ -89,7 +89,7 @@
     },
     "overview": {
       "course-code": "Mã khóa học",
-      "chat-placeholder": "Nhấn để thông báo điều gì đó...",
+      "chat-placeholder": "Nhập để thông báo điều gì đó...",
       "chat-title": "Thông báo",
       "chat-btn": "Đăng",
       "chat-no-msg": "Chưa có thông báo nào.",
@@ -131,6 +131,19 @@
       "remove-confirm": "Bạn có chắc chắn muốn xóa người dùng này?",
       "remove-description": "Hành động này sẽ không thể hoàn tác. Những người dùng dưới đây sẽ bị xóa khỏi khóa học.",
       "remove-cancel": "Hủy"
+    },
+    "assignments": {
+      "title": "Bài tập",
+      "create": "Tạo bài tập",
+      "name-placeholder": "Nhập tên bài tập của bạn vào đây.",
+      "description-placeholder": "Nhập mô tả ngắn gọn về bài tập.",
+      "due-date": "Hạn nộp",
+      "due-date-des": "Chọn ngày hết hạn nộp bài.",
+      "create-btn": "Tạo",
+      "cancel": "Hủy",
+      "no-assignment": "Không có bài tập nào.",
+      "no-assignment-des": "Hãy tạo bài tập đầu tiên của bạn.",
+      "assignment-announce": "đã đăng một bài tập mới: "
     }
   }
 }
