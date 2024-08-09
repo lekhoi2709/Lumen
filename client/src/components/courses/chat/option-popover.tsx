@@ -37,7 +37,7 @@ function OptionPopover({
   postData,
   commentId,
 }: {
-  type?: "Post" | "Comment";
+  type?: "Post" | "Comment" | "Assignment";
   isEditabel?: boolean;
   className?: string;
   postId: string;
@@ -57,7 +57,7 @@ function OptionPopover({
       </PopoverTrigger>
       <PopoverContent className="w-fit max-w-[12rem] p-2 px-4 text-sm">
         <div className="flex flex-col">
-          {type === "Post" && isEditabel && (
+          {(type === "Post" || type === "Assignment") && isEditabel && (
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
               <DialogTrigger asChild>
                 <Button
@@ -70,7 +70,7 @@ function OptionPopover({
                   </span>
                 </Button>
               </DialogTrigger>
-              <EditDialog setIsOpen={setIsOpen} postId={postId} />
+              <EditDialog setIsOpen={setIsOpen} postId={postId} type={type} />
             </Dialog>
           )}
           <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
@@ -185,9 +185,11 @@ function DeleteDialog({
 }
 
 function EditDialog({
+  type,
   postId,
   setIsOpen,
 }: {
+  type: "Post" | "Assignment";
   postId: string;
   setIsOpen: Dispatch<boolean>;
 }) {
@@ -203,7 +205,11 @@ function EditDialog({
           </DialogDescription>
         </DialogHeader>
         <section>
-          <UpdateChatForm setIsOpen={setIsOpen} postId={postId} />
+          <UpdateChatForm
+            setIsOpen={setIsOpen}
+            postId={postId}
+            updateType={type}
+          />
         </section>
       </div>
     </DialogContent>
