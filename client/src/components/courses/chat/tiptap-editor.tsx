@@ -3,12 +3,15 @@ import StarterKit from "@tiptap/starter-kit";
 import RichTextToolbar from "./toolbar";
 import Underline from "@tiptap/extension-underline";
 import Link from "@tiptap/extension-link";
+import Placeholder from "@tiptap/extension-placeholder";
 
 function TipTapRichTextEditor({
   data,
+  placeholder,
   onChange,
 }: {
-  data: string;
+  data?: string;
+  placeholder?: string;
   onChange: (richText: string) => void;
 }) {
   const editor = useEditor({
@@ -40,12 +43,17 @@ function TipTapRichTextEditor({
       }).extend({
         inclusive: false,
       }),
+      Placeholder.configure({
+        placeholder: placeholder,
+        emptyNodeClass:
+          "first:before:text-muted-foreground first:before:float-left first:before:content-[attr(data-placeholder)] first:before:pointer-events-none first:before:text-sm first:before:h-0",
+      }),
     ],
     content: data,
     editorProps: {
       attributes: {
         class:
-          "border-b border-border rounded-t-md p-2 py-4 font-nunito text-muted-foreground bg-accent dark:bg-accent/40 h-[10rem] max-h-[10rem] overflow-y-auto",
+          "border-b border-border rounded-t-md p-2 py-4 font-nunito text-muted-foreground bg-accent dark:bg-accent/40 h-[10rem] max-h-[10rem] overflow-y-auto text-sm",
       },
     },
     onUpdate({ editor }) {
