@@ -139,6 +139,7 @@
       "description-placeholder": "Nhập mô tả ngắn gọn về bài tập.",
       "due-date": "Hạn nộp",
       "due-date-des": "Chọn ngày hết hạn nộp bài.",
+      "no-due-date": "Không có hạn nộp",
       "create-btn": "Tạo",
       "cancel": "Hủy",
       "no-assignment": "Không có bài tập nào.",

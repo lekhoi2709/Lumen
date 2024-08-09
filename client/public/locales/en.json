@@ -139,6 +139,7 @@
       "description-placeholder": "Enter a brief description of the assignment.",
       "due-date": "Due Date",
       "due-date-des": "Select the due date for the assignment.",
+      "no-due-date": "No due date",
       "create-btn": "Create",
       "cancel": "Cancel",
       "no-assignment": "No assignments yet.",
