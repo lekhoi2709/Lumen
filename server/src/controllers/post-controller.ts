@@ -49,6 +49,21 @@ export default {
     }
   },
 
+  getAssignment: async (req: Request, res: Response) => {
+    try {
+      const { postId } = req.params;
+      const post = await Post.findOne({ _id: { $eq: postId } });
+
+      if (post) {
+        res.status(200).json(post);
+      } else {
+        res.status(400).json({ message: "Post not found" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  },
+
   updatePost: async (req: Request, res: Response) => {
     try {
       const { postId } = req.params;

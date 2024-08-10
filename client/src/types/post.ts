@@ -29,6 +29,7 @@ export type TPost = {
   type: PostType;
   createdAt?: string;
   updatedAt?: string;
+  dueDate?: string | Date;
   user?: SearchedUserData;
   comments?: TComment[];
 };
