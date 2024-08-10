@@ -19,7 +19,8 @@ import CourseDetail from "./routes/courses/course-detail";
 import CoursePeople from "./routes/courses/people";
 import SchedulePage from "./routes/schedule";
 import GradeBookPage from "./routes/gradebook";
-import AssignmentPage from "./routes/courses/assignment";
+import AssignmentPage from "./routes/courses/assignments";
+import AssignmentDetailPage from "./routes/courses/assignment-detail";
 
 function App() {
   const [showSplash, setShowSplash] = useState(
@@ -60,6 +61,10 @@ function App() {
               <Route
                 path="/courses/:id/assignments"
                 element={<AssignmentPage />}
+              />
+              <Route
+                path="/courses/:id/assignments/:postId"
+                element={<AssignmentDetailPage />}
               />
               <Route path="/courses/:id/people" element={<CoursePeople />} />
               <Route path="/courses/:id/grades" element={<CourseDetail />} />
