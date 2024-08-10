@@ -44,6 +44,7 @@ router.put(
 
 // Posts
 router.get("/c/:id/post", authenticateToken, postController.getPosts);
+router.get("/c/p/:postId", authenticateToken, postController.getAssignment);
 router.post("/c/:id/post", authenticateToken, postController.createPost);
 router.delete(
   "/c/p/:postId/delete",

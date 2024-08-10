@@ -11,6 +11,27 @@ export const getPosts = async (id: string) => {
   return response.data;
 };
 
+export const getAssignments = async (id: string) => {
+  const response = await axiosInstance.get<TPost[]>(
+    `/courses/c/${id}/assignment`,
+    {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    },
+  );
+  return response.data;
+};
+
+export const getAssignment = async (postId: string) => {
+  const response = await axiosInstance.get<TPost>(`/courses/c/p/${postId}`, {
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+    },
+  });
+  return response.data;
+};
+
 export const createPost = async (data: {
   courseId: string;
   postData: TPost;

@@ -89,7 +89,7 @@
     },
     "overview": {
       "course-code": "Course Code",
-      "chat-placeholder": "Press to announce something...",
+      "chat-placeholder": "Type something to announce...",
       "chat-title": "Announcements",
       "chat-btn": "Post",
       "chat-no-msg": "No announcements yet.",
@@ -131,6 +131,20 @@
       "remove-confirm": "Are you sure you want to remove these users?",
       "remove-description": "This action cannot be undone. This will permanently remove the users below from this course.",
       "remove-cancel": "Cancel"
+    },
+    "assignments": {
+      "title": "Assignments",
+      "create": "Create Assignment",
+      "name-placeholder": "Enter the title of the assignment.",
+      "description-placeholder": "Enter a brief description of the assignment.",
+      "due-date": "Due Date",
+      "due-date-des": "Select the due date for the assignment.",
+      "no-due-date": "No due date",
+      "create-btn": "Create",
+      "cancel": "Cancel",
+      "no-assignment": "No assignments yet.",
+      "no-assignment-des": "Assignments will appear here once they are created.",
+      "assignment-announce": "posted a new assignment: "
     }
   }
 }

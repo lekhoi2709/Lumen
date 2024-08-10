@@ -1,9 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
-import { getPosts } from "../api/posts-api";
+import { getAssignment, getPosts } from "../api/posts-api";
 
 export const usePosts = (courseId: string) => {
   return useQuery({
     queryKey: ["posts"],
     queryFn: () => getPosts(courseId),
+  });
+};
+
+export const useAssignment = (postId: string) => {
+  return useQuery({
+    queryKey: ["posts", postId],
+    queryFn: () => getAssignment(postId),
   });
 };

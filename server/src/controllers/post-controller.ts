@@ -14,8 +14,10 @@ export default {
         },
         courseId,
         type: postData.type,
+        title: postData.title,
         text: postData.text,
         files: postData.files,
+        dueDate: postData.dueDate,
       });
       await post.save();
       res.status(201).json({ message: "Post created" });
@@ -47,6 +49,21 @@ export default {
     }
   },
 
+  getAssignment: async (req: Request, res: Response) => {
+    try {
+      const { postId } = req.params;
+      const post = await Post.findOne({ _id: { $eq: postId } });
+
+      if (post) {
+        res.status(200).json(post);
+      } else {
+        res.status(400).json({ message: "Post not found" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  },
+
   updatePost: async (req: Request, res: Response) => {
     try {
       const { postId } = req.params;
@@ -54,9 +71,11 @@ export default {
       await Post.updateOne(
         { _id: { $eq: postId } },
         {
+          title: postData.title,
           type: postData.type,
           text: postData.text,
           updatedAt: Date.now(),
+          dueDate: postData.dueDate,
         }
       );
       res.status(200).json({ message: "Post updated" });

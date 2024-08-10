@@ -13,15 +13,14 @@ export type TComment = {
 };
 
 export enum PostType {
-  Text = "Text",
-  Image = "Image",
-  Video = "Video",
-  Document = "Document",
-  Mixed = "Mixed",
+  Post = "Post",
+  Assignment = "Assignment",
 }
 
 export type TPost = {
   _id?: string;
+  title?: string;
+  courseId?: string;
   text?: string;
   files?: {
     src: string;
@@ -30,6 +29,7 @@ export type TPost = {
   type: PostType;
   createdAt?: string;
   updatedAt?: string;
+  dueDate?: string | Date;
   user?: SearchedUserData;
   comments?: TComment[];
 };

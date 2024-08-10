@@ -1,32 +1,68 @@
-import { useForm } from "react-hook-form";
+import {
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { useTranslation } from "react-i18next";
+import FormLayout from "../chat/chatform-layout";
 import { z } from "zod";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams } from "react-router-dom";
-import { PostType } from "@/types/post";
 import { useAuth } from "@/contexts/auth-context";
-import { useCreatePost } from "@/services/mutations/posts";
-import FormLayout from "./chatform-layout";
-import { Dispatch, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
+import { PostType } from "@/types/post";
 import { uploadFiles } from "@/services/api/posts-api";
 import { isDocumentFile, isImageFile, isVideoFile } from "@/lib/utils";
 import { toast } from "@/components/ui/use-toast";
+import { useCreatePost } from "@/services/mutations/posts";
+
+export function CreateAssignmentDialog({
+  setIsOpen,
+}: {
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+}) {
+  const { t } = useTranslation();
+  return (
+    <DialogContent className="rounded-lg border-none bg-transparent p-4 font-nunito lg:max-w-[50rem]">
+      <div className="flex h-full w-full max-w-[calc(100vw-2rem)] flex-col gap-4 rounded-lg border border-border bg-background p-6">
+        <DialogHeader>
+          <DialogTitle>{t("courses.assignments.title")}</DialogTitle>
+          <DialogDescription className="hidden">
+            Create a new assignment
+          </DialogDescription>
+        </DialogHeader>
+        <CreateAssignmentForm setIsOpen={setIsOpen} />
+      </div>
+    </DialogContent>
+  );
+}
 
 const formSchema = z.object({
-  text: z.string().min(1),
+  title: z.string().min(1),
+  text: z.string(),
   files: z.array(
     z.object({
       src: z.string(),
       name: z.string(),
     }),
   ),
+  dueDate: z.date().optional(),
 });
 
-function ChatForm({ setIsOpen }: { setIsOpen: Dispatch<boolean> }) {
+function CreateAssignmentForm({
+  setIsOpen,
+}: {
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+}) {
+  const { t } = useTranslation();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       text: "",
       files: [],
+      dueDate: undefined,
     },
     mode: "onBlur",
   });
@@ -37,7 +73,7 @@ function ChatForm({ setIsOpen }: { setIsOpen: Dispatch<boolean> }) {
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     try {
-      let type = PostType.Post;
+      let type = PostType.Assignment;
       if (files && files.length > 0) {
         const response = await uploadFiles({ courseId: id!, files });
         if (response.urls && response.urls.length > 0) {
@@ -64,6 +100,9 @@ function ChatForm({ setIsOpen }: { setIsOpen: Dispatch<boolean> }) {
       createPostMutation.mutate({
         courseId: id!,
         postData: {
+          dueDate: data.dueDate
+            ? data.dueDate.toISOString()
+            : t("courses.assignments.no-due-date"),
           ...data,
           type,
           user: {
@@ -85,10 +124,9 @@ function ChatForm({ setIsOpen }: { setIsOpen: Dispatch<boolean> }) {
       console.error(error);
     }
   }
-
   return (
     <FormLayout
-      formType="announce"
+      formType="assignment"
       files={files}
       setFiles={setFiles}
       form={form}
@@ -97,4 +135,4 @@ function ChatForm({ setIsOpen }: { setIsOpen: Dispatch<boolean> }) {
   );
 }
 
-export default ChatForm;
+export default CreateAssignmentDialog;
