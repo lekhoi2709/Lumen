@@ -20,8 +20,8 @@ import { Loader2Icon } from "lucide-react";
 import { DateTimePicker } from "@/components/datetime-picker";
 
 const formSchema = z.object({
-  title: z.string(),
-  text: z.string(),
+  title: z.string().optional(),
+  text: z.string().optional(),
   dueDate: z.date().optional(),
 });
 
@@ -37,8 +37,8 @@ function UpdateChatForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      text: "",
+      title: undefined,
+      text: undefined,
       dueDate: undefined,
     },
     mode: "onBlur",
