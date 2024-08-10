@@ -23,6 +23,8 @@ function AssignmentDetailPage() {
   const { data: course } = useCourse(id!);
   const { data: post, isLoading } = useAssignment(postId!);
   const courseOwner = course?.createdUserEmail;
+  const isCourseOwner = courseOwner === user?.email;
+  const isPostOwner = user?.email === post?.user?.email;
 
   if (isLoading)
     return (
@@ -58,8 +60,7 @@ function AssignmentDetailPage() {
               {dueDate}
             </p>
           </div>
-          {(courseOwner === post?.user?.email ||
-            user?.email === post?.user?.email) && (
+          {(isCourseOwner || isPostOwner) && (
             <OptionPopover
               postId={post?._id!}
               postData={post}

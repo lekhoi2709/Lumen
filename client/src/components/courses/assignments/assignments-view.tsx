@@ -55,6 +55,8 @@ function AssignmentGrid({
           : t("courses.assignments.no-due-date");
         const isUpdated = assignment.createdAt === assignment.updatedAt;
         const isOverdue = new Date(assignment.dueDate!) < new Date(Date.now());
+        const isCourseOwner = courseOwner === user?.email;
+        const isPostOwner = user?.email === assignment.user?.email;
 
         return (
           <div
@@ -81,8 +83,7 @@ function AssignmentGrid({
                     `${dateFormat(new Date(assignment.updatedAt!))} (${t("courses.overview.edited")})`}
                 </p>
               </div>
-              {(courseOwner === assignment.user?.email ||
-                user?.email === assignment.user?.email) && (
+              {(isCourseOwner || isPostOwner) && (
                 <OptionPopover
                   postId={assignment._id!}
                   postData={assignment}
@@ -132,6 +133,8 @@ function AssignmentList({
           : t("courses.assignments.no-due-date");
         const isUpdated = assignment.createdAt === assignment.updatedAt;
         const isOverdue = new Date(assignment.dueDate!) < new Date(Date.now());
+        const isCourseOwner = courseOwner === user?.email;
+        const isPostOwner = user?.email === assignment.user?.email;
 
         return (
           <div
@@ -177,8 +180,7 @@ function AssignmentList({
                 {": "}
                 {dueDate}
               </p>
-              {(courseOwner === assignment.user?.email ||
-                user?.email === assignment.user?.email) && (
+              {(isCourseOwner || isPostOwner) && (
                 <OptionPopover
                   postId={assignment._id!}
                   postData={assignment}
