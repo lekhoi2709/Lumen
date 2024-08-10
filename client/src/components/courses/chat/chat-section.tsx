@@ -2,14 +2,8 @@ import { usePosts } from "@/services/queries/post";
 import { useParams } from "react-router-dom";
 import Loading from "@/components/loading";
 import { TComment, TPost } from "@/types/post";
-import parse, {
-  attributesToProps,
-  DOMNode,
-  domToReact,
-  Element,
-  HTMLReactParserOptions,
-} from "html-react-parser";
-import DOMPurify from "dompurify";
+import htmlFromString from "@/lib/sanitize-html";
+import dateFormat from "@/lib/date-format";
 import { Separator } from "@/components/ui/separator";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import ChatDialog from "./chat-dialog";
@@ -39,51 +33,6 @@ function ChatSection({ course }: { course: Course }) {
       </section>
     );
   }
-
-  const options: HTMLReactParserOptions = {
-    replace: (domNode) => {
-      const typedDomNode = domNode as Element;
-
-      if (!typedDomNode.attribs) return false;
-      if (typedDomNode.attribs.class === "tiptap-paragraph") {
-        return (
-          <p
-            {...attributesToProps(typedDomNode.attribs)}
-            className="text-wrap break-words"
-          >
-            {typedDomNode.children &&
-              domToReact(typedDomNode.children as DOMNode[], options)}
-          </p>
-        );
-      }
-    },
-  };
-
-  const htmlFromString = (text: string) => {
-    const clean = DOMPurify.sanitize(text, { ADD_ATTR: ["target"] });
-    return parse(clean, options);
-  };
-
-  const dateFormat = (date: Date) => {
-    const now = new Date();
-    const isCurrentYear = date.getFullYear() === now.getFullYear();
-    const isCurrentDate = date.toDateString() === now.toDateString();
-
-    if (isCurrentDate) {
-      const hours = date.getHours().toString().padStart(2, "0");
-      const minutes = date.getMinutes().toString().padStart(2, "0");
-      return `${hours}:${minutes}`;
-    } else if (isCurrentYear) {
-      const currentMonth = (date.getMonth() + 1).toString().padStart(2, "0");
-      const currentDate = date.getDate().toString().padStart(2, "0");
-      return `${currentDate}-${currentMonth}`;
-    } else {
-      const year = date.getFullYear().toString();
-      const month = (date.getMonth() + 1).toString().padStart(2, "0");
-      const day = date.getDate().toString().padStart(2, "0");
-      return `${day}-${month}-${year}`;
-    }
-  };
 
   return (
     <section className="flex w-full flex-col gap-4 xl:gap-6">
@@ -127,7 +76,7 @@ function ChatSection({ course }: { course: Course }) {
             )}
             {post.type === "Assignment" && (
               <div
-                className="flex w-full items-center gap-4"
+                className="flex w-full max-w-[80%] items-center gap-4"
                 onClick={() =>
                   post.type === "Assignment" &&
                   navigate(`/courses/${id}/assignments/${post._id}`)
@@ -443,3 +392,4 @@ function CommentSection({
 }
 
 export default ChatSection;
+export { CommentSection, CommentTrigger };
