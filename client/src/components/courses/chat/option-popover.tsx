@@ -25,7 +25,7 @@ import { useDeleteComment, useDeletePost } from "@/services/mutations/posts";
 import UpdateChatForm from "./update-chat-form";
 import { Dispatch, useState } from "react";
 import { TPost } from "@/types/post";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { deleteFiles } from "@/services/api/posts-api";
 import { toast } from "@/components/ui/use-toast";
 
@@ -51,8 +51,11 @@ function OptionPopover({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="ghost" className={twMerge("p-2", className)}>
-          <EllipsisVerticalIcon className="h-5 w-5 text-muted-foreground" />
+        <Button
+          variant="ghost"
+          className={twMerge("group p-2 hover:bg-orange-500/30", className)}
+        >
+          <EllipsisVerticalIcon className="h-5 w-5 text-muted-foreground group-hover:text-orange-500" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-fit max-w-[12rem] p-2 px-4 text-sm">
@@ -114,6 +117,7 @@ function DeleteDialog({
   const deletePost = useDeletePost();
   const deleteComment = useDeleteComment();
   const [isDeleting, setIsDeleting] = useState(false);
+  const navigate = useNavigate();
 
   const getModifiedFileNames = (post: TPost) => {
     const fileNames = post.files?.map((file) => id + "/" + file.name);
@@ -144,6 +148,7 @@ function DeleteDialog({
       setIsDeleting(false);
       onOpenChange(false);
     }
+    navigate(sessionStorage.getItem("history") || `/courses/${id}`);
   };
 
   const handleCommentDelete = () => {
