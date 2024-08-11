@@ -144,7 +144,9 @@
       "cancel": "Cancel",
       "no-assignment": "No assignments yet.",
       "no-assignment-des": "Assignments will appear here once they are created.",
-      "assignment-announce": "posted a new assignment: "
+      "assignment-announce": "posted a new assignment: ",
+      "submission": "Submission",
+      "submit": "Submit"
     }
   }
 }
