@@ -146,7 +146,8 @@
       "no-assignment-des": "Assignments will appear here once they are created.",
       "assignment-announce": "posted a new assignment: ",
       "submission": "Submission",
-      "submit": "Submit"
+      "submit": "Submit",
+      "unsubmit": "Unsubmit"
     }
   }
 }
