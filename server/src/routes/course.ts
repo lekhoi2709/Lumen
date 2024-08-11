@@ -62,5 +62,15 @@ router.put(
   postController.commentPost
 );
 router.put("/c/p/:postId/update", authenticateToken, postController.updatePost);
+router.put(
+  "/c/p/:postId/submission",
+  authenticateToken,
+  postController.submitAssignment
+);
+router.put(
+  "/c/p/:postId/submission/:submissionId/delete",
+  authenticateToken,
+  postController.unsubmitAssignment
+);
 
 export default router;

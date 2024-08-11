@@ -11,14 +11,6 @@ interface UserType {
   courses: { code: string; role: string }[];
 }
 
-const checkUserRole = (user: UserType, courseId: string) => {
-  const isAdmin = user.role === "Admin";
-  const roleInCourse = user.courses.find((c) => c.code === courseId)?.role;
-  const isInstructor =
-    roleInCourse === "Teacher" || roleInCourse === "Assistant";
-  return isAdmin || isInstructor;
-};
-
 const handleErrorResponse = (res: Response, error: Error, statusCode = 500) => {
   res.status(statusCode).json({ message: error.message });
 };
@@ -39,12 +31,7 @@ export default {
             .json({ message: "User information is missing or invalid" });
         }
 
-        const user = req.user as UserType;
         const { courseId } = req.params;
-        if (!checkUserRole(user, courseId)) {
-          return res.status(403).json({ message: "Access denied" });
-        }
-
         const files = req.files as Express.Multer.File[];
         if (!files || files.length === 0) {
           return res.status(400).json({ message: "No files uploaded" });
@@ -88,12 +75,6 @@ export default {
         return res
           .status(403)
           .json({ message: "User information is missing or invalid" });
-      }
-
-      const user = req.user as UserType;
-      const { courseId } = req.params;
-      if (!checkUserRole(user, courseId)) {
-        return res.status(403).json({ message: "Access denied" });
       }
 
       const fileNames = req.body as string[];

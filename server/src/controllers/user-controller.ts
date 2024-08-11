@@ -111,6 +111,7 @@ export default {
       return res.status(200).json({
         message: "Token refreshed",
         user: {
+          _id: user._id,
           email: user.email,
           role: user.role,
           avatarUrl: user.avatarUrl,

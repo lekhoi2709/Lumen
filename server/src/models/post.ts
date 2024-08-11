@@ -64,6 +64,43 @@ const postSchema = new mongoose.Schema({
       },
     },
   ],
+  grades: [
+    {
+      user: {
+        email: {
+          type: String,
+          required: true,
+        },
+        firstName: String,
+        lastName: String,
+        avatarUrl: String,
+      },
+      grade: Number,
+    },
+  ],
+  submissions: [
+    {
+      user: {
+        email: {
+          type: String,
+          required: true,
+        },
+        firstName: String,
+        lastName: String,
+        avatarUrl: String,
+      },
+      files: [
+        {
+          src: String,
+          name: String,
+        },
+      ],
+      createdAt: {
+        type: Date,
+        default: Date.now,
+      },
+    },
+  ],
 });
 
 const Post = mongoose.model("Post", postSchema);

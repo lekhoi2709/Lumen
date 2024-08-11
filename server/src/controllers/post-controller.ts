@@ -64,6 +64,45 @@ export default {
     }
   },
 
+  submitAssignment: async (req: Request, res: Response) => {
+    try {
+      const { postId } = req.params;
+      const { files, user } = req.body;
+      const post = await Post.findOne({ _id: { $eq: postId } });
+
+      if (post) {
+        post.submissions.push({
+          user: {
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            avatarUrl: user.avatarUrl,
+          },
+          files,
+        });
+        await post.save();
+        res.status(201).json({ message: "Submission created" });
+      } else {
+        res.status(400).json({ message: "Post not found" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  },
+
+  unsubmitAssignment: async (req: Request, res: Response) => {
+    try {
+      const { postId, submissionId } = req.params;
+      await Post.findOneAndUpdate(
+        { _id: { $eq: postId } },
+        { $pull: { submissions: { _id: { $eq: submissionId } } } }
+      );
+      return res.status(200).json({ message: "Submission deleted" });
+    } catch (error) {
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  },
+
   updatePost: async (req: Request, res: Response) => {
     try {
       const { postId } = req.params;
