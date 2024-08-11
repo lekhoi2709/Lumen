@@ -21,7 +21,7 @@ import SchedulePage from "./routes/schedule";
 import GradeBookPage from "./routes/gradebook";
 import AssignmentPage from "./routes/courses/assignments";
 import AssignmentDetailPage from "./routes/courses/assignment-detail";
-
+import Admin from "./routes/admin/admin"
 function App() {
   const [showSplash, setShowSplash] = useState(
     () => !JSON.parse(sessionStorage.getItem("show-splash") || "false"),

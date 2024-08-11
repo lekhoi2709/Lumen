@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  getUsersList,
-  deleteUser,
-} from "@/services/api/admin-api";
+import { getUsersList, deleteUser } from "@/services/api/admin-api";
 import EditRoleForm from "@/components/admin/edit-role";
 import EditUserForm from "@/components/admin/edit-user";
 import { Edit, Trash, UserCog } from "lucide-react";
@@ -13,11 +10,16 @@ import DeleteConfirmDialog from "@/components/admin/confirm-dialog";
 
 const UserList: React.FC = () => {
   const [users, setUsers] = useState<any[]>([]);
-  const [emailFilter, setEmailFilter] = useState<string>('');
+  const [emailFilter, setEmailFilter] = useState<string>("");
   const [editingUserId, setEditingUserId] = useState<string | null>(null);
-  const [editingUserDetailsId, setEditingUserDetailsId] = useState<string | null>(null);
+  const [editingUserDetailsId, setEditingUserDetailsId] = useState<
+    string | null
+  >(null);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState<{ type: 'user'; id: string } | null>(null);
+  const [itemToDelete, setItemToDelete] = useState<{
+    type: "user";
+    id: string;
+  } | null>(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -25,7 +27,7 @@ const UserList: React.FC = () => {
         const usersData = await getUsersList();
         setUsers(usersData.data.users);
       } catch (error) {
-        console.error('Failed to fetch users:', error);
+        console.error("Failed to fetch users:", error);
       }
     };
 
@@ -38,7 +40,7 @@ const UserList: React.FC = () => {
       setUsers(usersData.data.users);
       setEditingUserId(null);
     } catch (error) {
-      console.error('Failed to fetch users:', error);
+      console.error("Failed to fetch users:", error);
     }
   };
 
@@ -48,12 +50,12 @@ const UserList: React.FC = () => {
       setUsers(usersData.data.users);
       setEditingUserDetailsId(null);
     } catch (error) {
-      console.error('Failed to fetch users:', error);
+      console.error("Failed to fetch users:", error);
     }
   };
 
   const handleDeleteUser = (userId: string) => {
-    setItemToDelete({ type: 'user', id: userId });
+    setItemToDelete({ type: "user", id: userId });
     setIsDeleteConfirmOpen(true);
   };
 
@@ -64,7 +66,7 @@ const UserList: React.FC = () => {
         const usersData = await getUsersList();
         setUsers(usersData.data.users);
       } catch (error) {
-        console.error('Failed to delete user:', error);
+        console.error("Failed to delete user:", error);
       }
       setItemToDelete(null);
     }
@@ -90,39 +92,49 @@ const UserList: React.FC = () => {
         <Table>
           <thead>
             <tr>
-              <th className="text-left text-lg py-4" style={{ width: '25%' }}>User</th>
-              <th className="text-left text-lg py-4" style={{ width: '25%' }}>Email</th>
-              <th className="text-left text-lg py-4" style={{ width: '25%' }}>Role</th>
-              <th className="text-left text-lg py-4" style={{ width: '25%' }}>Actions</th>
+              <th className="py-4 text-left text-lg" style={{ width: "25%" }}>
+                User
+              </th>
+              <th className="py-4 text-left text-lg" style={{ width: "25%" }}>
+                Email
+              </th>
+              <th className="py-4 text-left text-lg" style={{ width: "25%" }}>
+                Role
+              </th>
+              <th className="py-4 text-left text-lg" style={{ width: "25%" }}>
+                Actions
+              </th>
             </tr>
           </thead>
           <TableBody>
             {filteredUsers.map((user) => (
               <TableRow key={user._id} className="py-4">
-                <TableCell className="p-0" style={{ width: '25%' }}>
+                <TableCell className="p-0" style={{ width: "25%" }}>
                   <span className="flex items-center space-x-2">
                     <Avatar>
                       <AvatarImage src={user.avatarUrl} />
-                      <AvatarFallback>
-                        {user.firstName.at(0)}
-                      </AvatarFallback>
+                      <AvatarFallback>{user.firstName.at(0)}</AvatarFallback>
                     </Avatar>
                     <p className="ml-2 text-lg">
                       {user.firstName} {user.lastName}
                     </p>
                   </span>
                 </TableCell>
-                <TableCell className="p-0 text-lg" style={{ width: '25%' }}>{user.email}</TableCell>
-                <TableCell className="p-0 text-lg" style={{ width: '25%' }}>
+                <TableCell className="p-0 text-lg" style={{ width: "25%" }}>
+                  {user.email}
+                </TableCell>
+                <TableCell className="p-0 text-lg" style={{ width: "25%" }}>
                   <span
                     className={`badge ${
-                      user.role === "Administrator" ? "badge-blue" : "badge-gray"
+                      user.role === "Administrator"
+                        ? "badge-blue"
+                        : "badge-gray"
                     }`}
                   >
                     {user.role}
                   </span>
                 </TableCell>
-                <TableCell className="p-0 text-lg" style={{ width: '25%' }}>
+                <TableCell className="p-0 text-lg" style={{ width: "25%" }}>
                   <div className="flex space-x-2">
                     <button
                       onClick={() => setEditingUserId(user._id)}
