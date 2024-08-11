@@ -17,19 +17,39 @@ export enum PostType {
   Assignment = "Assignment",
 }
 
-export type TPost = {
+type BasePostType = {
   _id?: string;
-  title?: string;
   courseId?: string;
   text?: string;
   files?: {
     src: string;
     name: string;
   }[];
-  type: PostType;
   createdAt?: string;
   updatedAt?: string;
-  dueDate?: string | Date;
   user?: SearchedUserData;
   comments?: TComment[];
 };
+
+export type TPost = BasePostType & {
+  type: PostType.Post;
+};
+
+export type TAssignment = BasePostType & {
+  title: string;
+  type: PostType.Assignment;
+  dueDate?: string | Date;
+  grades?: {
+    user: SearchedUserData;
+    grade: number;
+  }[];
+  submissions?: {
+    user: SearchedUserData;
+    files: {
+      src: string;
+      name: string;
+    }[];
+  }[];
+};
+
+export type TUnionPost = TPost | TAssignment;

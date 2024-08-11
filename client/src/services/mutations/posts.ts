@@ -6,7 +6,7 @@ import {
   commentPost,
   deleteComment,
 } from "../api/posts-api";
-import { TPost } from "@/types/post";
+import { TUnionPost } from "@/types/post";
 import { SearchedUserData } from "@/types/user";
 import { toast } from "@/components/ui/use-toast";
 
@@ -14,7 +14,7 @@ export function useCreatePost() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: { courseId: string; postData: TPost }) =>
+    mutationFn: (data: { courseId: string; postData: TUnionPost }) =>
       createPost(data),
     onMutate: () => {
       console.log("mutate");
@@ -69,7 +69,8 @@ export function useUpdatePost() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: { postId: string; postData: TPost }) => updatePost(data),
+    mutationFn: (data: { postId: string; postData: TUnionPost }) =>
+      updatePost(data),
     onMutate: () => {
       console.log("mutate");
     },

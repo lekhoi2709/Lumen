@@ -1,18 +1,21 @@
 import { axiosInstance } from "@/services/api/axios-instance";
 import { SearchedUserData } from "@/types/user";
-import { TPost } from "@/types/post";
+import { TUnionPost } from "@/types/post";
 
 export const getPosts = async (id: string) => {
-  const response = await axiosInstance.get<TPost[]>(`/courses/c/${id}/post`, {
-    headers: {
-      Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+  const response = await axiosInstance.get<TUnionPost[]>(
+    `/courses/c/${id}/post`,
+    {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
     },
-  });
+  );
   return response.data;
 };
 
 export const getAssignments = async (id: string) => {
-  const response = await axiosInstance.get<TPost[]>(
+  const response = await axiosInstance.get<TUnionPost[]>(
     `/courses/c/${id}/assignment`,
     {
       headers: {
@@ -24,17 +27,20 @@ export const getAssignments = async (id: string) => {
 };
 
 export const getAssignment = async (postId: string) => {
-  const response = await axiosInstance.get<TPost>(`/courses/c/p/${postId}`, {
-    headers: {
-      Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+  const response = await axiosInstance.get<TUnionPost>(
+    `/courses/c/p/${postId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
     },
-  });
+  );
   return response.data;
 };
 
 export const createPost = async (data: {
   courseId: string;
-  postData: TPost;
+  postData: TUnionPost;
 }) => {
   const response = await axiosInstance.post(
     `/courses/c/${data.courseId}/post`,
@@ -57,7 +63,10 @@ export const deletePost = async (postId: string) => {
   return response.data;
 };
 
-export const updatePost = async (data: { postId: string; postData: TPost }) => {
+export const updatePost = async (data: {
+  postId: string;
+  postData: TUnionPost;
+}) => {
   const response = await axiosInstance.put(
     `/courses/c/p/${data.postId}/update`,
     data,

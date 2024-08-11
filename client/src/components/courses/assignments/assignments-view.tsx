@@ -1,4 +1,4 @@
-import { TPost } from "@/types/post";
+import { TUnionPost, PostType } from "@/types/post";
 import { usePosts } from "@/services/queries/post";
 import { useNavigate, useParams } from "react-router-dom";
 import { Loader2Icon, NotebookPenIcon } from "lucide-react";
@@ -22,7 +22,9 @@ function AssignmentView({
 
   if (isLoading) return <Loader2Icon className="animate-spin" />;
 
-  const filteredData = data?.filter((post) => post.type === "Assignment");
+  const filteredData = data?.filter(
+    (post) => post.type === PostType.Assignment,
+  );
 
   return (
     <main key={view} className="flex w-full flex-col items-center md:mt-6">
@@ -40,7 +42,7 @@ function AssignmentGrid({
   data,
   courseOwner,
 }: {
-  data: TPost[];
+  data: TUnionPost[];
   courseOwner?: string;
 }) {
   const navigate = useNavigate();
@@ -50,6 +52,8 @@ function AssignmentGrid({
   return (
     <section className="flex h-full w-full max-w-[65rem] flex-col gap-4 md:grid md:grid-cols-[repeat(auto-fill,18rem)] md:gap-6">
       {data.map((assignment) => {
+        if (assignment.type !== PostType.Assignment) return null;
+
         const dueDate = assignment.dueDate
           ? dateFormat(new Date(assignment.dueDate))
           : t("courses.assignments.no-due-date");
@@ -118,7 +122,7 @@ function AssignmentList({
   data,
   courseOwner,
 }: {
-  data: TPost[];
+  data: TUnionPost[];
   courseOwner?: string;
 }) {
   const navigate = useNavigate();
@@ -128,6 +132,7 @@ function AssignmentList({
   return (
     <section className="flex h-full w-full max-w-[65rem] flex-col gap-4">
       {data.map((assignment) => {
+        if (assignment.type !== PostType.Assignment) return null;
         const dueDate = assignment.dueDate
           ? dateFormat(new Date(assignment.dueDate))
           : t("courses.assignments.no-due-date");
@@ -147,7 +152,7 @@ function AssignmentList({
                   `/courses/${assignment.courseId}/assignments/${assignment._id}`,
                 )
               }
-              className="flex w-full max-w-[60%] items-center gap-4"
+              className="flex w-full items-center gap-4 md:max-w-[60%]"
             >
               <span className="h-10 w-10 rounded-full border border-orange-500 bg-orange-500/20 p-2">
                 <NotebookPenIcon
