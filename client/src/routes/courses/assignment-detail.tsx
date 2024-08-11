@@ -19,7 +19,14 @@ import UploadButton from "@/components/upload";
 import { useState } from "react";
 import { FilesList } from "@/components/courses/chat/chatform-layout";
 import { Button } from "@/components/ui/button";
-import { PostType } from "@/types/post";
+import { PostType, SubmitAssignmentType, TUnionPost } from "@/types/post";
+import {
+  useSubmitAssignment,
+  useUnsubmitAssignment,
+} from "@/services/mutations/posts";
+import { SearchedUserData } from "@/types/user";
+import { toast } from "@/components/ui/use-toast";
+import { deleteFiles, uploadFiles } from "@/services/api/posts-api";
 
 function AssignmentDetailPage() {
   const { postId, id } = useParams<{ postId: string; id: string }>();
@@ -144,15 +151,93 @@ function AssignmentDetailPage() {
             <CommentTrigger postId={assignment?._id!} />
           </section>
         </section>
-        {isStudent && <SubmissionSection />}
+        {isStudent && <SubmissionSection assignmentData={assignment} />}
       </main>
     </CourseLayout>
   );
 }
 
-function SubmissionSection() {
+function SubmissionSection({ assignmentData }: { assignmentData: TUnionPost }) {
   const { t } = useTranslation();
+  const { user } = useAuth();
+  const { postId, id } = useParams<{ postId: string; id: string }>();
   const [files, setFiles] = useState<File[]>([]);
+  const submitAssignmentMutation = useSubmitAssignment();
+  const unSubmitAssignmentMutation = useUnsubmitAssignment();
+  const isEmptyFiles = files.length <= 0;
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  if (assignmentData.type !== PostType.Assignment) return null;
+  const isSubmitted = assignmentData.submissions?.find(
+    (submission) => submission.user.email === user?.email,
+  );
+
+  const handleSubmit = async () => {
+    try {
+      setIsSubmitting(true);
+      if (isEmptyFiles) return;
+      const response = await uploadFiles({ courseId: id!, files });
+      if (response.urls && response.urls.length > 0) {
+        const payload: SubmitAssignmentType = {
+          user: user as SearchedUserData,
+          files: [],
+        };
+
+        const fileNames = response.urls.map((url: string) => {
+          const name = url.split("/").pop();
+          return { name, src: url };
+        });
+
+        const images: { name: string; src: string }[] = fileNames.filter(
+          (file: { name: string; src: string }) => isImageFile(file.name),
+        );
+        const videos: { name: string; src: string }[] = fileNames.filter(
+          (file: { name: string; src: string }) => isVideoFile(file.name),
+        );
+
+        const documents: { name: string; src: string }[] = fileNames.filter(
+          (file: { name: string; src: string }) => isDocumentFile(file.name),
+        );
+
+        payload.files.push(...images, ...videos, ...documents);
+
+        await submitAssignmentMutation.mutateAsync({
+          postId: postId!,
+          postData: payload,
+        });
+      }
+      setFiles([]);
+      setIsSubmitting(false);
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.response.data.message || error.message,
+      });
+    }
+  };
+
+  const getModifiedFileNames = (post: SubmitAssignmentType) => {
+    const fileNames = post.files?.map((file) => id + "/" + file.name);
+    return fileNames;
+  };
+
+  const handleUnsubmit = async () => {
+    try {
+      if (!isSubmitted) return;
+      setIsSubmitting(true);
+      const fileNames = getModifiedFileNames(isSubmitted);
+      await deleteFiles(fileNames!, id!);
+      await unSubmitAssignmentMutation.mutateAsync({
+        postId: postId!,
+        submissionId: isSubmitted._id!,
+      });
+      setIsSubmitting(false);
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.response.data.message || error.message,
+      });
+    }
+  };
 
   return (
     <section className="h-fit w-full rounded-md border border-border p-4 md:max-w-[30%]">
@@ -161,6 +246,18 @@ function SubmissionSection() {
           {t("courses.assignments.submission")}
         </h2>
         <div className="flex w-full flex-wrap justify-center gap-4">
+          {isSubmitted &&
+            isSubmitted.files.map((file) => (
+              <a
+                key={file.src}
+                href={file.src}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="w-full truncate rounded-lg object-cover text-sm text-blue-500 hover:underline"
+              >
+                {file.name.split("-").pop()}
+              </a>
+            ))}
           <FilesList
             files={files}
             setFiles={setFiles}
@@ -168,8 +265,27 @@ function SubmissionSection() {
           />
         </div>
         <div className="flex w-full flex-col gap-4">
-          <UploadButton files={files} setFiles={setFiles} className="w-full" />
-          <Button>{t("courses.assignments.submit")}</Button>
+          <UploadButton
+            files={files}
+            setFiles={setFiles}
+            className={twMerge("w-full", isSubmitted && "hidden")}
+          />
+          {!isSubmitted && (
+            <Button onClick={handleSubmit} disabled={isEmptyFiles}>
+              {!isSubmitting && t("courses.assignments.submit")}
+              {isSubmitting && <Loader2Icon className="animate-spin" />}
+            </Button>
+          )}
+          {isSubmitted && (
+            <Button
+              variant="outline"
+              onClick={handleUnsubmit}
+              className="text-orange-500"
+            >
+              {!isSubmitting && t("courses.assignments.unsubmit")}
+              {isSubmitting && <Loader2Icon className="animate-spin" />}
+            </Button>
+          )}
         </div>
       </section>
     </section>

@@ -1,6 +1,6 @@
 import { axiosInstance } from "@/services/api/axios-instance";
 import { SearchedUserData } from "@/types/user";
-import { TUnionPost } from "@/types/post";
+import { SubmitAssignmentType, TUnionPost } from "@/types/post";
 
 export const getPosts = async (id: string) => {
   const response = await axiosInstance.get<TUnionPost[]>(
@@ -29,6 +29,38 @@ export const getAssignments = async (id: string) => {
 export const getAssignment = async (postId: string) => {
   const response = await axiosInstance.get<TUnionPost>(
     `/courses/c/p/${postId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    },
+  );
+  return response.data;
+};
+
+export const submitAssignment = async (data: {
+  postId: string;
+  postData: SubmitAssignmentType;
+}) => {
+  const response = await axiosInstance.put(
+    `/courses/c/p/${data.postId}/submission`,
+    data.postData,
+    {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    },
+  );
+  return response.data;
+};
+
+export const unsubmitAssignment = async (data: {
+  postId: string;
+  submissionId: string;
+}) => {
+  const response = await axiosInstance.put(
+    `/courses/c/p/${data.postId}/submission/${data.submissionId}/delete`,
+    null,
     {
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem("token")}`,

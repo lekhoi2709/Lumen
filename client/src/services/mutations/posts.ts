@@ -5,8 +5,10 @@ import {
   updatePost,
   commentPost,
   deleteComment,
+  submitAssignment,
+  unsubmitAssignment,
 } from "../api/posts-api";
-import { TUnionPost } from "@/types/post";
+import { SubmitAssignmentType, TUnionPost } from "@/types/post";
 import { SearchedUserData } from "@/types/user";
 import { toast } from "@/components/ui/use-toast";
 
@@ -140,6 +142,58 @@ export function useDeleteComment() {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
+    },
+  });
+}
+
+export function useSubmitAssignment() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: { postId: string; postData: SubmitAssignmentType }) =>
+      submitAssignment(data),
+    onMutate: () => {
+      console.log("mutate");
+    },
+    onError: (error: any) => {
+      console.log(error);
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success",
+        description: "Assignment submitted",
+      });
+    },
+    onSettled: (_data, _error, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["assignment", variables.postId],
+      });
+    },
+  });
+}
+
+export function useUnsubmitAssignment() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: { postId: string; submissionId: string }) =>
+      unsubmitAssignment(data),
+    onMutate: () => {
+      console.log("mutate");
+    },
+    onError: (error: any) => {
+      console.log(error);
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success",
+        description: "Assignment unsubmitted",
+      });
+    },
+    onSettled: (_data, _error, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["assignment", variables.postId],
+      });
     },
   });
 }

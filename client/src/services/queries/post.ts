@@ -10,7 +10,7 @@ export const usePosts = (courseId: string) => {
 
 export const useAssignment = (postId: string) => {
   return useQuery({
-    queryKey: ["posts", postId],
+    queryKey: ["assignment", postId],
     queryFn: () => getAssignment(postId),
   });
 };
