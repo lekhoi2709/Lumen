@@ -16,7 +16,7 @@ async function main() {
     dbConnection.connect(dbUrl).then(() => {
       const app = ExpressConfig();
       app.use("/api", ApiRoute);
-
+      app.use("/admin", ApiRoute);
       app.get("/", (req: Request, res: Response) => {
         res.send("Lumen Server");
       });

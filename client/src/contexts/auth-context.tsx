@@ -34,6 +34,10 @@ export function AuthProvider({ children, ...props }: AuthProviderProps) {
       localStorage.setItem("refreshToken", data.refreshToken);
     }
     sessionStorage.setItem("token", data.token);
+    if (data.user?.role === "Admin") {
+      navigate("/admin");
+      return;
+    }
     navigate(sessionStorage.getItem("history") || "/dashboard");
     return;
   };

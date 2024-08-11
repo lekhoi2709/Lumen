@@ -20,6 +20,7 @@ import CoursePeople from "./routes/courses/people";
 import SchedulePage from "./routes/schedule";
 import GradeBookPage from "./routes/gradebook";
 import AssignmentPage from "./routes/courses/assignment";
+import Admin from "./routes/admin/admin";
 
 function App() {
   const [showSplash, setShowSplash] = useState(
@@ -54,6 +55,7 @@ function App() {
             {/* private route */}
             <Route element={<PrivateRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/admin" element={<Admin />} />
               {/* course routes */}
               <Route path="/courses" element={<CoursesPage />} />
               <Route path="/courses/:id" element={<CourseDetail />} />
