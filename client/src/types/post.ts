@@ -35,6 +35,16 @@ export type TPost = BasePostType & {
   type: PostType.Post;
 };
 
+export type SubmitAssignmentType = {
+  _id?: string;
+  user: SearchedUserData;
+  files: {
+    src: string;
+    name: string;
+  }[];
+  createdAt?: string;
+};
+
 export type TAssignment = BasePostType & {
   title: string;
   type: PostType.Assignment;
@@ -43,13 +53,7 @@ export type TAssignment = BasePostType & {
     user: SearchedUserData;
     grade: number;
   }[];
-  submissions?: {
-    user: SearchedUserData;
-    files: {
-      src: string;
-      name: string;
-    }[];
-  }[];
+  submissions?: SubmitAssignmentType[];
 };
 
 export type TUnionPost = TPost | TAssignment;
