@@ -52,8 +52,9 @@ function CreateCourse({ user }: { user: User | null }) {
         email: user!.email,
       },
     };
-    createCourseMutation.mutate(payload);
+    await createCourseMutation.mutateAsync(payload);
     form.reset();
+    window.location.reload();
   }
 
   return (
