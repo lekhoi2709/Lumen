@@ -22,7 +22,7 @@ async function main() {
       const app = ExpressConfig();
       app.use(limiter);
       app.use("/api", ApiRoute);
-
+      app.use("/admin", ApiRoute);
       app.get("/", (req: Request, res: Response) => {
         res.send("Lumen Server");
       });
