@@ -145,9 +145,15 @@
       "no-assignment": "No assignments yet.",
       "no-assignment-des": "Assignments will appear here once they are created.",
       "assignment-announce": "posted a new assignment: ",
+      "submissions": "Submissions",
       "submission": "Submission",
       "submit": "Submit",
-      "unsubmit": "Unsubmit"
+      "unsubmit": "Unsubmit",
+      "late": "Submitted late",
+      "not-graded": "Not graded",
+      "grading": "Grading",
+      "max-grade": "Max Grade",
+      "comment": "Comment"
     }
   }
 }
