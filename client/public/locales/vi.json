@@ -152,8 +152,13 @@
       "late": "Nộp trễ",
       "not-graded": "Chưa có điểm",
       "grading": "Chấm điểm",
+      "grade": "Điểm",
       "max-grade": "Điểm tối đa",
-      "comment": "Nhận xét"
+      "comment": "Nhận xét",
+      "no-comment": "Không có nhận xét",
+      "submit-date": "Nộp vào",
+      "not-submitted": "Chưa nộp",
+      "graded-by": "Được chấm bởi"
     }
   }
 }

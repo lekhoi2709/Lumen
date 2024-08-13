@@ -152,8 +152,13 @@
       "late": "Submitted late",
       "not-graded": "Not graded",
       "grading": "Grading",
+      "grade": "Grade",
       "max-grade": "Max Grade",
-      "comment": "Comment"
+      "comment": "Comment",
+      "no-comment": "No comment",
+      "submit-date": "Submitted on",
+      "not-submitted": "Not submitted",
+      "graded-by": "Graded by"
     }
   }
 }
