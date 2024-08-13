@@ -232,4 +232,22 @@ export default {
       res.status(500).json({ message: "Internal Server Error" });
     }
   },
+
+  getAssignmentsForStudent: async (req: Request, res: Response) => {
+    try {
+      const { courseId } = req.params;
+      const assignments = await Post.find({
+        courseId: { $eq: courseId },
+        type: "Assignment",
+      });
+
+      if (assignments) {
+        return res.status(200).json(assignments);
+      }
+
+      return res.status(404).json({ message: "Assignments not found" });
+    } catch (error) {
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  },
 };

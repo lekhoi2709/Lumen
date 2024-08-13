@@ -55,4 +55,9 @@ export type TAssignment = BasePostType & {
   submissions?: SubmitAssignmentType[];
 };
 
+export type TGradeTable = {
+  students: SearchedUserData[];
+  assignments: TAssignment[];
+};
+
 export type TUnionPost = TPost | TAssignment;

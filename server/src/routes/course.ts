@@ -50,6 +50,11 @@ router.get(
   postController.getAssignmentsForGrading
 );
 router.get("/c/p/:postId", authenticateToken, postController.getAssignment);
+router.get(
+  "/c/:courseId/p/student/grade",
+  authenticateToken,
+  postController.getAssignmentsForStudent
+);
 router.post("/c/:id/post", authenticateToken, postController.createPost);
 router.delete(
   "/c/p/:postId/delete",

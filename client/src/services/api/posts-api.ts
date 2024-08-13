@@ -1,7 +1,7 @@
 import { axiosInstance } from "@/services/api/axios-instance";
 import { SearchedUserData } from "@/types/user";
-import { SubmitAssignmentType, TUnionPost } from "@/types/post";
-import { TGradeTable } from "@/routes/courses/grades/columns";
+import { SubmitAssignmentType, TAssignment, TUnionPost } from "@/types/post";
+import { TGradeTable } from "@/types/post";
 
 export const getPosts = async (id: string) => {
   const response = await axiosInstance.get<TUnionPost[]>(
@@ -30,6 +30,18 @@ export const getAssignments = async (id: string) => {
 export const getAssignmentsForGrading = async (courseId: string) => {
   const response = await axiosInstance.get<TGradeTable>(
     `/courses/c/${courseId}/assignments`,
+    {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    },
+  );
+  return response.data;
+};
+
+export const getAssignmentsForStudent = async (courseId: string) => {
+  const response = await axiosInstance.get<TAssignment[]>(
+    `/courses/c/${courseId}/p/student/grade`,
     {
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem("token")}`,

@@ -20,7 +20,7 @@ async function main() {
     const dbConnection = MongooseConnection.getInstance();
     dbConnection.connect(dbUrl).then(() => {
       const app = ExpressConfig();
-      // app.use(limiter);
+      app.use(limiter);
       app.use("/api", ApiRoute);
 
       app.get("/", (req: Request, res: Response) => {

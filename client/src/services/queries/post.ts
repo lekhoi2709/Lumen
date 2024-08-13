@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   getAssignment,
   getAssignmentsForGrading,
+  getAssignmentsForStudent,
   getPosts,
 } from "../api/posts-api";
 
@@ -23,5 +24,12 @@ export const useAssignmentsForGrading = (courseId: string) => {
   return useQuery({
     queryKey: ["assignments"],
     queryFn: () => getAssignmentsForGrading(courseId),
+  });
+};
+
+export const useAssignmentsForStudent = (courseId: string) => {
+  return useQuery({
+    queryKey: ["assignments"],
+    queryFn: () => getAssignmentsForStudent(courseId),
   });
 };
