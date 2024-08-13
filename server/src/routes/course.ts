@@ -44,6 +44,11 @@ router.put(
 
 // Posts
 router.get("/c/:id/post", authenticateToken, postController.getPosts);
+router.get(
+  "/c/:courseId/assignments",
+  authenticateToken,
+  postController.getAssignmentsForGrading
+);
 router.get("/c/p/:postId", authenticateToken, postController.getAssignment);
 router.post("/c/:id/post", authenticateToken, postController.createPost);
 router.delete(
@@ -71,6 +76,11 @@ router.put(
   "/c/p/:postId/submission/:submissionId/delete",
   authenticateToken,
   postController.unsubmitAssignment
+);
+router.put(
+  "/c/:id/p/:postId/grading",
+  authenticateToken,
+  postController.gradingSubmission
 );
 
 export default router;

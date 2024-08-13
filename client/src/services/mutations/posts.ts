@@ -7,6 +7,7 @@ import {
   deleteComment,
   submitAssignment,
   unsubmitAssignment,
+  gradingSubmission,
 } from "../api/posts-api";
 import { SubmitAssignmentType, TUnionPost } from "@/types/post";
 import { SearchedUserData } from "@/types/user";
@@ -188,6 +189,39 @@ export function useUnsubmitAssignment() {
       toast({
         title: "Success",
         description: "Assignment unsubmitted",
+      });
+    },
+    onSettled: (_data, _error, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["assignment", variables.postId],
+      });
+    },
+  });
+}
+
+export function useGradingSubmission() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: {
+      courseId: string;
+      postId: string;
+      gradedBy: SearchedUserData;
+      grade: number;
+      maxGrade: number;
+      comment?: string;
+      studentEmail: string;
+    }) => gradingSubmission(data),
+    onMutate: () => {
+      console.log("mutate");
+    },
+    onError: (error: any) => {
+      console.log(error);
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success",
+        description: "Assignment submitted",
       });
     },
     onSettled: (_data, _error, variables) => {

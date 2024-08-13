@@ -4,12 +4,7 @@ export type TComment = {
   _id?: string;
   text: string;
   createdAt?: string;
-  user: {
-    email: string;
-    firstName: string;
-    lastName: string;
-    avatarUrl: string;
-  };
+  user: SearchedUserData;
 };
 
 export enum PostType {
@@ -35,6 +30,13 @@ export type TPost = BasePostType & {
   type: PostType.Post;
 };
 
+type TGrade = {
+  by: SearchedUserData;
+  comment: string;
+  value: number;
+  max: number;
+};
+
 export type SubmitAssignmentType = {
   _id?: string;
   user: SearchedUserData;
@@ -42,6 +44,7 @@ export type SubmitAssignmentType = {
     src: string;
     name: string;
   }[];
+  grade?: TGrade;
   createdAt?: string;
 };
 
@@ -49,10 +52,6 @@ export type TAssignment = BasePostType & {
   title: string;
   type: PostType.Assignment;
   dueDate?: string | Date;
-  grades?: {
-    user: SearchedUserData;
-    grade: number;
-  }[];
   submissions?: SubmitAssignmentType[];
 };
 

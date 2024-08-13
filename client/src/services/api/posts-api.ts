@@ -1,6 +1,7 @@
 import { axiosInstance } from "@/services/api/axios-instance";
 import { SearchedUserData } from "@/types/user";
 import { SubmitAssignmentType, TUnionPost } from "@/types/post";
+import { TGradeTable } from "@/routes/courses/grades/columns";
 
 export const getPosts = async (id: string) => {
   const response = await axiosInstance.get<TUnionPost[]>(
@@ -17,6 +18,39 @@ export const getPosts = async (id: string) => {
 export const getAssignments = async (id: string) => {
   const response = await axiosInstance.get<TUnionPost[]>(
     `/courses/c/${id}/assignment`,
+    {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    },
+  );
+  return response.data;
+};
+
+export const getAssignmentsForGrading = async (courseId: string) => {
+  const response = await axiosInstance.get<TGradeTable>(
+    `/courses/c/${courseId}/assignments`,
+    {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    },
+  );
+  return response.data;
+};
+
+export const gradingSubmission = async (data: {
+  courseId: string;
+  postId: string;
+  gradedBy: SearchedUserData;
+  grade: number;
+  maxGrade: number;
+  comment?: string;
+  studentEmail: string;
+}) => {
+  const response = await axiosInstance.put(
+    `/courses/c/${data.courseId}/p/${data.postId}/grading`,
+    data,
     {
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem("token")}`,

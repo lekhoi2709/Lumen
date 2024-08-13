@@ -64,20 +64,6 @@ const postSchema = new mongoose.Schema({
       },
     },
   ],
-  grades: [
-    {
-      user: {
-        email: {
-          type: String,
-          required: true,
-        },
-        firstName: String,
-        lastName: String,
-        avatarUrl: String,
-      },
-      grade: Number,
-    },
-  ],
   submissions: [
     {
       user: {
@@ -95,6 +81,20 @@ const postSchema = new mongoose.Schema({
           name: String,
         },
       ],
+      grade: {
+        by: {
+          email: String,
+          firstName: String,
+          lastName: String,
+          avatarUrl: String,
+        },
+        comment: String,
+        value: Number,
+        max: {
+          type: Number,
+          default: 100,
+        },
+      },
       createdAt: {
         type: Date,
         default: Date.now,
