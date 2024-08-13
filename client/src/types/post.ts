@@ -4,12 +4,7 @@ export type TComment = {
   _id?: string;
   text: string;
   createdAt?: string;
-  user: {
-    email: string;
-    firstName: string;
-    lastName: string;
-    avatarUrl: string;
-  };
+  user: SearchedUserData;
 };
 
 export enum PostType {
@@ -17,19 +12,52 @@ export enum PostType {
   Assignment = "Assignment",
 }
 
-export type TPost = {
+type BasePostType = {
   _id?: string;
-  title?: string;
   courseId?: string;
   text?: string;
   files?: {
     src: string;
     name: string;
   }[];
-  type: PostType;
   createdAt?: string;
   updatedAt?: string;
-  dueDate?: string | Date;
   user?: SearchedUserData;
   comments?: TComment[];
 };
+
+export type TPost = BasePostType & {
+  type: PostType.Post;
+};
+
+type TGrade = {
+  by: SearchedUserData;
+  comment: string;
+  value: number;
+  max: number;
+};
+
+export type SubmitAssignmentType = {
+  _id?: string;
+  user: SearchedUserData;
+  files: {
+    src: string;
+    name: string;
+  }[];
+  grade?: TGrade;
+  createdAt?: string;
+};
+
+export type TAssignment = BasePostType & {
+  title: string;
+  type: PostType.Assignment;
+  dueDate?: string | Date;
+  submissions?: SubmitAssignmentType[];
+};
+
+export type TGradeTable = {
+  students: SearchedUserData[];
+  assignments: TAssignment[];
+};
+
+export type TUnionPost = TPost | TAssignment;

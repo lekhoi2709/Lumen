@@ -11,13 +11,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { Upload } from "lucide-react";
 import { isDocumentFile, isImageFile, isVideoFile } from "@/lib/utils";
+import { twMerge } from "tailwind-merge";
 
 function UploadButton({
   files,
   setFiles,
+  className,
 }: {
   files: File[];
   setFiles: React.Dispatch<React.SetStateAction<File[]>>;
+  className?: string;
 }) {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const overlayRef = useRef<HTMLDivElement | null>(null);
@@ -51,7 +54,10 @@ function UploadButton({
       <DialogTrigger asChild>
         <Button
           variant="outline"
-          className="flex items-center justify-center self-start rounded-md text-foreground"
+          className={twMerge(
+            "flex items-center justify-center self-start rounded-md text-foreground",
+            className,
+          )}
         >
           <Upload size={22} />
         </Button>

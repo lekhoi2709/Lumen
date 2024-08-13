@@ -19,17 +19,10 @@ function AssignmentPage() {
 
   return (
     <CourseLayout>
-      {(isTeacher || isAssistant) && (
-        <section className="flex w-full items-center justify-between">
-          <ChangeViewButton view={view} setView={setView} />
-          <CreateAssignmentBtn />
-        </section>
-      )}
-      {!isTeacher && !isAssistant && (
-        <section className="w-full">
-          <ChangeViewButton view={view} setView={setView} />
-        </section>
-      )}
+      <section className="flex w-full items-center justify-between">
+        <ChangeViewButton view={view} setView={setView} />
+        {(isTeacher || isAssistant) && <CreateAssignmentBtn />}
+      </section>
       <AssignmentView courseOwner={course?.createdUserEmail} view={view} />
     </CourseLayout>
   );

@@ -5,8 +5,11 @@ import {
   updatePost,
   commentPost,
   deleteComment,
+  submitAssignment,
+  unsubmitAssignment,
+  gradingSubmission,
 } from "../api/posts-api";
-import { TPost } from "@/types/post";
+import { SubmitAssignmentType, TUnionPost } from "@/types/post";
 import { SearchedUserData } from "@/types/user";
 import { toast } from "@/components/ui/use-toast";
 
@@ -14,7 +17,7 @@ export function useCreatePost() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: { courseId: string; postData: TPost }) =>
+    mutationFn: (data: { courseId: string; postData: TUnionPost }) =>
       createPost(data),
     onMutate: () => {
       console.log("mutate");
@@ -69,7 +72,8 @@ export function useUpdatePost() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: { postId: string; postData: TPost }) => updatePost(data),
+    mutationFn: (data: { postId: string; postData: TUnionPost }) =>
+      updatePost(data),
     onMutate: () => {
       console.log("mutate");
     },
@@ -139,6 +143,91 @@ export function useDeleteComment() {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
+    },
+  });
+}
+
+export function useSubmitAssignment() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: { postId: string; postData: SubmitAssignmentType }) =>
+      submitAssignment(data),
+    onMutate: () => {
+      console.log("mutate");
+    },
+    onError: (error: any) => {
+      console.log(error);
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success",
+        description: "Assignment submitted",
+      });
+    },
+    onSettled: (_data, _error, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["assignment", variables.postId],
+      });
+    },
+  });
+}
+
+export function useUnsubmitAssignment() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: { postId: string; submissionId: string }) =>
+      unsubmitAssignment(data),
+    onMutate: () => {
+      console.log("mutate");
+    },
+    onError: (error: any) => {
+      console.log(error);
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success",
+        description: "Assignment unsubmitted",
+      });
+    },
+    onSettled: (_data, _error, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["assignment", variables.postId],
+      });
+    },
+  });
+}
+
+export function useGradingSubmission() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: {
+      courseId: string;
+      postId: string;
+      gradedBy: SearchedUserData;
+      grade: number;
+      maxGrade: number;
+      comment?: string;
+      studentEmail: string;
+    }) => gradingSubmission(data),
+    onMutate: () => {
+      console.log("mutate");
+    },
+    onError: (error: any) => {
+      console.log(error);
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success",
+        description: "Assignment submitted",
+      });
+    },
+    onSettled: (_data, _error, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["assignment", variables.postId],
+      });
     },
   });
 }

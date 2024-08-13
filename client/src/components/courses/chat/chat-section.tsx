@@ -1,7 +1,7 @@
 import { usePosts } from "@/services/queries/post";
 import { useParams } from "react-router-dom";
 import Loading from "@/components/loading";
-import { TComment, TPost } from "@/types/post";
+import { TComment, TUnionPost } from "@/types/post";
 import htmlFromString from "@/lib/sanitize-html";
 import dateFormat from "@/lib/date-format";
 import { Separator } from "@/components/ui/separator";
@@ -36,7 +36,7 @@ function ChatSection({ course }: { course: Course }) {
 
   return (
     <section className="flex w-full flex-col gap-4 xl:gap-6">
-      {data?.map((post: TPost) => (
+      {data?.map((post: TUnionPost) => (
         <div
           key={post._id}
           className={twMerge(

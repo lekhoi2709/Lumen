@@ -24,7 +24,7 @@ import { useTranslation } from "react-i18next";
 import { useDeleteComment, useDeletePost } from "@/services/mutations/posts";
 import UpdateChatForm from "./update-chat-form";
 import { Dispatch, useState } from "react";
-import { TPost } from "@/types/post";
+import { TUnionPost } from "@/types/post";
 import { useNavigate, useParams } from "react-router-dom";
 import { deleteFiles } from "@/services/api/posts-api";
 import { toast } from "@/components/ui/use-toast";
@@ -41,7 +41,7 @@ function OptionPopover({
   isEditabel?: boolean;
   className?: string;
   postId: string;
-  postData?: TPost;
+  postData?: TUnionPost;
   commentId?: string;
 }) {
   const { t } = useTranslation();
@@ -109,7 +109,7 @@ function DeleteDialog({
 }: {
   postId: string;
   onOpenChange: Dispatch<boolean>;
-  postData?: TPost;
+  postData?: TUnionPost;
   commentId?: string;
 }) {
   const { t } = useTranslation();
@@ -119,7 +119,7 @@ function DeleteDialog({
   const [isDeleting, setIsDeleting] = useState(false);
   const navigate = useNavigate();
 
-  const getModifiedFileNames = (post: TPost) => {
+  const getModifiedFileNames = (post: TUnionPost) => {
     const fileNames = post.files?.map((file) => id + "/" + file.name);
     return fileNames;
   };

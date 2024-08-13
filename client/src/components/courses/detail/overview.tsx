@@ -16,10 +16,14 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import ChatDialog from "../chat/chat-dialog";
 import ChatSection from "../chat/chat-section";
 import { twMerge } from "tailwind-merge";
+import { useParams } from "react-router-dom";
 
 function CourseOverview({ data }: { data: Course }) {
   const { user } = useAuth();
+  const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
+  const isTeacher =
+    user?.courses?.find((course) => course.code === id)?.role === "Teacher";
 
   return (
     <section className="flex w-full flex-col gap-4 md:max-w-[65rem] xl:gap-6">
@@ -32,7 +36,7 @@ function CourseOverview({ data }: { data: Course }) {
         <Banner title={data.title} description={data.description!} />
       </div>
       <div className="relative flex w-full flex-col gap-4 xl:flex-row xl:gap-6">
-        {user?.role === "Teacher" && <CourseCode code={data._id!} t={t} />}
+        {isTeacher && <CourseCode code={data._id!} t={t} />}
         <div
           className={twMerge(
             "flex w-full flex-col gap-4 xl:gap-6",
