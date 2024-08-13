@@ -27,6 +27,7 @@ import {
 import { SearchedUserData } from "@/types/user";
 import { toast } from "@/components/ui/use-toast";
 import { deleteFiles, uploadFiles } from "@/services/api/posts-api";
+import GradingSection from "@/components/courses/assignments/grading";
 
 function AssignmentDetailPage() {
   const { postId, id } = useParams<{ postId: string; id: string }>();
@@ -37,6 +38,8 @@ function AssignmentDetailPage() {
   const courseOwner = course?.createdUserEmail;
   const isCourseOwner = courseOwner === user?.email;
   const isPostOwner = user?.email === assignment?.user?.email;
+  const isTeacher =
+    user?.courses?.find((course) => course.code === id)?.role === "Teacher";
   const isStudent =
     user?.courses?.find((course) => course.code === id)?.role === "Student";
 
@@ -50,7 +53,9 @@ function AssignmentDetailPage() {
   if (assignment?.type !== PostType.Assignment)
     return <CourseLayout>404</CourseLayout>;
   const isUpdated = assignment?.createdAt === assignment?.updatedAt;
-  const dueDate = dateFormat(new Date(assignment?.dueDate!));
+  const dueDate = assignment.dueDate
+    ? dateFormat(new Date(assignment.dueDate))
+    : t("courses.assignments.no-due-date");
   const isOverdue = new Date(assignment?.dueDate!) < new Date(Date.now());
 
   return (
@@ -150,6 +155,13 @@ function AssignmentDetailPage() {
             />
             <CommentTrigger postId={assignment?._id!} />
           </section>
+          <Separator className="my-4 mt-6 w-full" />
+          {isTeacher && (
+            <GradingSection
+              submissions={assignment.submissions}
+              dueDate={assignment.dueDate as string}
+            />
+          )}
         </section>
         {isStudent && <SubmissionSection assignmentData={assignment} />}
       </main>
@@ -239,12 +251,28 @@ function SubmissionSection({ assignmentData }: { assignmentData: TUnionPost }) {
     }
   };
 
+  const isOverdue = (date: string, dueDate: string | Date) => {
+    return new Date(dueDate) < new Date(date);
+  };
+
   return (
     <section className="h-fit w-full rounded-md border border-border p-4 md:max-w-[30%]">
       <section className="flex h-full w-full flex-col justify-between gap-4">
-        <h2 className="text-lg font-bold">
-          {t("courses.assignments.submission")}
-        </h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-bold">
+            {t("courses.assignments.submission")}
+          </h2>
+          <p className="font-nunito text-sm">
+            {isOverdue(isSubmitted?.createdAt!, assignmentData.dueDate!) &&
+              t("courses.assignments.late")}
+          </p>
+        </div>
+
+        {isSubmitted && isSubmitted?.grade?.value && (
+          <p className="font-nunito text-sm">
+            {isSubmitted.grade.value + " / " + isSubmitted.grade.max}
+          </p>
+        )}
         <div className="flex w-full flex-wrap justify-center gap-4">
           {isSubmitted &&
             isSubmitted.files.map((file) => (
