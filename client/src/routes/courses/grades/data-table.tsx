@@ -13,15 +13,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { SubmitAssignmentType, TAssignment } from "@/types/post";
-import { SearchedUserData } from "@/types/user";
 import { useMemo } from "react";
 import { AvatarFallback, AvatarImage, Avatar } from "@/components/ui/avatar";
 import { TFunction } from "i18next";
-
-export type TGradeTable = {
-  students: SearchedUserData[];
-  assignments: TAssignment[];
-};
+import { TGradeTable } from "@/types/post";
 
 const generateColumns = (
   assignments: TAssignment[],
