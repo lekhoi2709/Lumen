@@ -144,7 +144,21 @@
       "cancel": "Hủy",
       "no-assignment": "Không có bài tập nào.",
       "no-assignment-des": "Hãy tạo bài tập đầu tiên của bạn.",
-      "assignment-announce": "đã đăng một bài tập mới: "
+      "assignment-announce": "đã đăng một bài tập mới: ",
+      "submissions": "Bài nộp",
+      "submission": "Nộp bài",
+      "submit": "Nộp",
+      "unsubmit": "Huỷ nộp",
+      "late": "Nộp trễ",
+      "not-graded": "Chưa có điểm",
+      "grading": "Chấm điểm",
+      "grade": "Điểm",
+      "max-grade": "Điểm tối đa",
+      "comment": "Nhận xét",
+      "no-comment": "Không có nhận xét",
+      "submit-date": "Nộp vào",
+      "not-submitted": "Chưa nộp",
+      "graded-by": "Được chấm bởi"
     }
   }
 }

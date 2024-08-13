@@ -144,7 +144,21 @@
       "cancel": "Cancel",
       "no-assignment": "No assignments yet.",
       "no-assignment-des": "Assignments will appear here once they are created.",
-      "assignment-announce": "posted a new assignment: "
+      "assignment-announce": "posted a new assignment: ",
+      "submissions": "Submissions",
+      "submission": "Submission",
+      "submit": "Submit",
+      "unsubmit": "Unsubmit",
+      "late": "Submitted late",
+      "not-graded": "Not graded",
+      "grading": "Grading",
+      "grade": "Grade",
+      "max-grade": "Max Grade",
+      "comment": "Comment",
+      "no-comment": "No comment",
+      "submit-date": "Submitted on",
+      "not-submitted": "Not submitted",
+      "graded-by": "Graded by"
     }
   }
 }

@@ -2,7 +2,7 @@ import { useForm, UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useUpdatePost } from "@/services/mutations/posts";
-import { PostType } from "@/types/post";
+import { PostType, TAssignment, TPost, TUnionPost } from "@/types/post";
 import { Dispatch } from "react";
 import {
   Form,
@@ -47,14 +47,27 @@ function UpdateChatForm({
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     let type = updateType === "Post" ? PostType.Post : PostType.Assignment;
+    let payload: TUnionPost = {} as TUnionPost;
+
+    if (type === PostType.Post) {
+      payload = {
+        _id: postId,
+        text: data.text,
+      } as TPost;
+    }
+
+    if (type === PostType.Assignment) {
+      payload = {
+        _id: postId,
+        title: data.title,
+        text: data.text,
+        dueDate: data.dueDate ? data.dueDate.toISOString() : undefined,
+      } as TAssignment;
+    }
 
     updatePostMutation.mutate({
       postId,
-      postData: {
-        dueDate: data.dueDate ? data.dueDate.toISOString() : undefined,
-        ...data,
-        type,
-      },
+      postData: payload,
     });
     setIsOpen(false);
   }

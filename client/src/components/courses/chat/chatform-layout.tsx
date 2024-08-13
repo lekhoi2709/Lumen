@@ -18,6 +18,7 @@ import { Loader2Icon } from "lucide-react";
 import { isDocumentFile, isImageFile, isVideoFile } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { DateTimePicker } from "@/components/datetime-picker";
+import { twMerge } from "tailwind-merge";
 
 function FormLayout({
   formType,
@@ -140,9 +141,11 @@ function FormLayout({
 function FilesList({
   files,
   setFiles,
+  className,
 }: {
   files: File[];
   setFiles: React.Dispatch<React.SetStateAction<File[]>>;
+  className?: string;
 }) {
   const truncateFileName = (fileName: string) => {
     return fileName.split("/").pop() || fileName;
@@ -151,32 +154,35 @@ function FilesList({
   return files.map((file, index) => (
     <li
       key={index}
-      className="xl:w-1/8 block h-32 w-1/2 p-2 sm:w-1/3 md:w-1/4 lg:w-1/6"
+      className={twMerge(
+        "xl:w-1/8 block h-32 w-1/2 p-2 sm:w-1/3 md:w-1/4 lg:w-1/6",
+        className,
+      )}
     >
-      <article className="focus:shadow-outline group relative h-full w-full cursor-pointer rounded-md bg-gray-100 shadow-sm focus:outline-none">
+      <article className="focus:shadow-outline group relative h-full w-full cursor-pointer rounded-lg bg-gray-100 shadow-sm focus:outline-none">
         {isImageFile(file.name) && (
           <img
             alt="upload preview"
-            className="img-preview h-full w-full rounded-md object-cover"
+            className="img-preview h-full w-full rounded-lg object-cover"
             src={URL.createObjectURL(file)}
           />
         )}
         {isVideoFile(file.name) && (
           <video
             src={URL.createObjectURL(file)}
-            className="doc-preview h-full w-full rounded-md object-cover"
+            className="doc-preview h-full w-full rounded-lg object-cover"
           />
         )}
         {isDocumentFile(file.name) && (
-          <div className="flex h-full w-full items-center justify-center rounded-md bg-gray-100 text-gray-500">
+          <div className="flex h-full w-full items-center justify-center rounded-lg bg-gray-100 text-gray-500">
             <iframe
               referrerPolicy="no-referrer"
               src={URL.createObjectURL(file)}
-              className="doc-preview h-full w-full rounded-md object-cover"
+              className="doc-preview h-full w-full rounded-lg object-cover"
             />
           </div>
         )}
-        <section className="absolute bottom-0 z-20 flex h-fit w-full flex-col break-words rounded-md bg-background/20 px-3 py-2 text-xs backdrop-blur-md">
+        <section className="absolute bottom-0 z-20 flex h-fit w-full flex-col break-words rounded-lg bg-background/20 px-3 py-2 text-xs backdrop-blur-md">
           <div className="flex-1 truncate group-hover:text-blue-500">
             {truncateFileName(file.name)}
           </div>
@@ -217,3 +223,4 @@ function FilesList({
 }
 
 export default FormLayout;
+export { FilesList };
