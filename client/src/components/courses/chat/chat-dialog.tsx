@@ -13,11 +13,13 @@ function ChatDialog({
   setIsOpen,
   setIsCommentOpen,
   type = "announce",
+  commentType = "Post",
   postId,
 }: {
   setIsOpen?: Dispatch<boolean>;
   setIsCommentOpen?: Dispatch<boolean>;
   type?: "announce" | "comment";
+  commentType?: "Post" | "Assignment";
   postId?: string;
 }) {
   const { t } = useTranslation();
@@ -36,7 +38,11 @@ function ChatDialog({
         <section>
           {type === "announce" && <ChatForm setIsOpen={setIsOpen!} />}
           {type === "comment" && postId && (
-            <CommentForm setIsCommentOpen={setIsCommentOpen!} postId={postId} />
+            <CommentForm
+              setIsCommentOpen={setIsCommentOpen!}
+              postId={postId}
+              type={commentType}
+            />
           )}
         </section>
       </div>

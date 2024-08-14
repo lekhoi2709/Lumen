@@ -153,7 +153,7 @@ function AssignmentDetailPage() {
               dateFormat={dateFormat}
               htmlFromString={htmlFromString}
             />
-            <CommentTrigger postId={assignment?._id!} />
+            <CommentTrigger postId={assignment?._id!} type="Assignment" />
           </section>
           <Separator className="my-4 mt-6 w-full" />
           {isTeacher && (

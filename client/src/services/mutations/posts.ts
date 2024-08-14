@@ -123,6 +123,35 @@ export function useCommentPost() {
   });
 }
 
+export function useCommentAssigment() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: {
+      postId: string;
+      user: SearchedUserData;
+      text: string;
+    }) => commentPost(data),
+    onMutate: () => {
+      console.log("mutate");
+    },
+    onError: (error: any) => {
+      console.log(error);
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success",
+        description: "Comment added",
+      });
+    },
+    onSettled: (_data, _error, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["assignment", variables.postId],
+      });
+    },
+  });
+}
+
 export function useDeleteComment() {
   const queryClient = useQueryClient();
 

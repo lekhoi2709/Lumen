@@ -53,10 +53,22 @@ export default {
   getAssignment: async (req: Request, res: Response) => {
     try {
       const { postId } = req.params;
-      const post = await Post.findOne({ _id: { $eq: postId } });
+      const post = await Post.aggregate([
+        { $match: { $expr: { $eq: ["$_id", { $toObjectId: postId }] } } },
+        {
+          $addFields: {
+            comments: {
+              $sortArray: {
+                input: "$comments",
+                sortBy: { createdAt: -1 },
+              },
+            },
+          },
+        },
+      ]);
 
       if (post) {
-        res.status(200).json(post);
+        res.status(200).json(post[0]);
       } else {
         res.status(400).json({ message: "Post not found" });
       }

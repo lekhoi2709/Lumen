@@ -194,7 +194,13 @@ function ChatSection({ course }: { course: Course }) {
   );
 }
 
-function CommentTrigger({ postId }: { postId: string }) {
+function CommentTrigger({
+  postId,
+  type = "Post",
+}: {
+  postId: string;
+  type?: "Post" | "Assignment";
+}) {
   const { user } = useAuth();
   const { t } = useTranslation();
   const [showComment, setShowComment] = useState(false);
@@ -215,6 +221,7 @@ function CommentTrigger({ postId }: { postId: string }) {
       <ChatDialog
         setIsCommentOpen={setShowComment}
         type="comment"
+        commentType={type}
         postId={postId}
       />
     </Dialog>

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-enum PostType {
+export enum PostType {
   Post,
   Assignment,
 }
