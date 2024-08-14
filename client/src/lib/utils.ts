@@ -30,3 +30,7 @@ export function isDocumentFile(name: string) {
   const extension = name.split(".").pop();
   return documentExtensions.includes(extension!);
 }
+
+export function isTauri() {
+  return typeof window !== "undefined" && (window as any).__TAURI__;
+}
