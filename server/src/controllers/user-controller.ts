@@ -9,11 +9,17 @@ export default {
     const { email, password } = req.body;
 
     try {
-      const user = await User.findOne({ email: { $eq: email } }).exec();
+      const user = await User.findOne({ email: { $eq: email } });
 
       if (!user) {
         return res.status(404).json({
           message: "User not found",
+        });
+      }
+
+      if (!user.password && user.authProvider === "google") {
+        return res.status(400).json({
+          message: "Please login with Google",
         });
       }
 
