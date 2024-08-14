@@ -13,9 +13,9 @@ function CoursePeople() {
 
   if (isLoading) {
     return (
-      <div className="absolute left-0 top-0">
+      <CourseLayout>
         <Loading />
-      </div>
+      </CourseLayout>
     );
   }
 

@@ -1,15 +1,17 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-
-// Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
-}
+extern crate dotenv;
 
 fn main() {
-    tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![greet])
-        .run(tauri::generate_context!())
-        .expect("error while running tauri application");
+  if cfg!(debug_assertions) {
+    dotenv::from_filename(".env.development").unwrap().load();
+  } else {
+    let prod_env: &str = include_str!("../../.env.production");
+    let result = dotenv::from_read(prod_env.as_bytes()).unwrap();
+    result.load();
+  }
+
+  tauri::Builder::default()
+    .run(tauri::generate_context!())
+    .expect("error while running tauri application");
 }

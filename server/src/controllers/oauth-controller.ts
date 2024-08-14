@@ -7,6 +7,7 @@ export default {
   googleAuth: async (req: Request, res: Response) => {
     res.header("Access-Control-Allow-Credentials", "true");
     res.header("Referrer-Policy", "no-referrer-when-downgrade");
+    const { isTauri } = req.body;
 
     const redirectURL = process.env.REDIRECT_URL;
 
@@ -22,11 +23,16 @@ export default {
       prompt: "consent",
     });
 
-    res.json({ url: authorizeUrl });
+    const finalUrl = isTauri
+      ? authorizeUrl + `&isTauri=${isTauri}`
+      : authorizeUrl;
+
+    res.json({ url: finalUrl });
   },
 
   googleCallback: async (req: Request, res: Response) => {
     const code = req.query.code as string;
+    const isTauri = req.query.isTauri === "true";
     try {
       const redirectURL = process.env.REDIRECT_URL;
 
@@ -69,7 +75,11 @@ export default {
         refreshToken: refreshToken,
       };
 
-      return res.redirect(303, `${process.env.CLIENT_URL}/oauth/success`);
+      const CLIENT_URL = isTauri
+        ? process.env.TAURI_CLIENT_URL
+        : process.env.CLIENT_URL;
+
+      return res.redirect(303, `${CLIENT_URL}/oauth/success`);
     } catch (error) {
       console.error(error);
       return res.redirect(303, `${process.env.CLIENT_URL}/login`);

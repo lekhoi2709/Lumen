@@ -60,7 +60,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "^1",
+    "@tauri-apps/cli": "^1.5.14",
     "@types/dompurify": "^3.0.5",
     "@types/node": "^20.14.2",
     "@types/react": "^18.2.15",
