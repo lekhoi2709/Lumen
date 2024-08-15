@@ -1,6 +1,5 @@
 import { axiosInstance } from "@/services/api/axios-instance";
 import { User, Profile } from "@/types/user";
-import { isTauri } from "@/lib/utils";
 
 export const login = async (email: string, password: string) => {
   const response = await axiosInstance.post("/auth/login", {
@@ -44,11 +43,7 @@ export const resetPassword = async (email: string, newPassword: string) => {
 };
 
 export const googleAuth = async () => {
-  const isRunningInTauri = isTauri() !== undefined;
-  console.log("isRunningInTauri", isRunningInTauri);
-  const response = await axiosInstance.post("/auth/google", {
-    isTauri: isRunningInTauri,
-  });
+  const response = await axiosInstance.post("/auth/google");
   return response.data;
 };
 

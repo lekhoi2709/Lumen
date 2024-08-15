@@ -30,7 +30,8 @@
     "@tanstack/react-query": "^5.51.1",
     "@tanstack/react-query-devtools": "^5.51.1",
     "@tanstack/react-table": "^8.20.1",
-    "@tauri-apps/api": "^1",
+    "@tauri-apps/api": "2.0.0-rc.0",
+    "@tauri-apps/plugin-http": "2.0.0-rc.0",
     "@tiptap/extension-link": "^2.5.7",
     "@tiptap/extension-placeholder": "^2.5.9",
     "@tiptap/extension-underline": "^2.5.5",
@@ -38,6 +39,8 @@
     "@tiptap/react": "^2.5.5",
     "@tiptap/starter-kit": "^2.5.5",
     "axios": "^1.7.2",
+    "axios-tauri-api-adapter": "^0.2.1",
+    "axios-tauri-http-adapter": "^1.1.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
@@ -60,7 +63,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "^1.5.14",
+    "@tauri-apps/cli": "2.0.0-rc.3",
     "@types/dompurify": "^3.0.5",
     "@types/node": "^20.14.2",
     "@types/react": "^18.2.15",

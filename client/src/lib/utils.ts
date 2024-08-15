@@ -32,5 +32,6 @@ export function isDocumentFile(name: string) {
 }
 
 export function isTauri() {
-  return typeof window !== "undefined" && (window as any).__TAURI__;
+  const isTauri = "__TAURI_INTERNALS__" in window;
+  return isTauri;
 }
