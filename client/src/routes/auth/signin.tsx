@@ -22,6 +22,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Loader2Icon } from "lucide-react";
 import GoogleButton from "@/components/google-button";
 import { login } from "@/services/api/auth-api";
+import { isTauri } from "@/lib/utils";
 
 const formSchema = z.object({
   email: z.string().email().trim(),
@@ -42,6 +43,7 @@ function SignIn() {
   const { t } = useTranslation();
   const { toast } = useToast();
   const { isDirty, isValid, isSubmitting } = form.formState;
+  const isRunningInTauri = isTauri();
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     await login(data.email, data.password)
@@ -125,8 +127,8 @@ function SignIn() {
                 t("login.signin")
               )}
             </Button>
-            <p>{t("login.or")}</p>
-            <GoogleButton />
+            {!isRunningInTauri && <p>{t("login.or")}</p>}
+            {!isRunningInTauri && <GoogleButton />}
           </div>
           <FormDescription>
             {t("login.noAccount")}{" "}
