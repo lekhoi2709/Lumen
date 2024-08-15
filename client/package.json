@@ -32,6 +32,7 @@
     "@tanstack/react-table": "^8.20.1",
     "@tauri-apps/api": "2.0.0-rc.0",
     "@tauri-apps/plugin-http": "2.0.0-rc.0",
+    "@tauri-apps/plugin-shell": "2.0.0-rc.0",
     "@tiptap/extension-link": "^2.5.7",
     "@tiptap/extension-placeholder": "^2.5.9",
     "@tiptap/extension-underline": "^2.5.5",
