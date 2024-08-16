@@ -23,6 +23,8 @@ import AssignmentPage from "./routes/courses/assignments";
 import AssignmentDetailPage from "./routes/courses/assignment-detail";
 import GradesPage from "./routes/courses/grades/page";
 import Admin from "./routes/admin/admin";
+import UserProfile from "./routes/profile";
+
 function App() {
   const [showSplash, setShowSplash] = useState(
     () => !JSON.parse(sessionStorage.getItem("show-splash") || "false"),
@@ -56,6 +58,7 @@ function App() {
             {/* private route */}
             <Route element={<PrivateRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/profile" element={<UserProfile />} />
               <Route path="/admin" element={<Admin />} />
               {/* course routes */}
               <Route path="/courses" element={<CoursesPage />} />

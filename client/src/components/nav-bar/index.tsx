@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { ModeToggle } from "./mode-toggle";
 import LanguageToggle from "@/components/nav-bar/language-toggle";
 import { useTranslation } from "react-i18next";
@@ -54,9 +54,17 @@ function UserSection({
   t: TFunction<"translation", undefined>;
   logoutAct: () => void;
 }) {
+  const navigate = useNavigate();
+
   return (
     <section className="flex items-center gap-4 font-nunito">
-      <Avatar>
+      <Avatar
+        onClick={() => {
+          sessionStorage.setItem("history", "/profile");
+          navigate("/profile");
+        }}
+        className="cursor-pointer"
+      >
         <AvatarImage src={user.avatarUrl} alt="User avatar" />
         <AvatarFallback>{user.firstName.split("")[0]}</AvatarFallback>
       </Avatar>
