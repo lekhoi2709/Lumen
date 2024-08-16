@@ -168,6 +168,11 @@
     "edit": "Edit",
     "save": "Save Changes",
     "change-password": "Change Password",
-    "delete-account": "Delete Account"
+    "danger-zone": "Danger Zone",
+    "delete-account": "Delete Account",
+    "delete-account-confirm": "Are you sure you want to delete your account?",
+    "delete-account-description": "This action cannot be undone. This will permanently remove your account and all associated data from our server.",
+    "delete-account-cancel": "Cancel",
+    "delete-account-btn": "Delete"
   }
 }

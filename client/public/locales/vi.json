@@ -168,6 +168,11 @@
     "edit": "Chỉnh sửa",
     "save": "Lưu chỉnh sửa",
     "change-password": "Đổi mật khẩu",
-    "delete-account": "Xóa tài khoản"
+    "danger-zone": "Vùng nguy hiểm",
+    "delete-account": "Xóa tài khoản",
+    "delete-account-confirm": "Bạn có chắc chắn muốn xóa tài khoản của mình?",
+    "delete-account-description": "Hành động này sẽ không thể hoàn tác. Tất cả dữ liệu liên quan đến tài khoản của bạn sẽ bị xóa khỏi máy chủ của chúng tôi.",
+    "delete-account-cancel": "Hủy",
+    "delete-account-btn": "Xóa"
   }
 }
