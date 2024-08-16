@@ -63,6 +63,7 @@ function UserSection({
           sessionStorage.setItem("history", "/profile");
           navigate("/profile");
         }}
+        className="cursor-pointer"
       >
         <AvatarImage src={user.avatarUrl} alt="User avatar" />
         <AvatarFallback>{user.firstName.split("")[0]}</AvatarFallback>

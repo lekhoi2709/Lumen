@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { updateProfile } from "../api/auth-api";
+import { deleteUser, updateProfile } from "../api/auth-api";
 import { toast } from "@/components/ui/use-toast";
 
 export function useUpdateProfile() {
@@ -20,6 +20,29 @@ export function useUpdateProfile() {
       toast({
         title: data.message,
         description: "Profile updated",
+      });
+    },
+    onSettled: () => {},
+  });
+}
+
+export function useDeleteAccount() {
+  return useMutation({
+    mutationFn: () => deleteUser(),
+    onMutate: () => {
+      console.log("mutate");
+    },
+    onError: (error: any) => {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.response.data.message,
+      });
+    },
+    onSuccess: (data) => {
+      toast({
+        title: data.message,
+        description: "Account deleted",
       });
     },
     onSettled: () => {},

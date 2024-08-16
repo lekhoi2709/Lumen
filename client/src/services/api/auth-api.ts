@@ -76,3 +76,12 @@ export const updateProfile = async (user: {
   });
   return response.data;
 };
+
+export const deleteUser = async () => {
+  const response = await axiosInstance.delete("/auth/delete-account", {
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+    },
+  });
+  return response.data;
+};

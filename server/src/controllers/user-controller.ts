@@ -278,4 +278,28 @@ export default {
       });
     }
   },
+
+  deleteUserAccount: async (req: Request, res: Response) => {
+    const email = req.user?.email;
+
+    try {
+      const user = await User.findOne({ email: { $eq: email } });
+
+      if (!user) {
+        return res.status(404).json({
+          message: "User not found",
+        });
+      }
+
+      await user.deleteOne();
+
+      return res.status(200).json({
+        message: "Account deleted successfully",
+      });
+    } catch (error) {
+      return res.status(500).json({
+        message: "Internal Server Error",
+      });
+    }
+  },
 };

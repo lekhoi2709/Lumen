@@ -26,4 +26,9 @@ router.put(
   userController.updateUserProfile
 );
 
+router.delete(
+  "/delete-account",
+  authenticateToken,
+  userController.deleteUserAccount
+);
 export default router;

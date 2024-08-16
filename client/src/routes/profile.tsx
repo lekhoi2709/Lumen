@@ -15,10 +15,20 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useUpdateProfile } from "@/services/mutations/user";
+import { useDeleteAccount, useUpdateProfile } from "@/services/mutations/user";
 
 type TUserInput = {
   label: string;
@@ -46,7 +56,7 @@ const formSchema = z.object({
 });
 
 function UserProfile() {
-  const { user } = useAuth();
+  const { user, logoutAct } = useAuth();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -59,8 +69,10 @@ function UserProfile() {
     mode: "onBlur",
   });
   const [isEditing, setIsEditing] = useState<{ [key: string]: boolean }>({});
+  const [isDeleting, setIsDeleting] = useState(false);
   const { isValid, isDirty, isSubmitting } = form.formState;
   const updateProfileMutation = useUpdateProfile();
+  const deleteUserMutation = useDeleteAccount();
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (
@@ -81,6 +93,17 @@ function UserProfile() {
 
     const timeout = setTimeout(() => {
       window.location.reload();
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  };
+
+  const onDeleteUser = async () => {
+    setIsDeleting(true);
+    await deleteUserMutation.mutateAsync();
+    setIsDeleting(false);
+    const timeout = setTimeout(() => {
+      logoutAct();
     }, 1000);
 
     return () => clearTimeout(timeout);
@@ -129,7 +152,7 @@ function UserProfile() {
                 form={form}
               />
             </div>
-            <div className="mt-8 flex w-full items-center justify-between md:w-1/2">
+            <div className="flex w-full items-center justify-between md:w-1/2">
               <Button
                 type="button"
                 variant="outline"
@@ -146,6 +169,40 @@ function UserProfile() {
                 {!isSubmitting && t("profile.save")}
                 {isSubmitting && <Loader2Icon className="animate-spin" />}
               </Button>
+            </div>
+            <div className="w-full rounded-md border p-6 md:w-1/2">
+              <h1 className="mb-6 text-lg">{t("profile.danger-zone")}</h1>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button type="button" variant="destructive" className="w-fit">
+                    {t("profile.delete-account")}
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      {t("profile.delete-account-confirm")}
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      {t("profile.delete-account-description")}
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>
+                      {t("profile.delete-account-cancel")}
+                    </AlertDialogCancel>
+                    <Button
+                      variant="destructive"
+                      type="button"
+                      onClick={onDeleteUser}
+                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    >
+                      {isDeleting && <Loader2Icon className="animate-spin" />}
+                      {!isDeleting && t("profile.delete-account-btn")}
+                    </Button>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
           </form>
         </Form>
