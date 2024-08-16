@@ -4,6 +4,7 @@ import Footer from "@/components/footer";
 import { twMerge } from "tailwind-merge";
 import { NavigateListDesktop } from "@/components/nav-bar/nav-link-list";
 import { mainRoutes } from "@/data/sitemap";
+import { Toaster } from "@/components/ui/toaster";
 
 function Layout({
   children,
@@ -17,17 +18,18 @@ function Layout({
   sidebar?: boolean;
 }) {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-between font-nunito">
-      <Navbar className="self-start fixed border-b border-border font-nunito" />
+    <div className="flex min-h-screen flex-col items-center justify-between font-nunito">
+      <Navbar className="fixed self-start border-b border-border font-nunito" />
       <main
         className={twMerge(
-          "w-full min-h-screen h-full flex-1 md:flex justify-start bg-background pt-[72px] relative",
-          className
+          "relative h-full min-h-screen w-full flex-1 justify-start bg-background pt-[72px] md:flex",
+          className,
         )}
       >
         {sidebar && <NavigateListDesktop data={mainRoutes} />}
-        <section className="w-full min-h-screen h-full">{children}</section>
+        <section className="h-full min-h-screen w-full">{children}</section>
       </main>
+      <Toaster />
       {footer && <Footer />}
     </div>
   );
