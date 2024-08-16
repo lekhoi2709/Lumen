@@ -160,5 +160,14 @@
       "not-submitted": "Not submitted",
       "graded-by": "Graded by"
     }
+  },
+  "profile": {
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "role": "Role",
+    "edit": "Edit",
+    "save": "Save Changes",
+    "change-password": "Change Password",
+    "delete-account": "Delete Account"
   }
 }

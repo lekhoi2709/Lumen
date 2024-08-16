@@ -160,5 +160,14 @@
       "not-submitted": "Chưa nộp",
       "graded-by": "Được chấm bởi"
     }
+  },
+  "profile": {
+    "firstName": "Tên",
+    "lastName": "Họ",
+    "role": "Vai trò",
+    "edit": "Chỉnh sửa",
+    "save": "Lưu chỉnh sửa",
+    "change-password": "Đổi mật khẩu",
+    "delete-account": "Xóa tài khoản"
   }
 }
