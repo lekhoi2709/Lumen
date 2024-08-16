@@ -20,5 +20,10 @@ router.get("/google/callback", oauthController.googleCallback);
 router.get("/google/success", oauthController.googleSuccess);
 
 router.put("/reset-password", authenticateToken, userController.resetPassword);
+router.put(
+  "/update-profile",
+  authenticateToken,
+  userController.updateUserProfile
+);
 
 export default router;

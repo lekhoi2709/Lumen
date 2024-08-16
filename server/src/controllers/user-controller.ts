@@ -246,4 +246,36 @@ export default {
       });
     }
   },
+
+  updateUserProfile: async (req: Request, res: Response) => {
+    const email = req.user?.email;
+    const { firstName, lastName } = req.body;
+
+    try {
+      const user = await User.findOne({ email: { $eq: email } });
+
+      if (!user) {
+        return res.status(404).json({
+          message: "User not found",
+        });
+      }
+
+      if (firstName) {
+        user.firstName = firstName;
+      }
+
+      if (lastName) {
+        user.lastName = lastName;
+      }
+      await user.save();
+
+      return res.status(200).json({
+        message: "Profile updated successfully",
+      });
+    } catch (error) {
+      return res.status(500).json({
+        message: "Internal Server Error",
+      });
+    }
+  },
 };

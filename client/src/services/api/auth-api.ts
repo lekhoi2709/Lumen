@@ -64,3 +64,15 @@ export const verifyRefreshToken = async () => {
   });
   return response.data;
 };
+
+export const updateProfile = async (user: {
+  lastName?: string;
+  firstName?: string;
+}) => {
+  const response = await axiosInstance.put("/auth/update-profile", user, {
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+    },
+  });
+  return response.data;
+};
