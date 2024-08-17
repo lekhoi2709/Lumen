@@ -16,4 +16,10 @@ router.post(
   uploadController.deleteFiles
 );
 
+router.put(
+  "/upload/change-user-avatar",
+  authenticateToken,
+  uploadController.changeUserAvatar
+);
+
 export default router;

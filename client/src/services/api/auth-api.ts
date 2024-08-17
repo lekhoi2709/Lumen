@@ -85,3 +85,19 @@ export const deleteUser = async () => {
   });
   return response.data;
 };
+
+export const changeAvatar = async (avatar: File) => {
+  const formData = new FormData();
+  formData.append("image", avatar);
+
+  const response = await axiosInstance.put(
+    "/uploads/upload/change-user-avatar",
+    formData,
+    {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    },
+  );
+  return response.data;
+};
