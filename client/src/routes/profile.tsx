@@ -1,7 +1,7 @@
 import Layout from "@/layouts/layout";
 import { useAuth } from "@/contexts/auth-context";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { CameraIcon, Loader2Icon } from "lucide-react";
+import { Loader2Icon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -29,6 +29,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useDeleteAccount, useUpdateProfile } from "@/services/mutations/user";
+import ChangeAvatarDialog from "@/components/change-avatar-dialog";
 
 type TUserInput = {
   label: string;
@@ -121,9 +122,7 @@ function UserProfile() {
               <Avatar className="group relative h-32 w-32 border md:h-24 md:w-24">
                 <AvatarImage src={user?.avatarUrl} alt={user?.email} />
                 <AvatarFallback>{user?.firstName.at(0)}</AvatarFallback>
-                <span className="absolute bottom-0 flex h-1/3 w-full cursor-pointer items-center justify-center gap-2 rounded-b-full bg-slate-500/10 text-orange-500 backdrop-blur-md transition-opacity duration-200 ease-in-out md:opacity-0 md:group-hover:opacity-100">
-                  <CameraIcon className="h-6 w-6" />
-                </span>
+                <ChangeAvatarDialog />
               </Avatar>
             </div>
             <h1 className="text-xl font-bold">{user?.email}</h1>
