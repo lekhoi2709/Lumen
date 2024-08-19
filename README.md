@@ -11,10 +11,11 @@ Lumen is a web-based Learning Management System (LMS) built with React, TypeScri
 - Communication: Facilitates communication between instructors and students through announcements and messaging.
   
 ## Technologies Used
-- Frontend: React, TypeScript, TailwindCSS, Shadcn/UI
-- Backend: ExpressJS
-- Database: MongoDB
-- File Storage: Supabase
+- Frontend: Vite, React, Tauri, TailwindCSS, Shadcn/UI.
+- Backend: ExpressJS, NodeJS.
+- Database: MongoDB.
+- File Storage: Supabase.
+- Programming Languages: TypeScript.
 
 ## Project Structure
 
