@@ -78,5 +78,5 @@ This will package the application for the desired platform.
 
 You can also view the production page at:
 
-- Client: `https://lumen-omega.vercel.app/`
-- Server: `https://lumen-668c.onrender.com/`
+- Client: [`https://lumen-omega.vercel.app/`](https://lumen-omega.vercel.app/)
+- Server: [`https://lumen-668c.onrender.com/`](https://lumen-668c.onrender.com/`)
