@@ -15,3 +15,68 @@ Lumen is a web-based Learning Management System (LMS) built with React, TypeScri
 - Backend: ExpressJS
 - Database: MongoDB
 - File Storage: Supabase
+
+## Project Structure
+
+/client - Front-end code using Vite, React, and Tauri
+/docs - Documentation for the project
+/server - Back-end server using ExpressJS
+
+## Prerequisites
+
+Ensure you have the following installed:
+
+- Node.js
+- PNPM (Package Manager)
+- Tauri CLI (if you're building for Tauri)
+- Rust (for Tauri)
+
+## Installation
+
+1. Install client dependencies
+
+```
+cd client
+pnpm install
+```
+
+2. Install server dependencies
+
+```
+cd ../server
+pnpm install
+```
+
+## Running the website
+
+1. Start the server
+
+```
+cd server
+pnpm run dev
+```
+
+2. Start the client in a new session
+
+```
+cd client
+pnpm run dev
+```
+
+This will start the back-end at `http://localhost:3000/` and the front-end at `http://localhost:1420/`.
+
+## Build for production
+
+1. Build the Tauri application
+
+```
+cd client
+pnpm tauri build
+```
+
+This will package the application for the desired platform.
+
+You can also view the production page at:
+
+- Client: `https://lumen-omega.vercel.app/`
+- Server: `https://lumen-668c.onrender.com/`
