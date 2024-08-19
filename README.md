@@ -18,9 +18,9 @@ Lumen is a web-based Learning Management System (LMS) built with React, TypeScri
 
 ## Project Structure
 
-/client - Front-end code using Vite, React, and Tauri
-/docs - Documentation for the project
-/server - Back-end server using ExpressJS
+/client - Front-end code using Vite, React, and Tauri.
+/docs - Documentation for the project.
+/server - Back-end server using ExpressJS.
 
 ## Prerequisites
 
