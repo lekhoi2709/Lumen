@@ -54,7 +54,13 @@ pnpm install
 
 ```
 cd server
-pnpm run dev
+pnpm build
+pnpm start
+```
+&nbsp;&nbsp;or
+```
+cd server
+pnpm dev
 ```
 
 2. Start the client in a new session
